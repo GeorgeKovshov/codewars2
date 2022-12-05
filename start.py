@@ -82,6 +82,17 @@ def find_needle2(haystack): return 'found the needle at position %d' % haystack.
 
 print(find_needle(['3', '123124234', None, 'needle', 'world', 'hay', 2, '3', True, False]))
 
+def list_compre(numbers):
+    #print([x for x in numbers if x > 3])
+    print([x**2 for x in numbers if x != 2])
+
+    #print([(a, b) for a in numbers for b in range(1,10)])
+    print([ a**2 if a % 2 == 0 else a for a in numbers if a!=3])
+    cammel = "".join([i if i.islower() else " " + i.lower() if i in ["N", "M", "I"] else " " + i for i in "HelloMyNameIsCamel"])[1:]
+    print(cammel)
+
+list_compre([1,2,3,4,5])
+
 
 
 
