@@ -125,7 +125,77 @@ def get_middle2(s):
     index, odd = divmod(len(s), 2)
     return s[index] if odd else s[index - 1:index + 1]
 
+
 print(get_middle2("testin"))
+
+
+def odd_or_even(arr):
+    return "even" if sum(arr) % 2 == 0 else "odd"
+
+
+print(odd_or_even([0, 1, 2]))
+
+
+def solution(string, ending):
+    return True if string[-len(ending):] == ending else True if ending == "" else False
+
+
+def solution2(string, ending):
+    return string.endswith(ending)
+
+print(solution('abcde', 'cde'))
+
+
+fibonacci_cache = {}
+
+def fibonacci(n):
+    #if we have cached the value, then return it
+    if n in fibonacci_cache:
+        return fibonacci_cache[n]
+    #compute the Nth term
+    if n == 1:
+        value = 1
+    elif n == 2:
+        value = 1
+    elif n > 2:
+        value = fibonacci(n-1) + fibonacci(n-2)
+    #cache the value and return it
+    fibonacci_cache[n] = value
+    return value
+
+#below is the same as above, but using functools and with error messages added
+#from functools import lru_cache
+#@lru_cache(maxsize = 1000)
+def fibonacci2(n):
+    #check if positive integer
+    if type(n) != int:
+        raise TypeError("n must be an integer")
+    if n < 1:
+        raise TypeError("n must be positive")
+    if n == 1:
+        value = 1
+    elif n == 2:
+        value = 1
+    elif n > 2:
+        value = fibonacci2(n-1) + fibonacci2(n-2)
+
+#for n in range (1, 100):
+#   print( n, ":", fibonacci(n))
+
+
+class Date1:
+
+    def __init__(self, year, month, day):
+        self.year = year
+        self.month = month
+        self.day = day
+
+
+gba = Date1(1992, 12, 24)
+message = "gba was born on {}, {}, {}"
+print(message.format(gba))
+
+
 
 
 
