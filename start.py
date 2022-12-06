@@ -93,6 +93,39 @@ def list_compre(numbers):
 
 list_compre([1,2,3,4,5])
 
+def positive_sum(arr):
+    return sum([x for x in arr if x >= 0])
+
+def validate_pin(pin):
+    result = False
+    if len(pin) == 4 or len(pin) == 6:
+        result = True
+        for x in pin:
+            try:
+                int(x)
+            except:
+                result = False
+    return result
+
+def validate_pin2(pin):
+    return len(pin) in (4, 6) and pin.isdigit()
+
+print(validate_pin("12345A"))
+
+def get_middle(s):
+    list = [*s]
+    if len(list) % 2 == 0:
+        return str(list[(len(list) // 2) - 1]) + str(list[len(list) // 2])
+    else:
+        return str(list[len(list) // 2])
+    #result = "".join([x if [*s].index(x) in (len([*s]) for x in [*s] if [*s].index(x) in (len([*s]))])
+
+
+def get_middle2(s):
+    index, odd = divmod(len(s), 2)
+    return s[index] if odd else s[index - 1:index + 1]
+
+print(get_middle2("testin"))
 
 
 
