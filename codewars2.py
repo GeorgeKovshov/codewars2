@@ -34,9 +34,55 @@ print(basic_op('*', 4, 7))
 
 
 x = lambda word: 'I want to ' + word
-print(x("be free"))
+#print(x("be free"))
+
+def unique_in_order(iterabl):
+    if type(iterabl) != list:
+        iterable = [*iterabl]
+    else:
+        iterable = iterabl
+    if iterable:
+        lenght = len(iterable)
+        i = 0
+        result = []
+        while i < lenght - 1:
+            if iterable[i] != iterable[i + 1]:
+                result.append(iterable[i])
+            i+=1
+        result.append(iterable[lenght-1])
+        return result
+    else:
+        return []
+
+#from itertools import groupby
+
+#def unique_in_order(iterable):
+#   return [k for (k, _) in groupby(iterable)]
+
+def unique_in_order3(iterable):
+    result = []
+    prev = None
+    for char in iterable[0:]:
+        if char != prev:
+            result.append(char)
+            prev = char
+    return result
+
+unique_in_order2 = lambda l: [z for i, z in enumerate(l) if i == 0 or l[i - 1] != z]
 
 
+print(unique_in_order('AAAABBBCCDAABBB'))
+
+
+def get_sum(a, b):
+    if a > b:
+        a, b = b, a
+    return sum(range(a, b+1))
+
+def get_sum_mathematical(a, b):
+    return (a + b) * (abs(a - b) + 1) // 2
+
+print(get_sum(4,1))
 
 
 
