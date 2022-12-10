@@ -82,7 +82,52 @@ def get_sum(a, b):
 def get_sum_mathematical(a, b):
     return (a + b) * (abs(a - b) + 1) // 2
 
-print(get_sum(4,1))
+#print(get_sum(4,1))
+
+def row_sum_odd_numbers(n):
+    i, number = 1, 1
+    while i < n:
+        j = 0
+        while j < i:
+            number += 2
+            j += 1
+        i += 1
+    i = 0
+    result = 0
+    while i < n:
+        print(number)
+        result += number
+        number += 2
+        i += 1
+    return result
+
+def row_sum_odd_numbers2(n):
+    return sum(range(n*(n-1)+1, n*(n+1), 2))
+
+print(row_sum_odd_numbers(4))
+
+
+def find_even_index(arr):
+    result = [arr.index(x) for x in arr if sum(arr[:arr.index(x)]) == sum(arr[arr.index(x)+1:])]
+    return result.pop() if result else -1
+    #print(arr[:3])
+
+def find_even_index2(arr):
+    result = [ind for ind, x in enumerate(arr) if sum(arr[:ind]) == sum(arr[ind+1:])]
+    return result[0] if result else -1
+
+def find_even_index3(lst):
+    left_sum = 0
+    right_sum = sum(lst)
+    for i, a in enumerate(lst):
+        right_sum -= a
+        if left_sum == right_sum:
+            return i
+        left_sum += a
+    return -1
+
+
+print(find_even_index2([20,10,30,10,10,15,35]))
 
 
 
