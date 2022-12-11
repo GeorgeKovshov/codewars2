@@ -130,6 +130,70 @@ def find_even_index3(lst):
 print(find_even_index2([20,10,30,10,10,15,35]))
 
 
+import string
+print("Alphabet from a-z:")
+for letter in string.ascii_lowercase:
+   print(letter, end =" ")
+print("\nAlphabet from A-Z:")
+for letter in string.ascii_uppercase:
+   print(letter, end =" ")
+
+def is_pangram(s):
+    list = [*s.lower()]
+    for x in string.ascii_lowercase:
+        if x not in list:
+            return False
+    return True
+
+def is_pangram2(s):
+    return set(string.ascii_lowercase).issubset(s.lower())
+
+print(is_pangram("The quick, brown fox jumps over the lazy dog!"))
+
+def greet(name):
+    return "Hello, {} how are you doing today?".format(name)
+
+print(greet('Shingles'))
+
+
+list = string.ascii_lowercase
+def next_letter(str):
+    if str == "z":
+        return "a"
+    else:
+        return list[list.index(str) + 1]
+
+def last_survivor_iteration(string):
+    i = 1
+    result = ""
+    length = len(string)
+    while i < length + 1:
+        j = 0
+        alone = True
+        while j < len(string) - i:
+            if string[j] == string[-i]:
+                alone = False
+            j += 1
+        if alone == True:
+            result = string[-i] + result
+        i += 1
+    return result
+
+def last_survivors_new(string):
+    x = len(string)
+    y = x + 1
+    result = string
+    while x < y:
+        print(result)
+        y = x
+        result = last_survivor_iteration(result)
+        x = len(result)
+    return result
+
+
+print(last_survivors_new("zzaaabsssaasszzs"))
+
+
 
 
 
