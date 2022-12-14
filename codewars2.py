@@ -157,41 +157,105 @@ print(greet('Shingles'))
 
 
 list = string.ascii_lowercase
+
 def next_letter(str):
     if str == "z":
         return "a"
     else:
         return list[list.index(str) + 1]
 
-def last_survivor_iteration(string):
-    i = 1
-    result = ""
-    length = len(string)
-    while i < length + 1:
-        j = 0
-        alone = True
-        while j < len(string) - i:
-            if string[j] == string[-i]:
-                alone = False
-            j += 1
-        if alone == True:
-            result = string[-i] + result
-        i += 1
-    return result
 
-def last_survivors_new(string):
-    x = len(string)
-    y = x + 1
-    result = string
-    while x < y:
+
+def last_survivors1(string):
+    list1 = [*string]
+    print(list1)
+    new_letter = ""
+    pre_letter = ""
+    result = []
+    for letter1 in list1:
+        if letter1 == pre_letter:
+            result.pop()
+            result.append(next_letter(letter1))
+            new_letter = next_letter(letter1)
+        elif letter1 == new_letter:
+            result.pop()
+            result.append(letter1)
+        else:
+            result.append(letter1)
+        pre_letter = letter1
+    result1 = "".join([x for x in result])
+    if result1 == string:
+        return result1
+    else:
+        return last_survivors(result1)
+
+def test(string):
+    list1 = [*string]
+    letter1 = "a"
+    result = "{}".format(next_letter(letter1))
+    for x in list1:
+        result += x
         print(result)
-        y = x
-        result = last_survivor_iteration(result)
-        x = len(result)
     return result
 
+def last_survivors(string):
+    list1 = [*string]
+    result = ""
+    for ind1, letter1 in enumerate(list1):
+        for ind2, letter2 in enumerate(list1):
+            if letter1 == letter2 and ind1 != ind2:
+                del list1[ind2]
+                list1.remove(letter1)
+                result = "{}".format(next_letter(letter1))
+                for x in list1:
+                    result += x
+                print(result)
+                return last_survivors(result)
+    return "".join(list1)
 
-print(last_survivors_new("zzaaabsssaasszzs"))
+
+def last_survivors3(string):
+    ans = list(string);
+    abc = list(map(chr, range(97, 123)))  # all letters
+    abc.append('a')  # append the first letter at last z - a - b ...
+
+    for f in range(len(string)):
+        for i in ans:
+            if ans.count(i) >= 2:
+                index = abc.index(i)
+                ans.remove(i);
+                ans.remove(i)
+                ans.append(abc[index + 1])
+
+    return "".join(ans)
+
+from collections import Counter
+
+def shift(c):
+    return chr( (ord(c) - 96) % 26 + 97 )
+
+def last_survivors4(string):
+    c = Counter(string)
+    while True:
+        for k,v in c.items():
+            if v > 1:
+                c[k] = v % 2
+                c[shift(k)] += v // 2
+                break
+        else:
+            return "".join(c.elements())
+
+def last_survivors5(s):
+    new = "abcdefghijklmnopqrstuvwxyza"
+    for i in s:
+        if s.count(i)>1:
+            s = s.replace(i,"",2)+new[new.index(i)+1]
+            return last_survivors(s)
+    return s
+
+
+#print(test("abcde"))
+print(last_survivors("zzaaabsssaasszzs"))
 
 
 
