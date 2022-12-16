@@ -97,3 +97,73 @@ composites = set([4, 6, 8, 9, 10])
 
 print(odds.union(evens))
 print(primes.intersection(odds))
+
+
+def freq_stack(pops, balloons):
+    counted_balloons = {}
+    for balloon in balloons:
+        if balloon not in counted_balloons:
+            counted_balloons[balloon] = 1
+        else:
+            counted_balloons[balloon] += 1
+    print(counted_balloons)
+    max_balloon = max(counted_balloons.values())
+    balloons.reverse()
+    result = []
+    while pops:
+        for ind, x in enumerate(balloons):
+            if counted_balloons[x] == max_balloon:
+                result.append(x)
+                del balloons[ind]
+                counted_balloons[x] -= 1
+                max_balloon = max(counted_balloons.values())
+                break
+        print("pop", 5 - pops, balloons)
+        pops -= 1
+    return result
+
+from collections import Counter
+def freq_stack2(pops, balloons):
+    lst = []
+    cntr = Counter()
+    for i, b in enumerate(balloons):
+        cntr[b] += 1
+        lst.append((-cntr[b], -i, b))
+    return [b for _, _, b in sorted(lst)[:pops]]
+
+def freq_stack3(pops, balloons):
+    balloons = balloons[::-1]
+    popped_balloons = []
+    print(balloons)
+    for i in range(pops):
+        balloon_counts = Counter(balloons)
+        # Find the most frequent balloon
+        most_frequent_count = max(balloon_counts.values())
+        # Find the highest balloon with the most frequent count
+        j = 0
+        while balloon_counts[balloons[j]] != most_frequent_count:
+            j+=1
+        highest_frequent_balloon = balloons[j]
+        popped_balloons.append(highest_frequent_balloon)
+        # Remove the popped balloon from the list
+        balloons.remove(highest_frequent_balloon)
+    return popped_balloons
+
+print(freq_stack(4, [5, 7, 5, 7, 4, 5]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
