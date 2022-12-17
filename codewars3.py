@@ -152,6 +152,31 @@ def freq_stack3(pops, balloons):
 print(freq_stack(4, [5, 7, 5, 7, 4, 5]))
 
 
+## ignoring a value
+a, _, b = (1, 2, 3) # a = 1, b = 3
+print(a, b)
+
+## ignoring multiple values
+## *(variable) used to assign multiple value to a variable as list while unpacking
+## it's called "Extended Unpacking", only available in Python 3.x
+a, *_, b = (7, 6, 5, 4, 3, 2, 1)
+
+## lopping ten times using _
+for _ in range(5):
+    print(_)
+
+## iterating over a list using _
+## you can use _ same as a variable
+languages = ["Python", "JS", "PHP", "Java"]
+for _ in languages:
+    print(_)
+
+_ = 5
+while _ < 10:
+    print(_, end = ' ') # default value of 'end' id '\n' in python. we're changing it to space
+    _ += 1
+
+
 
 
 
