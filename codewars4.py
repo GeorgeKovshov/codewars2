@@ -64,7 +64,56 @@ def bar_triang2(a, b, c):
 
 print(bar_triang([4, 6], [12, 4], [10, 10]))
 
+from collections import Counter
 
+def find_waldo(crowd):
+    # Return y (row) and x (column) coordinates of Waldo -> (0,0) is top-left
+    waldo_count = Counter()
+    for ind, x in enumerate(crowd):
+        waldo_count += Counter(crowd[ind])
+    waldo = waldo_count.most_common()[-1][0]
+    print(waldo)
+    waldo_location = [-1,-1]
+    for ind, x in enumerate(crowd):
+        if waldo in crowd[ind]:
+            waldo_location = [ind, crowd[ind].index(waldo)]
+    print(waldo_location)
+
+
+from collections import defaultdict
+
+def find_waldo2(crowd):
+    d = defaultdict(list)
+    for y, row in enumerate(crowd):
+        for x, c in enumerate(row):
+            if c.isalpha():  #if all are letters returns True
+                d[c].append([y, x])
+    return next(v[0] for k, v in d.items() if len(v) == 1)
+
+def find_waldo3(crowd):
+    flatmap = "".join(crowd)
+    waldo = Counter(flatmap).most_common()[-1][0]
+    return divmod(flatmap.find(waldo), len(crowd[0]))
+
+
+print(find_waldo([
+              "             ",           # Air
+              "         w   ",           # Air with a bird
+              "   w         ",           # Air with a bird
+              "~~~~~~~~~~~~~",           # Sea
+              ".~..~~.~~~..~",           # Waves on beach
+              "...P......P..",           # Beach with some people
+              "......P..P...",           # Beach with some people
+              "..PW........."            # Beach with Waldo and presumably a friend next to him
+            ]))
+print(find_waldo([
+              "                              ",           # Air
+              "                              ",           # Air
+              "            _                 ",           # Top of pyramid
+              "          _____               ",           # Layer of pyramid
+              "        _________             ",           # Layer of pyramid
+              "  B  _______________   G   GG "
+            ]))
 
 
 
