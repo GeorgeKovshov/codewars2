@@ -55,6 +55,15 @@ def sum_dig_pow3(a, b):
 
 print(sum_dig_pow(1, 95))
 
+def bar_triang(point_a, point_b, point_c):
+    return[round((point_a[0] + point_b[0] + point_c[0])/3, 4), round((point_a[1] + point_b[1] + point_c[1])/3, 4)]
+
+
+def bar_triang2(a, b, c):
+    return [round(sum(x)/3.0, 4) for x in zip(a, b, c)]
+
+print(bar_triang([4, 6], [12, 4], [10, 10]))
+
 
 
 
