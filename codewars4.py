@@ -115,6 +115,46 @@ print(find_waldo([
               "  B  _______________   G   GG "
             ]))
 
+def is_defended(attackers, defenders):
+    victory = 0
+    amount_of_fights = min(len(attackers), len(defenders))
+    biggest_army = max(len(attackers), len(defenders))
+    for ind in range(0, amount_of_fights):
+        print(f"{attackers[ind]} vs {defenders[ind]}")
+        if attackers[ind] > defenders[ind]:
+            victory -= 1
+            print("lost")
+        elif attackers[ind] < defenders[ind]:
+            victory += 1
+            print("won")
+        else:
+            print("draw")
+        print("victory", victory)
+    if amount_of_fights != biggest_army:
+        if len(attackers) == biggest_army:
+            victory -= biggest_army - amount_of_fights
+        else:
+            victory += biggest_army - amount_of_fights
+    return victory > 0 if victory != 0 else sum(attackers) <= sum(defenders)
+
+def is_defended1(atks, defs):
+    atkPow, defPow = sum(atks),sum(defs)
+    survivors = len(defs) - len(atks) + sum((a>b)-(a<b) for a,b in zip(defs,atks))
+    return survivors>0 if survivors else defPow>=atkPow
+
+from itertools import zip_longest
+
+def is_defended(attackers, defenders):
+    s = t = 0
+    for a, d in zip_longest(attackers, defenders, fillvalue = -1):
+        s += (d > a) - (a > d)
+        t += d - a
+    return s > 0 or not s and t >= 0
+
+
+#print(is_defended([1,3,5,7], [2,4,6,8]))
+print(is_defended([10, 10, 1, 1], [4, 4, 7, 7]))
+
 
 
 

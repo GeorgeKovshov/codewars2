@@ -13,3 +13,59 @@ re
 JSON
 unittest
 urllib
+itertools
+
+
+libraries:
+tkinter, TK gui
+wxpython, also gui
+PyQt - most sophisticated gui, but it works on C++
+
+web:
+requests - library for http requests
+scrapy - collecting data from the web, used by companies
+beautiful soup - also web scrapping library
+
+
+games:
+pygame 2d, simple
+pyglet 3d
+pyengine3d - creates beautiful renders
+
+Mathematics:
+NumPy
+SciPy - commonly used for machine learning and image manipulation
+SymPy
+
+Data Science:
+pandas - a must for data science
+SQLalchemy - library for work with sql
+Matlotlib - create charts, graphs, etc.
+Plotly - also charts, but more advanced
+Scikit - related to machine learning, analysis of data
+imbalanced-learn - correction of imbalance in groups of data sets
+theano - evaluate math expressions
+bokeh - matlotlib analog
+Pymc3 - uses theano in machine learning
+lightGBM - tree gradient boosting
+ELI5 - debug machine learnng classifiers and explain their predictions
+
+Deep learning:
+TensorFlow - a must have machine learning library.
+PyTorch - builds Neural Networks
+Keras - deep neural network library
+
+Web Frameworks:
+Django - web development framework, one of the most popular in the world
+Flask - the same, also incredibly popular
+
+Miscellaneous:
+Twisted - event-driven lib for internet applications. Twitch uses it
+IP[y] - shell for interactive computing
+pillow - imaging library
+Poetry - library to manage a project with several libraries
+Pywin32 - allows Python to work with windows, access and use applications installed on os
+Kivy - build apps for android
+Pendulum - time, date-time, TIMEZONES!
+Loguru - simplifies logging
+
