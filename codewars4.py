@@ -155,6 +155,17 @@ def is_defended(attackers, defenders):
 #print(is_defended([1,3,5,7], [2,4,6,8]))
 print(is_defended([10, 10, 1, 1], [4, 4, 7, 7]))
 
+stri = "slgfjdsakg"
+print(stri[::-1])
+
+def other_angle(a, b):
+    return int(180 - (a + b))
+
+def solution(string):
+    string
+    return "".join([x for x in string[::-1]])
+
+print(solution("hello"))
 
 
 
