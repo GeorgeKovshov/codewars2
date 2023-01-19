@@ -171,6 +171,21 @@ print(solution("hello"))
 def mango(quantity, price):
     return (quantity - quantity//3)*price
 
+def trim(phrase, size):
+    """I'm just goofing about here"""
+    return "".join([x if (ind<max(size, 3) and len(phrase)<=3) or (ind<size-3) else "" for ind, x in enumerate([*phrase]) if ind<=size-1]) + "..." if len(phrase)>size else phrase
+
+def trim2(phrase, size):
+    return phrase if size >= len(phrase) else phrase[:size if len(phrase) < 4 or size < 4 else (size-3)]+ "..."
+
+
+phr="Creating kata is fun"
+print(phr[:5])
+print(trim("Creating kata is fun",7))
+print(trim("Creating kata is fun",4))
+print(trim("He",1))
+print(trim("Hey", 2))
+
 
 
 
