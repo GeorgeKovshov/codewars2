@@ -180,11 +180,18 @@ def trim2(phrase, size):
 
 
 phr="Creating kata is fun"
+
 print(phr[:5])
 print(trim("Creating kata is fun",7))
 print(trim("Creating kata is fun",4))
 print(trim("He",1))
 print(trim("Hey", 2))
+
+def are_you_playing_banjo(name):
+    # Implement me!
+    return f"{name} plays banjo" if name[0] in ['R', 'r'] else f"{name} does not play banjo"
+
+print(are_you_playing_banjo("Rohn"))
 
 
 
