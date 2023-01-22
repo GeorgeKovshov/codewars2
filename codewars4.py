@@ -193,7 +193,30 @@ def are_you_playing_banjo(name):
 
 print(are_you_playing_banjo("Rohn"))
 
+def set_reducer(inp):
+    if len(inp)==1:
+        return inp[0]
+    else:
+        new_inp = []
+        last_x = -1
+        index = -1
+        for x in inp:
+            if x == last_x:
+                new_inp[index] += 1
+            else:
+                index += 1
+                new_inp.append(1)
+                last_x = x
+        return set_reducer(new_inp)
 
+
+from itertools import groupby
+
+def set_reducer2(arr):
+    return arr[0] if len(arr)==1 else set_reducer([len([*g]) for k, g in groupby(arr)])
+
+
+print(set_reducer([0, 4, 6, 8, 8, 8, 5, 5, 7]))
 
 
 
