@@ -219,6 +219,35 @@ def set_reducer2(arr):
 print(set_reducer([0, 4, 6, 8, 8, 8, 5, 5, 7]))
 
 
+def reduce_fraction(fraction):
+    i = min(abs(fraction[0]), abs(fraction[1]))
+    new_fraction = fraction
+    print(fraction)
+    while i>1:
+        if fraction[0] % i == 0 and fraction[1] % i == 0:
+            return reduce_fraction([fraction[0] / i, fraction[1] / i])
+            break
+        i -= 1
+    return fraction
+
+from fractions import Fraction
+def reduce_fraction2(fraction):
+    t = Fraction(*fraction)
+    return (t.numerator, t.denominator)
+
+
+
+def gcd(a, b):
+    return a if b == 0 else gcd(b, a % b)
+
+def reduce_fraction3(fraction):
+    num, denom = fraction
+    gcd_num_denom = gcd(num, denom)
+    return (num // gcd_num_denom, denom // gcd_num_denom)
+
+print(reduce_fraction([60, 20]))
+
+
 
 
 
