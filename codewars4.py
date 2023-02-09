@@ -247,6 +247,19 @@ def reduce_fraction3(fraction):
 
 print(reduce_fraction([60, 20]))
 
+def descending_order(num):
+    list = sorted([int(x) for x in str(num)], reverse=True)
+    result = 0
+    for x in list:
+        result = result * 10 + x
+    return result
+
+def Descending_Order2(num):
+    return int("".join(sorted(str(num), reverse=True)))
+
+
+print(descending_order(123456789))
+
 
 
 
