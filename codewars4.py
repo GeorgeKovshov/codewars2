@@ -260,6 +260,18 @@ def Descending_Order2(num):
 
 print(descending_order(123456789))
 
+def reverse_words(text):
+    """
+    text_new = text.split(" ")
+    text_n = ""
+    for x in text.split(" "):
+        text_n += " " + "".join(reversed(x))
+    return text_n[1:]
+    """
+    return " ".join(["".join(reversed(x)) for x in text.split(" ")])[1:]
+
+print(reverse_words('The quick brown fox jumps over the lazy dog.'))
+
 
 
 
