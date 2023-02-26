@@ -272,9 +272,122 @@ def reverse_words(text):
 
 print(reverse_words('The quick brown fox jumps over the lazy dog.'))
 
+domains_list = '''\
+*.amazon.co.uk    89
+*.doubleclick.net    139
+*.fbcdn.net    212
+*.in-addr.arpa    384
+*.l.google.com    317
+1.client-channel.google.com    110
+6.client-channel.google.com    45
+a.root-servers.net    1059
+apis.google.com    43
+clients4.google.com    71
+clients6.google.com    81
+connect.facebook.net    68
+edge-mqtt.facebook.com    56
+graph.facebook.com    150
+mail.google.com    128
+mqtt-mini.facebook.com    47
+ssl.google-analytics.com    398
+star-mini.c10r.facebook.com    46
+staticxx.facebook.com    48
+www.facebook.com    178
+www.google.com    162
+www.google-analytics.com    127
+www.googleapis.com    87'''
 
 
+def count_domains(domains, min_hits=0):
+    dom = domains.split()
+    i = 0
+    dict = {}
+    indexes = []
+    while i < len(dom) - 1:
+        sentence = dom[i].split(".")
+        if len(sentence[-2]) < 4 and len(sentence[-1]) == 2:  # in case of something like amazon.co.uk
+            try:
+                site = str(sentence[-3]) + "." + str(sentence[-2]) + "." + str(sentence[-1])
+            except:
+                site = str(sentence[-2]) + "." + str(sentence[-1])
+        else:
+            site = str(sentence[-2]) + "." + (sentence[-1])
+        try:
+            dict[site] += int(dom[i + 1])
+        except:
+            dict[site] = int(dom[i + 1])
+        i += 2
+        if dict[site] > min_hits and site not in indexes:
+            indexes.append(site)
+    new_dict = {k: v for k, v in sorted(dict.items(), key=lambda item: item[1])}
+    #indexes.sort(reverse=True)
+    #sorted_indexes = sorted(dict, key=lambda x: (dict[x], x))
 
+    list_new = []
+    result = ""
+
+    #for x in new_dict:
+
+    """
+    for domain in sorted_indexes:
+        result += domain[0] + " (" + str(domain[1]) + ")" + "\n"
+    """
+    """
+    current_value = -1
+    previous = []
+
+    # Sorting
+    for x in new_dict:
+        if x in indexes:
+            print("current: ", x, " ", new_dict[x])
+            if new_dict[x] == current_value:
+                previous.append(x)
+            elif new_dict[x] != current_value and previous:
+                previous.sort(reverse=True)
+                print("sorted:", previous)
+                for y in previous:
+                    result = y + " (" + str(new_dict[y]) + ")" + "\n" + result
+                previous = []
+                result = x + " (" + str(new_dict[x]) + ")" + "\n" + result
+            else:
+                #result = previous[0] + " (" + str(new_dict[previous[0]]) + ")" + "\n" + result
+                previous.append(x)
+
+            current_value = new_dict[x]
+    if previous:
+        result = previous[0] + " (" + str(new_dict[previous[0]]) + ")" + "\n" + result
+    print("______________")
+    """
+    for x in new_dict:
+        if x in indexes:
+            #list_new.append((x, dict[x]))
+            result = x + " (" + str(new_dict[x]) + ")" + "\n" + result
+    #sorted_list = sorted(list.new, key=lambda x: (x[1], -x[0]))
+    return result[0:len(result) - 1]
+
+
+print(count_domains(domains_list, 500))
+
+
+"""
+'livejasmin.com (1164)\n \ livejasmin.com (1164)\n '
+'globo.com (925)\n' \ 'globo.com (925)\n
+'booking.com (734)\n' \ "booking.com (734)\n"
+'microsoftonline.com (633)\n' \ "microsoftonline.com (633)\n"
+'fc2.com (613)\n' \ "fc2.com (613)\n"
+'rakuten.co.jp (576)\n' \ "rakuten.co.jp (576)\n"
+'diply.com (557)\n' \ "diply.com (557)\n"
+'twitch.tv (484)\n' \ "twitch.tv (484)\n"
+'cnzz.com (482)\n' \"cnzz.com (482)\n"
+'linkedin.com (482)\n' \"linkedin.com (482)\n"
+'baidu.com (479)\n' \"adobe.com (479)\n"
+'adobe.com (479)\n' \"baidu.com (479)\n"
+'naver.com (475)\n' \"naver.com (475)\n"
+'tmall.com (473)\n' \"tmall.com (473)\n"
+'walmart.com (471)\n' \"walmart.com (471)\n"
+'txxx.com (469)\n' \"txxx.com (469)\n"
+'labh.360.cn (463)' "360.cn (463)"
+"""
 
 
 
