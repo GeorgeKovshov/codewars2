@@ -305,7 +305,8 @@ def count_domains(domains, min_hits=0):
     indexes = []
     while i < len(dom) - 1:
         sentence = dom[i].split(".")
-        if len(sentence[-2]) < 4 and len(sentence[-1]) == 2:  # in case of something like amazon.co.uk
+        #if len(sentence[-2]) < 4 and len(sentence[-1]) == 2:  # in case of something like amazon.co.uk
+        if sentence[-2] in ["co", "com"]:
             try:
                 site = str(sentence[-3]) + "." + str(sentence[-2]) + "." + str(sentence[-1])
             except:
@@ -319,50 +320,12 @@ def count_domains(domains, min_hits=0):
         i += 2
         if dict[site] > min_hits and site not in indexes:
             indexes.append(site)
-    new_dict = {k: v for k, v in sorted(dict.items(), key=lambda item: item[1])}
-    #indexes.sort(reverse=True)
-    #sorted_indexes = sorted(dict, key=lambda x: (dict[x], x))
-
-    list_new = []
+    new_dict = {k: v for k, v in sorted(dict.items(), key=lambda item: (-item[1], item[0]))}
     result = ""
 
-    #for x in new_dict:
-
-    """
-    for domain in sorted_indexes:
-        result += domain[0] + " (" + str(domain[1]) + ")" + "\n"
-    """
-    """
-    current_value = -1
-    previous = []
-
-    # Sorting
     for x in new_dict:
         if x in indexes:
-            print("current: ", x, " ", new_dict[x])
-            if new_dict[x] == current_value:
-                previous.append(x)
-            elif new_dict[x] != current_value and previous:
-                previous.sort(reverse=True)
-                print("sorted:", previous)
-                for y in previous:
-                    result = y + " (" + str(new_dict[y]) + ")" + "\n" + result
-                previous = []
-                result = x + " (" + str(new_dict[x]) + ")" + "\n" + result
-            else:
-                #result = previous[0] + " (" + str(new_dict[previous[0]]) + ")" + "\n" + result
-                previous.append(x)
-
-            current_value = new_dict[x]
-    if previous:
-        result = previous[0] + " (" + str(new_dict[previous[0]]) + ")" + "\n" + result
-    print("______________")
-    """
-    for x in new_dict:
-        if x in indexes:
-            #list_new.append((x, dict[x]))
-            result = x + " (" + str(new_dict[x]) + ")" + "\n" + result
-    #sorted_list = sorted(list.new, key=lambda x: (x[1], -x[0]))
+            result = result + x + " (" + str(new_dict[x]) + ")" + "\n"
     return result[0:len(result) - 1]
 
 
