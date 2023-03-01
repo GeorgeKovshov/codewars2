@@ -352,6 +352,21 @@ print(count_domains(domains_list, 500))
 'labh.360.cn (463)' "360.cn (463)"
 """
 
+def nb_dig(n, d):
+    count = 0
+    while n > 0:
+        k = n*n
+        print([*str(k)])
+        for digit in [*str(k)]:
+            if str(d) == digit:
+                count += 1
+        n -= 1
+    return count
+
+print(nb_dig(10,1))
+
+print([*"123456"])
+
 
 
 
