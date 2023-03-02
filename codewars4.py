@@ -367,6 +367,42 @@ print(nb_dig(10,1))
 
 print([*"123456"])
 
+def hanoi(disks):
+    rod1 = []
+    rod2 = []
+    rod3 = []
+    while disks >0:
+        rod1.append(disks)
+        disks -= 1
+    count = 0
+    while rod1:
+        print("--------")
+        print("rod1", rod1)
+        print("rod2", rod2)
+        print("rod3", rod3)
+        if len(rod2) == 0 or rod1[-1] < rod2[-1] :
+            #print(1)
+            rod2.append(rod1.pop())
+        elif len(rod3) == 0 or rod1[-1] < rod3[-1]:
+            #print(2)
+            rod3.append(rod1.pop())
+        elif rod3[-1] < rod1[-1] and rod2[-1] < rod1[-1]:
+            rod1.append(rod3.pop())
+        elif rod2[-1] < rod3[-1]:
+            #print(3)
+            rod3.append(rod2.pop())
+        elif rod3[-1] < rod2[-1]:
+            #print(4)
+            rod2.append(rod3.pop())
+        elif rod3[- 1] < rod1[- 1]:
+            #print(5)
+            rod1.append(rod3.pop())
+        count += 1
+    return count
+
+
+print(hanoi(4))
+
 
 
 
