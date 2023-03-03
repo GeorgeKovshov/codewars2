@@ -367,41 +367,238 @@ print(nb_dig(10,1))
 
 print([*"123456"])
 
-def hanoi(disks):
-    rod1 = []
-    rod2 = []
-    rod3 = []
+
+rod1 = []
+rod2 = []
+rod3 = []
+def func(targeted_rod):
+    """the most frequent action is the movement of the top 2 disks (the last rod):
+
+                  [..2,1] [..]   [..]
+        1 count:  [..2]   [..1]  [..]
+        2 count:  [..]    [..1]  [..2]
+        3 count:  [..]    [..]   [..2,1]
+
+    so I've put it into a separate function.
+    """
+    global rod1
+    global rod2
+    global rod3
+
+    # determening where the top 2 disks are and removing them
+    if 1 in rod1:
+        rod1.pop()
+        rod1.pop()
+    elif 1 in rod2:
+        rod2.pop()
+        rod2.pop()
+    else:
+        rod3.pop()
+        rod3.pop()
+
+    # putting the top 2 disks onto targeted rod
+    if targeted_rod == 1:
+        rod1.append(2)
+        rod1.append(1)
+    elif targeted_rod == 2:
+        rod2.append(2)
+        rod2.append(1)
+    elif targeted_rod == 3:
+        rod3.append(2)
+        rod3.append(1)
+
+def func1(targeted_rod):
+    """the most frequent action is the movement of the top 2 disks (the last rod):
+
+                  [..2,1] [..]   [..]
+        1 count:  [..2]   [..1]  [..]
+        2 count:  [..]    [..1]  [..2]
+        3 count:  [..]    [..]   [..2,1]
+
+    so I've put it into a separate function.
+    """
+    global rod1
+    global rod2
+    global rod3
+
+    # putting the top 2 disks onto targeted rod
+    if targeted_rod == 1:
+        rod1.append(2)
+        rod1.append(1)
+    elif targeted_rod == 2:
+        rod2.append(2)
+        rod2.append(1)
+    elif targeted_rod == 3:
+        rod3.append(2)
+        rod3.append(1)
+
+
+def old_hanoi(disks):
+    "function that returns the count of moves to win a hanoi tower game with the given number of disks"
+    global rod1
+    global rod2
+    global rod3
+
+    # if 1 or 2 disks, return count 1 or 2
+    if disks < 3:
+        return disks
+
+    # putting the disks onto the first rod
     while disks >0:
         rod1.append(disks)
         disks -= 1
-    count = 0
-    while rod1:
-        print("--------")
-        print("rod1", rod1)
-        print("rod2", rod2)
-        print("rod3", rod3)
-        if len(rod2) == 0 or rod1[-1] < rod2[-1] :
-            #print(1)
-            rod2.append(rod1.pop())
-        elif len(rod3) == 0 or rod1[-1] < rod3[-1]:
-            #print(2)
-            rod3.append(rod1.pop())
-        elif rod3[-1] < rod1[-1] and rod2[-1] < rod1[-1]:
-            rod1.append(rod3.pop())
-        elif rod2[-1] < rod3[-1]:
-            #print(3)
-            rod3.append(rod2.pop())
-        elif rod3[-1] < rod2[-1]:
-            #print(4)
-            rod2.append(rod3.pop())
-        elif rod3[- 1] < rod1[- 1]:
-            #print(5)
-            rod1.append(rod3.pop())
-        count += 1
+
+    # making the first 3 moves that place 1st and 2nd disks onto second rod
+    func(2)
+    count = 3
+
+    # we have to keep track of where the last and current disk are moved from and to
+    previous = 0
+    current = 0
+    future = 0
+    while rod1 or (rod2 and rod3):  # if two rods are empty at the same time, then we have won the game and stop
+        previous = current
+
+        """
+        in the cycle we compare the two rods that DON'T have the top two disks (1 and 2)
+        and move from the rod with the smallest top disk to the one with the larger one.
+        
+        for visual clarity I used the nested ifs
+        """
+
+        if rod1 and rod1[-1] == 1:  # the exchange is between rod2 and rod 3
+            if rod2 and (not rod3 or rod2[-1] < rod3[-1]):
+                rod3.append(rod2.pop())
+                current = 2
+                future = 3
+            else:
+                rod2.append(rod3.pop())
+                current = 3
+                future = 2
+
+        elif rod2 and rod2[-1] == 1:    # the exchange is between rod1 and rod 3
+            if rod3 and (not rod1 or rod3[-1] < rod1[-1]):
+                rod1.append(rod3.pop())
+                current = 3
+                future = 1
+            else:
+                rod3.append(rod1.pop())
+                current = 1
+                future = 3
+
+        elif rod3 and rod3[-1] == 1:    # the exchange is between rod1 and rod 2
+            if rod2 and (not rod1 or rod2[-1] < rod1[-1]):
+                rod1.append(rod2.pop())
+                current = 2
+                future = 1
+            else:
+                rod2.append(rod1.pop())
+                current = 1
+                future = 2
+
+        """ 
+        if two disks are moved from the same rod (current and previous) one after the other
+        then we move the top 2 disks to the rod they came from (current),
+        else we move the top 2 disks to the rod that the last disk is moved to (future)
+        """
+        if previous == current:
+            func(current)
+        else:
+            func(future)
+        count += 3 + 1
+
     return count
 
 
-print(hanoi(4))
+
+def good_hanoi(disks):
+    "function that returns the count of moves to win a hanoi tower game with the given number of disks"
+    global rod1
+    global rod2
+    global rod3
+
+    # if 1 or 2 disks, return count 1 or 2
+    if disks < 3:
+        return disks
+
+    # putting the disks onto the first rod
+    while disks >0:
+        rod1.append(disks)
+        disks -= 1
+
+    # making the first 3 moves that place 1st and 2nd disks onto second rod
+    #func(2)
+    rod1.pop()
+    rod1.pop()
+    count = 3
+    print(rod1, rod2, rod3)
+    # we have to keep track of where the last and current disk are moved from and to
+    previous = 0
+    current = 0
+    future = 0
+    present_place = 2
+    while rod1 or (rod2 and rod3):  # if two rods are empty at the same time, then we have won the game and stop
+
+        previous = current
+        """
+                in the cycle we compare the two rods that DON'T have the top two disks (1 and 2)
+                and move from the rod with the smallest top disk to the one with the larger one.
+
+                for visual clarity I used the nested ifs
+                """
+
+        if present_place == 1:  # the exchange is between rod2 and rod 3
+            if rod2 and (not rod3 or rod2[-1] < rod3[-1]):
+                rod3.append(rod2.pop())
+                current = 2
+                future = 3
+            else:
+                rod2.append(rod3.pop())
+                current = 3
+                future = 2
+
+        elif present_place == 2:  # the exchange is between rod1 and rod 3
+            if rod3 and (not rod1 or rod3[-1] < rod1[-1]):
+                rod1.append(rod3.pop())
+                current = 3
+                future = 1
+            else:
+                rod3.append(rod1.pop())
+                current = 1
+                future = 3
+
+        elif present_place == 3:  # the exchange is between rod1 and rod 2
+            if rod2 and (not rod1 or rod2[-1] < rod1[-1]):
+                rod1.append(rod2.pop())
+                current = 2
+                future = 1
+            else:
+                rod2.append(rod1.pop())
+                current = 1
+                future = 2
+
+        """ 
+        if two disks are moved from the same rod (current and previous) one after the other
+        then we move the top 2 disks to the rod they came from (current),
+        else we move the top 2 disks to the rod that the last disk is moved to (future)
+        """
+        if previous == current:
+            present_place = current
+        else:
+            present_place = future
+        count += 4
+    func1(present_place)
+
+    return count
+
+
+def hanoi(disks):
+    "function that returns the count of moves to win a hanoi tower game with the given number of disks"
+    return 2**disks - 1
+
+
+print(good_hanoi(8))
+#print(hanoi(4))
 
 
 
