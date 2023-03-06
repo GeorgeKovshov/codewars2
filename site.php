@@ -93,6 +93,107 @@
 			  return $arr['0'] ==  $arr['1'] ? end($arr) : $arr['0'];
 			}
 			
+			function encode2(string $s): string {
+				$arr = [];
+				$j=0;
+				$number = 1;
+				foreach(range("a", "z") as $i){
+					echo "$i";
+					$arr += [$i => $number];
+					$number = abs($number - 1);
+					print $arr[$i];
+					echo "<br>";
+				}
+				$arr += [" " => " "];
+				$chars = str_split($s);
+				$str = "";
+				foreach($chars as $char){
+					$str = $str . $arr[$char];
+					//print($char);
+					//echo "<br>";
+				}
+				return $str;
+			}
+			
+			function encode3(string $s): string {
+				$arr = [];
+				$j=0;
+				//$number = 1;
+
+				foreach(range("a", "z") as $i){
+					array_push($arr, $i);
+					//$number = abs($number - 1);
+				}
+				//$arr += [" " => " "];
+				$chars = str_split($s);
+				$str = "";
+				$i=0;
+				foreach($chars as $char){
+					//if(in_array($char, range("a", "z")){
+					//	$str = $str . $arr[$char];
+					//}
+					if(in_array($char, $arr)){
+						$str = $str . array_search($char, $arr)%2;
+					}else{
+						$str = $str . $char;
+					}
+
+					
+				}
+				return $str;
+			}
+			
+			function encode4(string $s): string {
+			  return preg_replace_callback('/[a-z]/i', function ($m) {return (ord($m[0]) + 1) % 2;}, $s);
+			}
+			
+			function encode5(string $s): string {
+			  return implode(array_map(function ($e) {
+				  return ctype_alpha($e) ? (ord($e) + 1) % 2 : $e;
+				}, str_split($s)));
+			}
+			
+			//echo encode("sdf d fsfsd");
+			
+			$greet = function($name) {
+				printf("Hello %s\r\n", $name);
+			};
+			$greet("PHP");
+			
+			echo preg_replace_callback('~-([a-z])~', function ($match) {
+				return strtoupper($match[1]);
+			}, 'hello-world');
+			echo "<br>";
+			echo "<br>";
+			
+			
+			function camel_case(string $s): string {
+				$s = trim($s);
+				$words = explode(" ", $s);
+				$result = "";
+				foreach($words as $word){
+					$word[0] = strtoupper($word[0]);
+					$result = $result . $word;
+				}
+				//print_r($arr);
+				return $result;
+			  // Your code here
+			}
+			echo camel_case("Hello case");
+			echo camel_case(" camel case word");
+			echo camel_case("test case");
+			
+			function camel_case1(string $s): string {
+			  return str_replace(' ', '', ucwords(trim($s)));
+			}
+			
+			function camel_case(string $s): string {
+				return empty($s) ? "" : implode(array_map('ucfirst', explode(" ", trim($s))));
+			}
+			
+			
+			
+			
 		?>
 		
 		
