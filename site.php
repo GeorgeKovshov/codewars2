@@ -187,10 +187,145 @@
 			  return str_replace(' ', '', ucwords(trim($s)));
 			}
 			
-			function camel_case(string $s): string {
+			function camel_case2(string $s): string {
 				return empty($s) ? "" : implode(array_map('ucfirst', explode(" ", trim($s))));
 			}
+			echo "<br>";
 			
+			function digPow($n, $p) {
+				$original = $n;
+				$sum = 0;
+				$p += strlen(strval($n));
+				while($n>=1){
+					$p--;
+					$no = $n % 10;
+					$sum += pow($no, $p);
+					$n = floor($n/10);
+				}
+
+				$product = $original;
+				$count = 1;
+				while($product <= $sum){
+					if($product == $sum){
+						return $count;
+					}
+					$product += $original;
+					$count++;
+					
+				}
+				return -1;
+			}
+			
+			//echo digPow(153,1);
+			//echo digPow(92, 1);
+			//echo digPow(89, 1);
+			echo digPow(46288, 3);
+			
+			function digPow2($n, $p) {
+				$sum = 0;
+				
+				foreach(str_split($n) as $number) {
+					$sum += $number ** $p++;
+				}
+				  
+				return (($sum % $n) == 0) ? 
+					($sum / $n) : -1 ;
+			}
+			
+			function digPow3($n, $p) {
+				// Split $n into array
+				$digits = str_split($n);
+			   
+				// Walk through digits to calculate x ^ p + index
+				array_walk($digits, function (&$elem, $index, $param) { $elem = pow($elem, $param + $index); }, $p);
+				
+				// Calculate sum
+				$calc_result = array_sum($digits);
+				
+				// Return $calc_result / $n if $calc_result % $n == 0, return -1 otherwise
+				return (($calc_result % $n == 0) ? ($calc_result / $n) : -1);
+			}
+			
+			function find($integers) {
+				$divider = 0;
+				if($integers[0]%2 ==$integers[1]%2){
+					$divider = $integers[0]%2;
+				}else{
+					if($integers[0]%2 == $integers[2]%2){
+						return $integers[1];
+					}else{
+						return $integers[0];
+					}
+				}
+				
+				for($i=2; $i<count($integers);$i++){
+					if(abs($integers[$i]%2) != $divider){
+						return $integers[$i];
+					}
+				}
+				
+			}
+			
+			$go = 0;
+			
+			function calculation1($catch_up_rate){
+				global $go;
+				$result = 0;
+				while($go - $catch_up_rate>=0){
+					$go = $go - $catch_up_rate;
+					$result++;
+				}
+				return $result;
+			
+			}
+			
+			function race1($v1, $v2, $g) {
+				global $go;
+				$go = $g;
+				$catch_up_rate = $v2 - $v1;
+				$hour = calculation1($catch_up_rate);	
+				//$minutes = calculation1(ceil($catch_up_rate/60));
+				//$seconds = calculation1(ceil($catch_up_rate/3600));
+				$minutes = calculation1($catch_up_rate/60);
+				$seconds = calculation1($catch_up_rate/3600);
+				$arr = array($hour,$minutes,$seconds);
+				print_r($arr);
+			}
+			
+			//print_r(race(720, 850, 70));
+			//print_r(race(80, 91, 37));
+			//print_r(race(80, 100, 40));
+			echo "<br>";
+			function calculation($catch_up_rate){
+				global $go;
+				$result = $go / $catch_up_rate;
+				$go = $go % $catch_up_rate;
+				echo "catch = $catch_up_rate; result = $result; go = $go <br>";
+				return $result;
+			
+			}
+			
+			function race($v1, $v2, $g) {
+				global $go;
+				$go = $g;
+				$catch_up_rate = $v2 - $v1;
+				$hour = floor(calculation($catch_up_rate));
+				if($go!=0){
+					$minutes = floor(calculation($catch_up_rate/60));
+				}
+				if($go!=0.00){
+					$seconds = floor(calculation($catch_up_rate/3600));
+				}
+				
+				
+				
+				$arr = array($hour,$minutes,$seconds);
+				print_r($arr); echo "<br>";
+			}
+			//print_r(race(720, 850, 70));
+			//print_r(race(80, 91, 37));
+			//print_r(race(80, 100, 40));
+			print_r(race1(541, 621, 144));
 			
 			
 			
