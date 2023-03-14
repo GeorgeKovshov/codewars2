@@ -146,42 +146,112 @@
 			}
 			
 			
-			
+			/*function find_sum($k, $max_sum, $ls, $t,$true_sum, $max_k){
+				if($k == 0){
+					if($t<0){
+						return [0, $true_sum];
+						//
+					}else{
+						if($true_sum<$max_sum){
+							//$true_sum=$max_sum;
+							return [$max_sum, $max_sum];
+						} 
+						//return $max_sum;
+					}
+					
+				}else{
+					if(count($ls)>=$max_k){
+						$m_sum = max(find_sum($k-1, $max_sum + $ls[0], array_slice($ls, 1), $t - $ls[0], $true_sum, $max_k)[1],
+								   find_sum($k, $max_sum, array_slice($ls, 1), $t, $true_sum, $max_k)[1]);
+						return [$max_sum, $m_sum];
+					}else{
+						return find_sum($k-1, $max_sum + $ls[0], array_slice($ls, 1), $t - $ls[0], $true_sum, $max_k);
+					}
+					
+					
+				}
 			
 			
 			function find_sum($k, $max_sum, $ls, $t,$true_sum, $max_k){
 				if($k == 0){
 					if($t<0){
-						return 0;
+						return [0, $true_sum];
 						//
 					}else{
-						//if($true_sum<$max_sum){
-							//return 
-						//}
+						if($true_sum<$max_sum){
+							//$true_sum=$max_sum;
+							return [$max_sum, $max_sum];
+						} 
 						//return $max_sum;
 					}
 					
+				}else{
+					$new_summ = [$max_sum,$true_sum];
+					for($i=0; $i<count($ls);$i++){
+						$summ = find_sum($k-1, $max_sum + $ls[$i], array_slice($ls, 1), $t - $ls[$i], $true_sum, $max_k);
+						if($summ[1]>$true_sum){
+							$new_summ[1]=$summ[1];
+						}
+						if($summ[0]>$max_sum){
+							$new_summ[0]=$summ[0];
+						}
+						
+					}
+					return $new_summ;
 				}
-				$summ = $max_sum;
-
-				for($i=0;$i<=count($ls)-$k;$i++){
-
-					$summ1 = find_sum($k-1, $max_sum, array_slice($ls, $i+1), $t - $ls[$i], $true_sum, $max_k);
-					
-					if($summ1>$summ && $k == $max_k){
-						$summ=$summ1;
+			
+			
+			function find_sum($k, $max_sum, $ls, $t,$true_sum, $max_k){
+				if($k == 0){
+					if($t<0){
+						return [0, $true_sum];
+						//
+					}else{
+						if($true_sum<$max_sum){
+							//$true_sum=$max_sum;
+							return [$max_sum, $max_sum];
+						} 
+						//return $max_sum;
 					}
 					
-					//if($summ1[0]>$summ && $summ1[0]<= $t){
-						//print_r($ls[$i]); echo "<br>";
-					//	$summ = $summ1[0];
-					//}
-
-
+				}else{
+					return find_sum($k-1, $max_sum + $ls[0], array_slice($ls, 1), $t - $ls[0], $true_sum, $max_k);
 				}
-				//return [[$summ,$summ2], $true_sum];
-				return $summ;
+			*/
+			
+			function find_sum($k, $max_sum, $ls, $t,$true_sum, $max_k){
+				if($k == 0){
+					if($t<0){
+						return [0, $true_sum];
+						//
+					}else{
+						if($true_sum<$max_sum){
+							//$true_sum=$max_sum;
+							return [$max_sum, $max_sum];
+						}else{
+							return [$max_sum, $true_sum];
+						} 
+						//return $max_sum;
+					}
+					
+				}else{
+					if(count($ls)>$max_k){
+
+						$m_sum = max(find_sum($k-1, $max_sum + $ls[0], array_slice($ls, 1), $t - $ls[0], $true_sum, $max_k)[1],
+								   find_sum($k, $max_sum, array_slice($ls, 1), $t, $true_sum, $max_k)[1]);
+						return [$max_sum, $m_sum];
+					}elseif(count($ls) != 0){
+						$m_sum = max(find_sum($k-1, $max_sum + $ls[0], array_slice($ls, 1), $t - $ls[0], $true_sum, $max_k)[1],
+								   find_sum($k, $max_sum, array_slice($ls, 1), $t, $true_sum, $max_k)[1]);
+						return [$max_sum, $m_sum];
+            
+						//return find_sum($k-1, $max_sum + $ls[0], array_slice($ls, 1), $t - $ls[0], $true_sum, $max_k);
+					}else{
+						return[$max_sum, $true_sum];
+					}
+				}
 			}
+	
 			
 			function chooseBestSum($t, $k, $ls) {
 				
@@ -193,7 +263,7 @@
 				if($k>count($ls)){
 					return null;
 				}
-				if($t<3){
+				if($t<0){
 					return null;
 				}
 				$list = $ls;
@@ -223,7 +293,7 @@
 				}*/
 				$lenght = count($list);
 				//$i = $lenght;
-				$max_sum = find_sum($k-1,0,$ls,$t,0, $k-1);
+				$max_sum = find_sum($k,0,$ls,$t,0, $k);
 				
 				/*
 				for($i=0;$i<$lenght-2;$i++){
@@ -242,7 +312,10 @@
 				}*/
 				echo "<br>";
 				echo "<br>";
-				return $max_sum;
+				print_r($max_sum);
+				echo "<br>";
+				echo "<br>";
+				return $max_sum[1];
 			}
 			
 			
