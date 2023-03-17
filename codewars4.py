@@ -511,6 +511,45 @@ def old_hanoi(disks):
 
 
 
+rod1 = []
+rod2 = []
+rod3 = []
+def func(targeted_rod):
+    """the most frequent action is the movement of the top 2 disks (the last rod):
+
+                  [..2,1] [..]   [..]
+        1 count:  [..2]   [..1]  [..]
+        2 count:  [..]    [..1]  [..2]
+        3 count:  [..]    [..]   [..2,1]
+
+    so I've put it into a separate function.
+    """
+    global rod1
+    global rod2
+    global rod3
+
+    # determening where the top 2 disks are and removing them
+    if 1 in rod1:
+        rod1.pop()
+        rod1.pop()
+    elif 1 in rod2:
+        rod2.pop()
+        rod2.pop()
+    else:
+        rod3.pop()
+        rod3.pop()
+
+    # putting the top 2 disks onto targeted rod
+    if targeted_rod == 1:
+        rod1.append(2)
+        rod1.append(1)
+    elif targeted_rod == 2:
+        rod2.append(2)
+        rod2.append(1)
+    elif targeted_rod == 3:
+        rod3.append(2)
+        rod3.append(1)
+
 def good_hanoi(disks):
     "function that returns the count of moves to win a hanoi tower game with the given number of disks"
     global rod1
@@ -597,8 +636,8 @@ def hanoi(disks):
     return 2**disks - 1
 
 
-print(good_hanoi(8))
-#print(hanoi(4))
+#print(good_hanoi(15))
+print(hanoi(50))
 
 
 
