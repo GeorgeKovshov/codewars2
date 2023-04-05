@@ -640,6 +640,62 @@ def hanoi(disks):
 print(hanoi(50))
 
 
+def bubble_sort(list_l):
+    length = len(list_l)
+    i = 0
+    while i <= length-1:
+        swap = False
+        j = 0
+        while j <= length - 2 - i:
+            if list_l[j] > list_l[j + 1]:
+                temp = list_l[j + 1]
+                list_l[j + 1] = list_l[j]
+                list_l[j] = temp
+                swap = True
+            j += 1
+        if not swap:
+            break
+        i += 1
+    return list_l
+
+print(bubble_sort([5,7,3,8,44,2,8,4,1,4,6]))
+
+
+def merge(left, right):
+    length_left = len(left)
+    length_right = len(right)
+    l = 0
+    r = 0
+    temp = []
+    while l < length_left and r < length_right:
+        if left[l] < right[r]:
+            temp.append(left[l])
+            l += 1
+        elif right[r] <= left[l]:
+            temp.append(right[r])
+            r += 1
+    if l < length_left:
+        temp += left[l:]
+    elif r < length_right:
+        temp += right[r:]
+    return temp
+
+
+def merge_sort(list_l, n):
+    if n == 1:
+        return list_l
+
+    left = merge_sort(list_l[:n//2], n//2)  # left side
+    right = merge_sort(list_l[n//2:], round(n/2))  # right side
+
+    return merge(left, right)
+
+listik = [2,4,6,8,9,1,3,5,7,6,2]
+print(merge_sort(listik, len(listik)))
+
+
+
+
 
 
 
