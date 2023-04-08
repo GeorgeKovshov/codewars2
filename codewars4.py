@@ -693,6 +693,61 @@ def merge_sort(list_l, n):
 listik = [2,4,6,8,9,1,3,5,7,6,2]
 print(merge_sort(listik, len(listik)))
 
+def swap(left, right):
+    return right, left
+
+
+def pivot_choice(list_l, length):
+    if list_l[length//2] > list_l[length - 1]:
+        list_l[length//2], list_l[length-1] = swap(list_l[length//2], list_l[length-1])
+    if list_l[0] > list_l[length-1]:
+        list_l[0], list_l[length - 1] = swap(list_l[0], list_l[length - 1])
+    if list_l[0] > list_l[length//2]:
+        list_l[0], list_l[length//2] = swap(list_l[0], list_l[length//2])
+    return list_l
+
+
+def quicksort(listl, length):
+    if length == 1:
+        return listl
+    listl = pivot_choice(listl, length)
+    listl[length//2], listl[length-1] = swap(listl[length//2], listl[length-1])
+    i = 0
+    j = length-2
+
+    while i<j:
+        if listl[i] > listl[length-1]:
+            if listl[j] <= listl[length-1]:
+                listl[i], listl[j] = swap(listl[i], listl[j])
+                i+=1
+                j-=1
+                break
+            else:
+                j-=1
+        else:
+            i+=1
+    listl[i], listl[length - 1] = swap(listl[i], listl[length - 1])
+
+    leftlist = quicksort(listl[:i-1], len(listl[:i-1]))
+    rightlist = quicksort(listl[i+1:], len(listl[i+1:]))
+
+    return leftlist + [listl[i]] + rightlist
+
+
+
+
+print("Quicksort:")
+list_q = [2,4,6,8,9,1,3,5,7,6,2]
+list_p = [5,7,3,8,44,2,8,4,1,4,6]
+#print(pivot_choice(list_q, len(list_q)))
+#print(pivot_choice(list_p, len(list_p)))
+print(quicksort(list_q, len(list_q)))
+print(quicksort(list_p, len(list_p)))
+
+
+
+
+
 
 
 
