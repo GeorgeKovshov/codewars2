@@ -716,76 +716,102 @@ def insert_sort_dumb(list_l):
     return result
 
 def insert_sort(list_l):
-    length = len(list_l)-1
+    length = len(list_l)
     i = 1
     while i<length:
         j = i
-        if list_l[i - 1]
+        while j>0:
+            if list_l[j - 1] > list_l[j]:
+                list_l[j - 1], list_l[j] = list_l[j], list_l[j - 1]
+            j -= 1
+        i+=1
+    return list_l
 
 
 list_q = [2, 4, 6, 8, 9, 1, 3, 5, 7, 6, 2]
 list_p = [5, 7, 3, 8, 44, 2, 8, 4, 1, 4, 6]
 
-#print("insert sort:")
-#print(insert_sort(list_q))
-#print(insert_sort(list_p))
+print("insert sort:")
+print(insert_sort(list_q))
+print(insert_sort(list_p))
 
 
 
 
 
 
-"""
+
 def swap(left, right):
     return right, left
 
 
 
-def pivot_choice(list_l, length):
-    if length >= 3:
-        if list_l[length//2] > list_l[length - 1]:
-            list_l[length//2], list_l[length-1] = swap(list_l[length//2], list_l[length-1])
-        if list_l[0] > list_l[length-1]:
-            list_l[0], list_l[length - 1] = swap(list_l[0], list_l[length - 1])
-        if list_l[0] > list_l[length//2]:
-            list_l[0], list_l[length//2] = swap(list_l[0], list_l[length//2])
-    elif length == 2:
-        if list_l[0]>list_l[1]:
-            list_l[0], list_l[1] = swap(list_l[0], list_l[1])
+def pivot_choice(l, leng):
+    if leng >= 3:
+        if l[leng//2] > l[leng-1]:
+            l[leng//2], l[leng-1] = l[leng-1], l[leng//2]
+        if l[0] > l[leng-1]:
+            l[0], l[leng-1] = l[leng-1], l[0]
+        if l[0] > l[leng//2]:
+            l[0], l[leng//2] = l[leng//2], l[0]
+    elif leng == 2:
+        if l[0]>l[1]:
+            l[0],l[1] = l[1], l[0]
 
-    return list_l
+    return l
 
 
-def quicksort(listl, length):
+def quicksort(l, length):
+    if length == 0:
+        return []
     if length == 1:
-        return listl
+        return l
     if length == 2:
-        if listl[0]>listl[1]:
-            listl[0], listl[1] = swap(listl[0], listl[1])
-        return listl
-    listl = pivot_choice(listl, length)
-    listl[length//2], listl[length-1] = swap(listl[length//2], listl[length-1])
+        if l[0] > l[1]:
+            l[0], l[1] = l[1], l[0]
+        return l
+    l = pivot_choice(l, length)
+    print("pivoted: ", l)
+
     i = 0
-    j = length-2
+    j = length-1
+    p = length//2
+    pivot = l[length//2]
 
-    while i<j:
-        if listl[i] > listl[length-1]:
-            if listl[j] <= listl[length-1]:
-                listl[i], listl[j] = swap(listl[i], listl[j])
-                i+=1
-                j-=1
-                break
-            else:
-                j-=1
-        else:
+    while i<p<j:
+        if l[i] > pivot > l[j]:
+            l[i], l[j] = l[j], l[i]
             i+=1
-    listl[i], listl[length - 1] = swap(listl[i], listl[length - 1])
+            j-=1
+        elif l[i] > pivot:
+            j -=1
+        elif pivot > l[j]:
+            i += 1
+        else:
+            i += 1
+            j -= 1
+    if i < p:
+        pp = p
+        while i<pp:
+            if l[pp-1] > l[pp]:
+                l[pp], l[pp-1] = l[pp-1], l[pp]
+            pp -= 1
+        p = pp
+    elif j > p:
+        pp = p
+        while pp<j:
+            if l[pp] > l[pp+1]:
+                l[pp], l[pp+1] = l[pp+1], l[pp]
+            pp += 1
+        p = pp
+    #print("left: ", l[:p-1])
+    #print("left: ", l[p:])
+    #print(l[:p-1] + l[p:])
+    left = quicksort(l[:p], len(l[:p]))
+    right = quicksort(l[p:], len(l[p:]))
+    #left.append(l[p])
 
-    leftlist = quicksort(listl[:i-1], len(listl[:i-1]))
-    rightlist = quicksort(listl[i+1:], len(listl[i+1:]))
-    leftlist.append(listl[i])
-
-    return leftlist + rightlist
+    return left + right
 
 
 
@@ -795,9 +821,11 @@ list_q = [2,4,6,8,9,1,3,5,7,6,2]
 list_p = [5,7,3,8,44,2,8,4,1,4,6]
 #print(pivot_choice(list_q, len(list_q)))
 #print(pivot_choice(list_p, len(list_p)))
-print(quicksort(list_q, len(list_q)))
-print(quicksort(list_p, len(list_p)))
-"""
+print(quicksort(2, 1))
+print("result: ", quicksort(list_q, len(list_q)), "\n")
+
+print("result: ",quicksort(list_p, len(list_p)))
+
 
 
 
