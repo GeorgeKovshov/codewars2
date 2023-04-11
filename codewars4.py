@@ -815,7 +815,7 @@ def quicksort(l, length):
 
 
 
-
+"""
 print("Quicksort:")
 list_q = [2,4,6,8,9,1,3,5,7,6,2]
 list_p = [5,7,3,8,44,2,8,4,1,4,6]
@@ -825,6 +825,43 @@ print(quicksort(2, 1))
 print("result: ", quicksort(list_q, len(list_q)), "\n")
 
 print("result: ",quicksort(list_p, len(list_p)))
+"""
+
+def tiaosheng(failed_counter):
+    if not failed_counter:
+        return 60
+    seconds = 0
+    jumps = 0
+    j = 0
+    length = len(failed_counter)
+    while seconds < 60:
+        if j < length:
+            if failed_counter[j] == jumps:
+                seconds += 2
+                jumps -= 1
+                j += 1
+        jumps += 1
+        seconds += 1
+
+    return jumps
+
+def tiaosheng1(a):
+    j, t = 0, 0
+    for j in a:
+        t += 3
+        if j + t > 60:
+            return min(j, 60-t+3)
+    return 60-t
+
+def tiaosheng2(failed_counter):
+    n = 60
+    for c in failed_counter:
+        if c <= n:
+            n -= min(3, n-c)
+    return n
+
+def tiaosheng3(fails):
+    return 60 - sum(1 for i, f in enumerate(fails) for k in range(3) if 3*i + f + k < 60)
 
 
 
