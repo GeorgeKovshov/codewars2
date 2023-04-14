@@ -908,35 +908,75 @@ def find_max_sum2(n):
         x -= 1
     return sum
 
-def find_max_sum3(n):
+def find_max_sum4(n):
     sum = 0
     x=n
-    while x>=0:
+
+    while x>=0 and x+2*n>sum:
         if (x % 2 == 0 and n % 2 == 0) or (x % 2 != 0 and n % 2 != 0):
             y = n
         else:
             y = n - 1
 
-        while y >= 0:
+        while y >= 0 and x+y+n>sum:
             tmp = False
             z = n
             while z >= 0 and tmp == False:
                 if ((y+z) % 3 == 0) and ((x + y + z) % 5 == 0):
                     if (x + y + z) > sum:
                         sum = x+y+z
-                        tmp = True
+                        break
                 z -= 1
-            while z>=0 and tmp == True:
-                if((y + z) % 3 == 0):
-                    if (x + y + z) > sum:
-                        sum = x+y+z
-                z -= 10
-
             y-=2
         x -=1
     return sum
 
-print(find_max_sum2(8))
+def find_max_sum3(n):
+    sum = 0
+    x = n
+
+    if n % 2 == 0:
+        shift_of_y = -1
+    else:
+        shift_of_y = 0
+
+    while x>=0 and x + 2 * n > sum:
+
+        """formula to get the first 'y' that - when plus'ed with 'x' - will give an even number 
+            that will allow to use "y -= 2" instead of "y -= 1"
+        """
+        y = n + (abs(shift_of_y) - 1)
+
+        while x + y + n > sum:
+            z = n
+            while z >= 0:
+                if ((y + z) % 3 == 0) and ((x + y + z) % 5 == 0):
+                    if (x + y + z) > sum:
+                        sum = x + y + z
+                        break
+                z -= 1
+            y -= 2
+        x -= 1
+    return sum
+
+from collections import deque
+def find_max_sum5(n):
+    q = deque([(n,n,n)])
+    while q:
+        a,b,c = q.popleft()
+        if (a+b)%2 == 0 and (b+c)%3 == 0 and (a+b+c)%5 == 0:
+            return a+b+c
+        q.append((a-1,b,c))
+        q.append((a,b-1,c))
+        q.append((a,b,c-1))
+
+LOOP = (0, 0, 5, 5, 10, 10, 15, 15, 20, 25, 25, 30, 30, 35, 40)
+
+def find_max_sum6(n):
+    q, r = divmod(n, 15)
+    return 45*q + LOOP[r]
+
+print(find_max_sum3(101))
 
 
 
