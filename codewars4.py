@@ -864,6 +864,86 @@ def tiaosheng3(fails):
     return 60 - sum(1 for i, f in enumerate(fails) for k in range(3) if 3*i + f + k < 60)
 
 
+def find_max_sum(n):
+    x=n
+    while x>=0:
+        y = n
+        while y >= 0:
+            if ((x + y) % 2 == 0):
+                z = n
+                while z >= 0:
+                    if ((y+z) % 3 == 0) and ((x + y + z) % 5 == 0):
+                        return x + y + z
+                    z -= 1
+                y-=1
+        x -=1
+    return 0
+
+
+def find_max_sum2(n):
+    sum = 0
+    x = n
+    while x >= 0:
+        if (x % 2 == 0 and n % 2 == 0) or (x % 2 != 0 and n % 2 != 0):
+            y = n
+        else:
+            y = n - 1
+
+        while y >= 0:
+            tmp = False
+            z = n
+            while z >= 0 and tmp == False:
+                if ((y + z) % 3 == 0) and ((x + y + z) % 5 == 0):
+                    if (x + y + z) > sum:
+                        sum = x + y + z
+                        tmp = True
+                z -= 1
+            while z >= 0 and tmp == True:
+                if ((x + y + z) % 5 == 0):
+                    if (x + y + z) > sum:
+                        sum = x + y + z
+                z -= 3
+
+            y -= 2
+        x -= 1
+    return sum
+
+def find_max_sum3(n):
+    sum = 0
+    x=n
+    while x>=0:
+        if (x % 2 == 0 and n % 2 == 0) or (x % 2 != 0 and n % 2 != 0):
+            y = n
+        else:
+            y = n - 1
+
+        while y >= 0:
+            tmp = False
+            z = n
+            while z >= 0 and tmp == False:
+                if ((y+z) % 3 == 0) and ((x + y + z) % 5 == 0):
+                    if (x + y + z) > sum:
+                        sum = x+y+z
+                        tmp = True
+                z -= 1
+            while z>=0 and tmp == True:
+                if((y + z) % 3 == 0):
+                    if (x + y + z) > sum:
+                        sum = x+y+z
+                z -= 10
+
+            y-=2
+        x -=1
+    return sum
+
+print(find_max_sum2(8))
+
+
+
+
+
+
+
 
 
 
