@@ -976,7 +976,54 @@ def find_max_sum6(n):
     q, r = divmod(n, 15)
     return 45*q + LOOP[r]
 
-print(find_max_sum3(101))
+print(find_max_sum3(10))
+
+def find_hack(arr):
+    result = []
+    for x in arr:
+        h_dict = {}
+        summ = 0
+        for y in x[2]:
+            summ += {
+                'A': 30,
+                'B': 20,
+                'C': 10,
+                'D': 5,
+                'E': 0,
+                'F': 0
+            #}[y]
+            }.get(y, 0)
+            if y not in h_dict:
+                h_dict[y] = 0
+            h_dict[y] += 1
+        check = True
+        for k, value in h_dict.items():
+            if k not in ["A", "B"]:
+                check = False
+        if check and len(x[2])>=5:
+            if summ >180:
+                summ = 200
+            else:
+                summ += 20
+        if summ != x[1]:
+            result.append(x[0])
+        print(x[0],x[1],h_dict)
+    return result
+
+
+
+array = [
+    ["name1", 150, ["B", "A", "A", "C", "A", "A"]],
+    ["name2", 120, ["B", "A", "A", "A"]],
+    ["name3", 160, ["B", "A", "A", "A","A"]],
+    ["name4", 140, ["B", "A", "A", "C", "A"]]
+]
+
+print(find_hack(array))
+
+print(2, 4 in [2,4])
+
+
 
 
 
