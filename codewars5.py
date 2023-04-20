@@ -1,3 +1,6 @@
+import math
+
+
 def solution(s, t):
     base = s * t
     summ = base + s
@@ -45,3 +48,141 @@ def solution3(s, t):
 
 
 print(solution(2,4))
+
+
+
+def check_sides(str, width):
+    perimeter = 0
+    if str[0] == "X":
+         perimeter += 1
+    if str[width - 1] == "X":
+        perimeter += 1
+    return perimeter
+
+
+def land_perimeter(arr):
+    width = len(arr[0])
+    length = len(arr)
+    previous = "O" * width
+    perimeter = 0
+    i = 0
+    while i < length:
+        for j in range(width):
+            if previous[j] != arr[i][j]:
+                perimeter += 1
+            if j < width-1:
+                if arr[i][j] != arr[i][j+1]:
+                    perimeter += 1
+
+        perimeter += check_sides(arr[i], width)
+        previous = arr[i]
+        i += 1
+    perimeter += arr[length-1].count("X")
+    return perimeter
+
+
+land = ['XOOXO',
+        'XOOXO',
+        'OOOXO',
+        'XXOXO',
+        'OXOOO']
+
+print(land_perimeter(land))
+
+import math
+
+# TODO: complete this class
+
+class PaginationHelper:
+
+    # The constructor takes in an array of items and an integer indicating
+    # how many items fit within a single page
+    def __init__(self, collection, items_per_page):
+        print(collection, items_per_page)
+        self.collection = collection
+        self.items_per_page = items_per_page
+        self.items_amount = len(collection)
+        self.page_amount = math.ceil(self.items_amount / self.items_per_page)
+        c = 0
+        tmp2 = []
+        for i in range(self.page_amount):
+            tmp = []
+            for j in range(items_per_page):
+                tmp.append(collection[c])
+                c += 1
+                if c > self.items_amount-1:
+                    break
+            tmp2.append(tmp)
+        self.collection_pages = tmp2
+
+    # returns the number of items within the entire collection
+    def item_count(self):
+        return self.items_amount
+
+    # returns the number of pages
+    def page_count(self):
+        return self.page_amount
+
+
+    # returns the number of items on the current page. page_index is zero based
+    # this method should return -1 for page_index values that are out of range
+    def page_item_count(self, page_index):
+        if page_index < 0 or page_index > self.page_amount-1:
+            return -1
+        else:
+            return len(self.collection_pages[page_index])
+
+    # determines what page an item is on. Zero based indexes.
+    # this method should return -1 for item_index values that are out of range
+    def page_index(self, item_index):
+        if item_index < 0 or item_index > self.items_amount-1:
+            return -1
+        elif item_index == 0:
+            return 0
+        else:
+            page_index = -1
+            things = 0
+            while things < item_index:
+                things += self.items_per_page
+                page_index += 1
+            return page_index
+        """
+        val = self.collection[item_index]
+        for ind, x in enumerate(self.collection_pages):
+            if val in x:
+                return ind
+        return -1
+        """
+
+
+helper = PaginationHelper(['a','b','c','d','e','f'], 4)
+print(helper.collection_pages)
+
+print(helper.page_index(5))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
