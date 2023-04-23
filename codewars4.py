@@ -1023,6 +1023,14 @@ print(find_hack(array))
 
 print(2, 4 in [2,4])
 
+def solution(s, t):
+    while t > 0:
+        for j in range(t):
+            print(t, j, s)
+        t -= 1
+
+print(solution(2,4))
+
 
 
 
