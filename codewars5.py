@@ -300,35 +300,127 @@ array4 = [[279, 728, 190, 585, 636, 779, 45, 563, 160],
           [661, 75, 83, 551, 947, 467, 501, 416, 69],
           [197, 425, 479, 857, 138, 585, 346, 585, 369]]
 
-print(snail(array))
-print(snail(array2))
-print(snail(array3))
-print(snail([[]]))
+#print(snail(array))
+#print(snail(array2))
+#print(snail(array3))
+#print(snail([[]]))
+
+prime_list = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
+              101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199,
+              211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293,
+              307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397,
+              401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499]
+
+def check_prime(num):
+    if num > 1:
+        # Iterate from 2 to n / 2
+        for i in range(2, int(num / 2) + 1):
+            # If num is divisible by any number between
+            # 2 and n / 2, it is not prime
+            if (num % i) == 0:
+                return False
+        else:
+            return True
+    else:
+        return False
+
+def simplified_array(a):
+    if len(a)<=1:
+        return a
+    if a[0] in prime_list:
+        is_prime = 1
+    elif a[0] not in prime_list:
+        is_prime = -1
+    else:
+        return []
+    result = []
+    summ = 0
+    for x in a:
+        if x > 499:
+            if check_prime(x) and x not in prime_list:
+                prime_list.append(x)
+        if is_prime == 1:
+            if x in prime_list:
+                summ += x
+            else:
+                result.append(summ)
+                summ = x
+                is_prime *= -1
+        elif is_prime == -1:
+            if x not in prime_list:
+                summ += x
+            else:
+                result.append(summ)
+                summ = x
+                is_prime *= -1
+    result.append(summ)
+    if len(result) == len(a):
+        return result
+    else:
+        return simplified_array(result)
+
+print(simplified_array([1, 2, 3, 5, 6, 4, 2, 3]))
 
 """
-[237, 962, 690, 293, 837, 61, 353, 671, 169, 378, 227, 752, 555, 650, 251, 655, 873, 794, 175, 162, 474, 483, 946, 76, 544, 474, 813, 823, 215, 516, 484, 537, 983, 389, 219, 772, 983]
-should equal
-[237, 962, 690, 293, 837, 61, 353, 671, 169, 378, 227, 752, 555, 650, 251, 655, 873, 794, 175, 162, 474, 483, 946, 76, 544, 474, 813, 823, 215, 516, 484, 537, 983, 389, 219, 772]
+from gmpy2 import is_prime
+from itertools import groupby
 
-[286, 734, 505, 672, 899, 659, 151, 844, 250, 270, 548, 901, 161, 705, 581, 177, 581]
-should equal
-[286, 734, 505, 672, 899, 659, 151, 844, 250, 270, 548, 901, 161, 705, 581, 177]
-
-[122, 81, 822, 155, 391, 442, 13, 348, 576, 854, 285, 999, 16, 296, 175, 138, 109, 731, 462, 375, 514, 730, 35, 267, 638, 139, 847, 837, 500, 312, 484, 717, 898, 96, 14, 743, 14]
- should equal 
- [122, 81, 822, 155, 391, 442, 13, 348, 576, 854, 285, 999, 16, 296, 175, 138, 109, 731, 462, 375, 514, 730, 35, 267, 638, 139, 847, 837, 500, 312, 484, 717, 898, 96, 14, 743]
-
-
-[279, 728, 190, 585, 636, 779, 45, 563, 160, 215, 927, 252, 616, 489, 15, 69, 369, 585, 346, 585, 138, 857, 479, 425, 197, 661, 816, 648, 429, 167, 604, 50, 331, 621, 448, 149, 571, 968, 365, 175, 573, 168, 257, 517, 416, 501, 467, 947, 551, 83, 75, 713, 570, 487, 654, 764, 554, 845, 96, 401, 631, 881, 614, 798, 558, 108, 385, 393, 879, 655, 970, 644, 353, 709, 227, 291, 238, 745, 652, 242] 
-should equal 
-[279, 728, 190, 585, 636, 779, 45, 563, 160, 215, 927, 252, 616, 489, 15, 69, 369, 585, 346, 585, 138, 857, 479, 425, 197, 661, 816, 648, 429, 167, 604, 50, 331, 621, 448, 149, 571, 968, 365, 175, 573, 168, 257, 517, 416, 501, 467, 947, 551, 83, 75, 713, 570, 487, 654, 764, 554, 845, 96, 401, 631, 881, 614, 798, 558, 108, 385, 393, 879, 655, 970, 644, 353, 709, 227, 291, 238, 745, 652, 242, 359]
-
-
-[286, 734, 505, 672],
-[901, 161, 705, 899],
-[548, 177, 581, 659],
-[270, 250, 844, 151]]
+def simplified_array(xs):
+    while len(xs) != len(xs := [sum(g) for _, g in groupby(xs, lambda x: x > 0 and is_prime(x))]):
+        pass
+    return xs
 """
+
+
+"""
+import collections
+
+Item = collections.namedtuple('Item', 'weight price')
+store = [
+  Item(weight=2, price=6),
+  Item(weight=2, price=3),
+  Item(weight=6, price=5),
+  Item(weight=5, price=4),
+  Item(weight=4, price=6),
+  Item(weight=10, price=20)
+]
+
+
+def greedy_thief(items, n:int):
+    list_items = []
+    for x in items:
+        #print(x, "valuability: ", x.price/x.weight)
+        if x.weight != 0:
+            list_items.append((x, x.price / x.weight))
+        else:
+            list_items.append((x, 9999))
+    ordered_dict = sorted(list_items, key=lambda y:(y[1],-y[0].weight), reverse=True) # -y[0] - it reverses the sorting
+    thief_bag = []
+    for item in ordered_dict:
+        print(item)
+        if item[0].weight<n:
+            n -= item[0].weight
+            thief_bag.append(item[0])
+        if n<1:
+            break
+        #print(item[0])
+        #print(item[0].weight)
+    for item in reversed(ordered_dict):
+        print(item)
+    print("result")
+    return thief_bag
+
+
+print(greedy_thief(store, 5))
+
+
+llist = [(1,2), (1,3), (2,4),(1,1), (3,2)]
+llist.sort(key=lambda y:y[1])
+#print(llist)
+"""
+
+
+
 
 
 
