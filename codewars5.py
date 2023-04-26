@@ -512,7 +512,7 @@ def subarray(lst):
     else:
         return highest_negative
 
-def subarray2(lst):
+def subarray2(nums):
     newNum = maxTotal = nums[0]
 
     for i in range(1, len(nums)):
@@ -523,20 +523,81 @@ def subarray2(lst):
 
 
 
-nums4=[-1, 0, -2]
-nums2 = [-2,-3,-1]
-nums3=[0,0,0,0,0]
-nums = [5,4,-1,7,8]
-nums1 = [-2,1,-3,4,-1,2,1,-5,4]
-length=len(nums)
+#nums4=[-1, 0, -2]
+#nums2 = [-2,-3,-1]
+#nums3=[0,0,0,0,0]
+#nums = [5,4,-1,7,8]
+#nums1 = [-2,1,-3,4,-1,2,1,-5,4]
+#length=len(nums)
 #print(nums[(length//2-length//4):(length//2+length//4)])
 
 #print(nums[:4])
 #print(nums[:length//2])
 #print(nums[length//2:])
-print(subarray2(nums1))
+#print(subarray2(nums1))
 #print(max(3,2,1,3))
 
+def is_divided_by_three(var):
+    if var == 0:
+        return False
+    y = var
+    sum = 0
+    while y >= 1:
+        sum += y % 10
+        y = y // 10
+    if sum >= 10:
+        return is_divided_by_three(sum)
+    elif sum % 3 == 0:
+        return True
+    else:
+        return False
+
+def solution1(number):
+    if number <= 0:
+        return 0
+    nums = []
+    for x in range(number):
+        if x!=0 and (x % 5 == 0 or x % 10 == 0):
+            nums.append(x)
+        elif is_divided_by_three(x):
+            nums.append(x)
+    sum = 0
+    for y in nums:
+        sum += y
+    return sum
+
+
+def solution2(number):
+    if number <= 0:
+        return 0
+    cycle = [3, 2, 1, 3, 1, 2, 3, 3, 2, 1, 3, 1, 2, 3]
+    var = 0
+    summ = 0
+    i = 0
+    length = len(cycle)
+    while var < number:
+        summ += var
+        var += cycle[i]
+        if i == length - 1:
+            i = 0
+        else:
+            i += 1
+
+    return summ
+
+def solution3(number):
+    return sum(x for x in range(number) if x % 3 == 0 or x % 5 == 0)
+
+def solution4(number):
+    a3 = (number-1)/3
+    a5 = (number-1)/5
+    a15 = (number-1)/15
+    result = (a3*(a3+1)/2)*3 + (a5*(a5+1)/2)*5 - (a15*(a15+1)/2)*15
+    return result
+
+
+
+print(is_divided_by_three(-1653))
 
 
 
