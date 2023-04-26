@@ -372,7 +372,7 @@ def simplified_array(xs):
 """
 
 
-"""
+
 import collections
 
 Item = collections.namedtuple('Item', 'weight price')
@@ -396,28 +396,146 @@ def greedy_thief(items, n:int):
             list_items.append((x, 9999))
     ordered_dict = sorted(list_items, key=lambda y:(y[1],-y[0].weight), reverse=True) # -y[0] - it reverses the sorting
     thief_bag = []
+    item_index = 0
     for item in ordered_dict:
         print(item)
-        if item[0].weight<n:
+        if item[0].weight<=n:
             n -= item[0].weight
             thief_bag.append(item[0])
+        item_index += 1
         if n<1:
             break
         #print(item[0])
         #print(item[0].weight)
-    for item in reversed(ordered_dict):
-        print(item)
+    reverse_index = len(ordered_dict) - 1
+    lightest_item = [9999, 9999]
+    light_item_ind = -1
+    for ind, z in enumerate(thief_bag):
+        print("thief bag ", ind, z)
+        if z.weight<lightest_item[0] or (z.weight==lightest_item[0] and z.price<lightest_item[1]):
+            lightest_item = [z.weight, z.price]
+            light_item_ind = ind
+
+    print(light_item_ind)
+    if n >= 1 and thief_bag:
+        for item in reversed(ordered_dict):
+            if item[0].weight - thief_bag[light_item_ind].weight <= n and item[0].price > thief_bag[light_item_ind].price:
+                thief_bag[light_item_ind] = item[0]
+                n -= item[0].weight - thief_bag[light_item_ind].weight
+            reverse_index -= 1
+            if n < 1 or reverse_index <= item_index:
+                break
+
     print("result")
     return thief_bag
 
 
-print(greedy_thief(store, 5))
+#print(greedy_thief(store, 5))
 
 
 llist = [(1,2), (1,3), (2,4),(1,1), (3,2)]
-llist.sort(key=lambda y:y[1])
+#llist.sort(key=lambda y:y[1])
 #print(llist)
+
 """
+Test: n=41, max price is 69
+Log
+(Item(weight=10, price=22), 2.2)
+(Item(weight=14, price=28), 2.0)
+(Item(weight=28, price=47), 1.6785714285714286)
+(Item(weight=22, price=11), 0.5)
+(Item(weight=17, price=6), 0.35294117647058826)
+result
+You should get the max possible price: 56 should be 69
+
+Test: n=66, max price is 92
+Log
+(Item(weight=26, price=44), 1.6923076923076923)
+(Item(weight=16, price=26), 1.625)
+(Item(weight=28, price=29), 1.0357142857142858)
+(Item(weight=22, price=21), 0.9545454545454546)
+(Item(weight=24, price=22), 0.9166666666666666)
+thief bag  0 Item(weight=26, price=44)
+thief bag  1 Item(weight=16, price=26)
+thief bag  2 Item(weight=22, price=21)
+1
+result
+You should get the max possible price: 91 should be 92
+
+
+"""
+#print(llist[:2])
+
+def subarray(lst):
+    length = len(lst)
+    if length == 0:
+        return 0
+    elif length == 1:
+        return lst[0]
+    elif length == 2:
+        return max(lst[0], lst[1], lst[0] + lst[1])
+    if lst[0]>0:
+        sum = lst[0]
+    else:
+        sum = 0
+    sum2 = lst[0]
+    max_sum = -1000000
+    highest_negative = 1
+    neg_sum = 0
+    i = 1
+    while i < length:
+        sum += neg_sum
+        neg_sum = 0
+        if sum+lst[i] > sum:
+            sum += lst[i]
+            sum2 += lst[i]
+            i += 1
+        elif lst[i] <= 0:
+            while i < length and lst[i] <= 0:
+                neg_sum += lst[i]
+                if lst[i] > highest_negative or highest_negative>0:
+                    highest_negative = lst[i]
+                i += 1
+            sum2=0
+        else:
+            if lst[i]>0:
+                sum = lst[i]
+            i += 1
+        if sum2>sum and sum2!=0:
+            sum = sum2
+        if sum > max_sum:
+            max_sum = sum
+    if max_sum == 0 and highest_negative>0:
+        return 0
+    elif max_sum>0:
+        return max_sum
+    else:
+        return highest_negative
+
+def subarray2(lst):
+    newNum = maxTotal = nums[0]
+
+    for i in range(1, len(nums)):
+        newNum = max(nums[i], nums[i] + newNum)
+        maxTotal = max(newNum, maxTotal)
+
+    return maxTotal
+
+
+
+nums4=[-1, 0, -2]
+nums2 = [-2,-3,-1]
+nums3=[0,0,0,0,0]
+nums = [5,4,-1,7,8]
+nums1 = [-2,1,-3,4,-1,2,1,-5,4]
+length=len(nums)
+#print(nums[(length//2-length//4):(length//2+length//4)])
+
+#print(nums[:4])
+#print(nums[:length//2])
+#print(nums[length//2:])
+print(subarray2(nums1))
+#print(max(3,2,1,3))
 
 
 
