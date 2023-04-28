@@ -570,14 +570,18 @@ def solution1(number):
 def solution2(number):
     if number <= 0:
         return 0
+    cycle2 = {}
     cycle = [3, 2, 1, 3, 1, 2, 3, 3, 2, 1, 3, 1, 2, 3]
+    for i in range(14):
+        cycle2[i]=cycle[i]
     var = 0
     summ = 0
     i = 0
     length = len(cycle)
+    print(length)
     while var < number:
         summ += var
-        var += cycle[i]
+        var += cycle2[i]
         if i == length - 1:
             i = 0
         else:
@@ -595,9 +599,35 @@ def solution4(number):
     result = (a3*(a3+1)/2)*3 + (a5*(a5+1)/2)*5 - (a15*(a15+1)/2)*15
     return result
 
+import time
+#start_time = time.time()
+#print(solution2(12311233))
+#end_time = time.time()
+#elapsed_time = end_time - start_time
+#print("Elapsed time: ", elapsed_time)
 
 
-print(is_divided_by_three(-1653))
+def max_sum_of_n(n, lst):
+    i = 0
+    max_sum = 0
+    list_max = []
+    while i<n:
+        max_int = -9999
+        max_ind = -1
+        for ind, x in enumerate(lst):
+            if x > max_int and ind not in list_max:
+                max_int = x
+                max_ind = ind
+        max_sum += max_int
+        list_max.append(max_ind)
+        i += 1
+    return max_sum
+
+#n = int(input("number of numbers:"))
+
+#print(max_sum_of_n(n,[-2,1,-3,4,-1,2,1,-5,4]))
+
+
 
 
 
