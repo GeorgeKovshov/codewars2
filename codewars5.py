@@ -627,6 +627,116 @@ def max_sum_of_n(n, lst):
 
 #print(max_sum_of_n(n,[-2,1,-3,4,-1,2,1,-5,4]))
 
+def permutate2(lst):
+    length = len(lst)
+    if length == 1:
+        return [lst]
+    result = []
+    for ind, item in enumerate(lst):
+        i = ind+1
+        while i < length:
+            result.append([item, lst[i]])
+            i += 1
+    return result
+
+
+def permutate1(lst):
+    length = len(lst)
+    i = 0
+    result = []
+    while i<length:
+        j = i + 1
+        while j < length:
+            result.append([lst[i],lst[j]])
+            j += 1
+        i+=1
+    return lst + result
+
+def permutate_prototype(lst):
+    length = len(lst)
+    if length==1:
+        return lst
+    if not isinstance(lst[0],int):
+        count = len(lst[0])
+        if len(lst[0]) == 4:
+            return lst
+    i = length-1
+    result = []
+    first = True
+    while i>0:
+        if not isinstance(lst[i],int):
+            first = False
+            i += 1
+            break
+        i -= 1
+    end = i
+    used_ints = []
+    while i < length:
+        if first:
+            j = i + 1
+            while j < length:
+                result.append([lst[i], lst[j]])
+                j += 1
+        else:
+            j = 0
+            used_ints.append(lst[i])
+            while not isinstance(lst[j],int) and lst[j][0] in used_ints:
+                j += 1
+            while j < end and len(lst[j]) == count:
+                result.append([lst[i]] + lst[j])
+                j += 1
+
+        i+=1
+    return permutate(result + lst)
+
+
+def permutate(lst):
+    length = len(lst)
+    if length==1:
+        return lst
+    if not isinstance(lst[0],int):
+        count = len(lst[0])
+        if len(lst[0]) == 4:
+            return lst
+    i = length-1
+    result = []
+    first = True
+    while i>0:
+        if not isinstance(lst[i],int):
+            first = False
+            i += 1
+            break
+        i -= 1
+    end = i
+    used_ints = []
+    while i < length:
+        if first:
+            j = i + 1
+            while j < length:
+                result.append([lst[i], lst[j]])
+                j += 1
+        else:
+            j = 0
+            used_ints.append(lst[i])
+            while not isinstance(lst[j],int) and lst[j][0] in used_ints:
+                j += 1
+            while j < end and len(lst[j]) == count:
+                result.append([lst[i]] + lst[j])
+                j += 1
+
+        i+=1
+    return permutate(result + lst)
+
+
+list = [1,2,3,4]
+def permute(lst):
+
+
+#print([2]+list)
+llist = permutate(list)
+for item in llist:
+    print(item)
+
 
 
 
