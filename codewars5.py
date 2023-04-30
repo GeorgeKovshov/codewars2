@@ -690,52 +690,75 @@ def permutate_prototype(lst):
     return permutate(result + lst)
 
 
-def permutate(lst):
+def permutate(lst, n):
     length = len(lst)
-    if length==1:
+    if isinstance(lst[0],int):
         return lst
-    if not isinstance(lst[0],int):
+    else:
         count = len(lst[0])
-        if len(lst[0]) == 4:
-            return lst
+    if count == n:
+        return lst
     i = length-1
     result = []
-    first = True
     while i>0:
         if not isinstance(lst[i],int):
-            first = False
             i += 1
             break
         i -= 1
     end = i
     used_ints = []
     while i < length:
-        if first:
-            j = i + 1
-            while j < length:
-                result.append([lst[i], lst[j]])
-                j += 1
-        else:
-            j = 0
-            used_ints.append(lst[i])
-            while not isinstance(lst[j],int) and lst[j][0] in used_ints:
-                j += 1
-            while j < end and len(lst[j]) == count:
-                result.append([lst[i]] + lst[j])
-                j += 1
-
+        j = 0
+        used_ints.append(lst[i])
+        while not isinstance(lst[j],int) and lst[j][0] in used_ints:
+            j += 1
+        while j < end and len(lst[j]) == count:
+            result.append([lst[i]] + lst[j])
+            j += 1
         i+=1
-    return permutate(result + lst)
+    return permutate(result + lst, n)
 
 
-list = [1,2,3,4]
+list = [1,2,3,4,5]
 def permute(lst):
+    length = len(lst)
+    if length == 1:
+        return lst
+    if length == 2:
+        return [[lst[0],lst[1]], lst[0], lst[1]]
+    result = []
+    for i, x in enumerate(lst):
+        j = i + 1
+        while j < length:
+            result.append([lst[i], lst[j]])
+            j += 1
+    return permutate(result + lst, length)
 
-
+#print(permute(list))
 #print([2]+list)
-llist = permutate(list)
+llist = permute(list)
 for item in llist:
     print(item)
+list = [1,2,3,4,5,6,7]
+print(list[3:])
+
+
+def recursive_max_sum(remaining_items):
+    length = len(remaining_items)
+    if length == 0:
+        return 0
+    elif length < 1:
+        return remaining_items
+    max = 0
+    ind = 0
+
+    while ind < length:
+        #print(remaining_items[ind + 1])
+        sum = remaining_items[ind] + recursive_max_sum(remaining_items[ind+1:])
+        if sum>max:
+            max = sum
+        ind += 1
+    return max
 
 
 
