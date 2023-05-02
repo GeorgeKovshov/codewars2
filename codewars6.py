@@ -429,7 +429,7 @@ def recursive_thief233(items, n):
         ind += 1
     return max_price, max_thief_bag
 
-def recursive_thief(items, n):
+def recursive_thief5(items, n):
     length = len(items)
     if length == 0:
         return 0, []
@@ -472,8 +472,55 @@ def big_loop(items, n):
     return max_price, max_thief_bag
 
 
+def recursive_thief(items, n):
+    length = len(items)
+    if length == 0 or n <= 0:
+        return 0, [], 0
+    if length == 1 and n - items[0].weight >=0:
+        print(items)
+        return items[0].price, items, items[0]. weight
+    max_thief_bag = []
+    max_sum = 0
+    weight = 0
+    ind = 0
+    while ind < length:
+        summ = 0
+        thief_bag = []
+        weight = 0
+        item = items[ind]
+        if item.weight < n:
+            summ, thief_bag, weight = recursive_thief(items[ind+1:], n - item.weight)
+        if item.weight + weight <= n:
+            summ = item.price + summ
+            thief_bag.append(item)
+            weight = item.weight + weight
+        if summ > max_sum:
+            max_sum = summ
+            max_thief_bag = thief_bag
+        if item.weight > n:
+            break
+        ind+=1
+    return max_sum, max_thief_bag, weight
+
 
 def greedy_thief(items,n):
+    ordered_items = sorted(items, key=lambda x: (x.weight, -x.price))
+    print(ordered_items)
+    length = len(ordered_items)
+    zeros = 0
+    if ordered_items[length-1].weight>n:
+        return []
+    while ordered_items[zeros].weight == 0 and zeros<length:
+        zeros += 1
+    if zeros == length-1 and ordered_items[length-1] == 0:
+        return ordered_items
+    else:
+        result = recursive_thief(ordered_items[zeros:], n)
+        return result[1] + ordered_items[:zeros]
+
+
+
+def greedy_thief11(items,n):
     ordered_items = sorted(items, key=lambda x: (-x.weight, -x.price))
     print(ordered_items)
     zeros = len(ordered_items)-1
@@ -494,6 +541,10 @@ def greedy_thief(items,n):
             sum+=x.price
 
         return result[0] + sum
+
+
+
+
 
 #print(store)
 store3 =[
@@ -556,6 +607,17 @@ big_store = [
     Item(weight=0, price=21),
     Item(weight=0, price=3)
 ]
+
+# 0/1 Knapsack Problem
+def greedy_thief(items:list[Item], n:int) -> list[Item]:
+    dp = [(0, []) for _ in range(n+1)]
+    for item in items:
+        for w in range(n, 0, -1):
+            if item.weight <= w:
+                x, y = dp[w-item.weight]
+                if x + item.price > dp[w][0]:
+                    dp[w] = (x+item.price, y+[item])
+    return dp[n][1]
 
 #print(greedy_thief(big_store, 372))
 #print(recursive_thief(nums1))
