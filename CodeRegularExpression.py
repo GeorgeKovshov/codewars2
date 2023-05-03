@@ -57,5 +57,96 @@ def pig_it3(text):
 
 
 
-print(pig_it3('Pig latin is cool !'))
-print(pig_it3('This is my string ?'))
+#print(pig_it3('Pig latin is cool !'))
+#print(pig_it3('This is my string ?'))
+
+
+def strip_comments1(strng, markers):
+    if markers == []:
+        return strng
+    patt = ""
+    for item in markers:
+        if item == '-':
+            patt += '\\'
+        elif item == '\\':
+            patt += '\\'
+        patt += str(item)
+    pattern = r"(\w*|\d*|\s)+(\s?["
+    pattern += patt
+    pattern +="])?(.*)?(\n|$)"
+    string1= re.sub(pattern, r"\1\4",strng)
+    return string1
+    #string1 = pattern.finditer(strng)
+    #print(string1)
+    #for item in string1:
+    #    print(item.group(1,2))
+
+def strip_comments2(strng, markers):
+    if markers == []:
+        return strng
+    patt = ""
+    for item in markers:
+        if item == '-':
+            patt += '\\'
+        elif item == '\\':
+            patt += '\\'
+        patt += str(item)
+    pattern = r"(([ \t]*[^ \t"
+    pattern += patt
+    pattern += r"]+)*)([ \t]?["
+    pattern += patt
+    pattern += r"])?(.*)?(\n|$)"
+    string1= re.sub(pattern, r"\1\5",strng)
+    return string1
+
+def strip_comments(strng, markers):
+    if markers == []:
+        return strng
+    # patt is a string of markers we add into a regex expression
+    patt = "".join(['\\' + str(item) if item in ['-', '\\'] else item for item in markers])
+    """ 
+        We create groups:
+             avocados = @ bananas oranges cherries\n" \
+            (avocados =)( @)( bananas oranges cherries)(\n)" 
+                 (1+2)  ( 3)         (4)               (5) 
+        We just return (1) and (5):
+             avocados =\n
+    """
+    pattern = r"(([ \t]*[^ \t" + patt + r"]+)*)([ \t]?[" + patt + r"])?(.*)?(\n|$)"
+    return re.sub(pattern, r"\1\5", strng)
+
+
+solution1=lambda t,m,r=__import__('re'):r.sub(r'( *[{}].*)'.format(r.escape(''.join(m))),'',t)if m else t
+
+
+print('\\')
+#print(strip_comments('apples, pears # and bananas\ngrapes\nbananas !apples', ['#', '!']))
+
+tring= "avocados strawberries bananas '\n" \
+        "lemons @ oranges ! ! pears\n" \
+        "- @ watermelons avocados @ watermelons\n" \
+        "avocados = @ bananas oranges cherries\n" \
+        "pears ."
+Markers= ['-', "'"]
+print(strip_comments(tring, Markers))
+
+'avocados strawberries bananas\n' \
+'lemons @ oranges ! ! pears\n' \
+'avocados = @ bananas oranges cherries\n' \
+'pears .' #should equal
+'avocados strawberries bananas\n' \
+'lemons @ oranges ! ! pears\n' \
+'\n' \
+'avocados = @ bananas oranges cherries\n' \
+'pears .'
+
+
+
+
+
+
+
+
+
+
+
