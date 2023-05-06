@@ -125,11 +125,43 @@ print("years:", years)
 
 
 
-print(format_duration(3662))
+#print(format_duration(3662))
+
+
+def next_bigger_bad(n):
+    min = n*10
+    list = [*str(n)][::-1]
+    for ind, x in enumerate(list):
+        for i in range(ind+1, len(list)):
+            list_tmp = list   # here's the mistake - list and list_tmp are pointers to the same data
+            list_tmp[ind], list_tmp[i] = list_tmp[i], list_tmp[ind]
+            m = 0
+            for y in reversed(list_tmp):
+                m = m * 10 + int(y)
+            if n < m < min:
+                min = m
+    return min if min/10 != n else "-1"
+            #print("main: ", x, "second:",  list[i], end=" | ")
+
+def next_bigger(n):
+    min = n*10
+    list = [*str(n)][::-1]
+    for ind, x in enumerate(list):
+        for i in range(ind+1, len(list)):
+            list_tmp = list.copy()
+            list_tmp[ind], list_tmp[i] = list_tmp[i], list_tmp[ind]
+            m = 0
+            for y in reversed(list_tmp):
+                m = m * 10 + int(y)
+            if n < m < min:
+                min = m
+    return min if min/10 != n else -1
 
 
 
 
+
+print(next_bigger(144))
 
 
 
