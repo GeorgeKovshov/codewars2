@@ -143,7 +143,21 @@ def next_bigger_bad(n):
     return min if min/10 != n else "-1"
             #print("main: ", x, "second:",  list[i], end=" | ")
 
-def next_bigger(n):
+def next_bigger1(n):
+    min = n*10
+    list = [*str(n)][::-1]
+    for ind, x in enumerate(list):
+        for i in range(ind+1, len(list)):
+            list_tmp = list.copy()
+            list_tmp[ind], list_tmp[i] = list_tmp[i], list_tmp[ind]
+            m = 0
+            for y in reversed(list_tmp):
+                m = m * 10 + int(y)
+            if n < m < min:
+                min = m
+    return min if min/10 != n else -1
+
+def next_bigger2(n):
     min = n*10
     list = [*str(n)][::-1]
     for ind, x in enumerate(list):
@@ -158,12 +172,43 @@ def next_bigger(n):
     return min if min/10 != n else -1
 
 
+def next_bigger_rec(n, original):
+    min = n
+    if n == original:
+        min *= 10
+    list = [*str(n)][::-1]
+    for ind, x in enumerate(list):
+        for i in range(ind+1, len(list)):
+            list_tmp = list.copy()
+            list_tmp[ind], list_tmp[i] = list_tmp[i], list_tmp[ind]
+            m = 0
+            for y in reversed(list_tmp):
+                m = m * 10 + int(y)
+            if original < m < min:
+                min = m
+                break
+    if min/10 == n:
+        return n
+    return min if min == n else next_bigger_rec(min, original)
+
+def next_bigger(n):
+    next = next_bigger_rec(n, n)
+    return next if next != n else -1
+
+#print(next_bigger(144))
+#print(next_bigger(1234567890))
+print(next_bigger(59884848459853))
 
 
 
-print(next_bigger(144))
+"""
+Incorrect answer for n=
+59884848459853: 
+59884848489553 should equal 
+59884848483559
+59884848483559
 
-
+"""
 
 
 
