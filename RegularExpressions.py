@@ -50,13 +50,13 @@ urlsss = re.compile(r'https?://(www\.)?(\w+)(\.\w+)')
 urlsssZ = urlsss.finditer(urls)
 
 for match in matches:
-    print(match)
+    print("here", match)
 
 for match in urlsssZ:
     print(match.group(2, 3))
 
 subbed_urls = urlsss.sub(r'\2\3', urls)
-print(subbed_urls)
+print("now", subbed_urls)
 
 try:
     with open("Wonder.txt") as fobj:
@@ -75,12 +75,12 @@ with open("pattern.txt", 'a') as fobj2:
 from math import pi
 
 def circle_area(r):
-    return pi*(r**2)
+    return pi*(r*2)
 
 #Test function
 radii = [2, 0, -3, 2 + 5j, True, "radius"]
 message = "Area of circles with r = {radius} is {area}"
 
-for r in radii:
-    A = circle_area(r)
-    print(message.format(radius=r, area=A))
+#for r in radii:
+    #A = circle_area(r)
+    #print(message.format(radius=r, area=A))
