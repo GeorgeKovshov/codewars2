@@ -197,7 +197,7 @@ def next_bigger(n):
 
 #print(next_bigger(144))
 #print(next_bigger(1234567890))
-print(next_bigger(59884848459853))
+#print(next_bigger(59884848459853))
 
 
 
@@ -210,6 +210,23 @@ Incorrect answer for n=
 
 """
 
+def duplicate_count(text):
+    my_dict = {}
+    count = 0
+    for s in text:
+        c = s.lower()
+        if c not in my_dict.keys():
+            my_dict[c] = 1
+        elif my_dict[c] == 1:
+            my_dict[c] += 1
+            count += 1
+    return count
+
+def duplicate_count2(s):
+  return len([c for c in set(s.lower()) if s.lower().count(c)>1])
+
+
+print(duplicate_count("Indivisibilities"))
 
 
 
