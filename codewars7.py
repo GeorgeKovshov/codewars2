@@ -226,7 +226,72 @@ def duplicate_count2(s):
   return len([c for c in set(s.lower()) if s.lower().count(c)>1])
 
 
-print(duplicate_count("Indivisibilities"))
+#print(duplicate_count("Indivisibilities"))
+
+from queue import Queue
+
+
+def swap(q):
+
+    return
+
+
+def get_in_line(arr):
+    ones = 0
+    twos = 0
+    for x in arr:
+        if x == 1:
+            ones += 1
+        elif x == 2:
+            twos += 1
+
+    arr2 = []
+    ones2 = ones
+
+    while ones2 > 0:
+        arr2.append(1)
+        ones2 -= 1
+    while twos > 0:
+        arr2.append(2)
+        twos -= 1
+    length = len(arr)
+    for x in arr:
+        if x not in [1, 2]:
+            arr2.append(x)
+
+
+
+    while ones > 0:
+       i = ones
+       while i < length/2:
+           if arr2[i] != 3 and arr2[length - 1 - i] != 3:
+               arr2[i], arr2[length - 1 - i] = arr2[length - 1 - i], arr2[i]
+           i += 1
+       ones -= 1
+
+
+    #q = Queue(maxsize=len(arr))
+    #while ones > 0:
+    #   q.put(1)
+    #    ones -= 1
+    """while twos > 0:
+        q.put(2)
+        twos -= 1
+    for x in arr:
+        if x not in [1,2]:
+            q.put(x)
+    client = -1
+    while not q.empty() or client != 0:
+        if client == 1:
+            swap
+        client = q.get()"""
+    return arr2.index(0)
+
+
+
+#get_in_line([1,1,3,2,0])
+print(get_in_line([0, 8, 2, 1, 4, 2, 12, 3, 2]))
+
 
 
 
