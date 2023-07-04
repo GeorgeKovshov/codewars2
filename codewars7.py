@@ -260,37 +260,25 @@ def get_in_line(arr):
             arr2.append(x)
 
 
-
+    j = 0
     while ones > 0:
-       i = ones
-       while i < length/2:
-           if arr2[i] != 3 and arr2[length - 1 - i] != 3:
-               arr2[i], arr2[length - 1 - i] = arr2[length - 1 - i], arr2[i]
-           i += 1
        ones -= 1
+       j+= 1
+       i = 0
+       while i + ones + j <= (length- 1 - i - ones):
+           if arr2[i + ones + j] != 3 and arr2[length - 1 - i - ones] != 3:
+               arr2[i + ones + j], arr2[length - 1 - i - ones] = arr2[length - 1 - i - ones], arr2[i + ones + j]
+           i += 1
 
 
-    #q = Queue(maxsize=len(arr))
-    #while ones > 0:
-    #   q.put(1)
-    #    ones -= 1
-    """while twos > 0:
-        q.put(2)
-        twos -= 1
-    for x in arr:
-        if x not in [1,2]:
-            q.put(x)
-    client = -1
-    while not q.empty() or client != 0:
-        if client == 1:
-            swap
-        client = q.get()"""
-    return arr2.index(0)
+    return arr2.index(0) + 1
 
 
 
 #get_in_line([1,1,3,2,0])
-print(get_in_line([0, 8, 2, 1, 4, 2, 12, 3, 2]))
+#print(get_in_line([0, 8, 2, 1, 4, 2, 12, 3, 2]))
+print(get_in_line([2, 3, 1, 4, 5, 2, 1, 0, 8, 5, 6, 1]))
+
 
 
 
