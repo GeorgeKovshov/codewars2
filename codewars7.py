@@ -277,7 +277,26 @@ def get_in_line(arr):
 
 #get_in_line([1,1,3,2,0])
 #print(get_in_line([0, 8, 2, 1, 4, 2, 12, 3, 2]))
-print(get_in_line([2, 3, 1, 4, 5, 2, 1, 0, 8, 5, 6, 1]))
+#print(get_in_line([2, 3, 1, 4, 5, 2, 1, 0, 8, 5, 6, 1]))
+
+def solution_camel(s):
+    if len(s)==0:
+        return ""
+    result = ""
+    for l in s:
+        if l.isupper():
+            result+=" "
+        result+=l
+    return result
+
+import re
+def solution_camel1(s):
+    return re.sub('([A-Z])', r' \1', s) #  r'some string' means ignore all the blackslashes in some string
+
+
+
+
+print(solution_camel("helloWorld"))
 
 
 
