@@ -24,6 +24,8 @@ def compare3(a, b):
 from collections import deque
 
 
+
+
 def tree_by_levels(node):
     q = deque()
     q.append(node)
