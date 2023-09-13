@@ -64,4 +64,78 @@ def custom_fib2(signature, indexes, n):
         fib.popleft()
     return fib[0]
 
+count = {
+    'a': 1, 'b': 2, 'c': 3, '2': 4,
+    'd': 1, 'e': 2, 'f': 3, '3': 4,
+    'g': 1, 'h': 2, 'i': 3, '4': 4,
+    'j': 1, 'k': 2, 'l': 3, '5': 4,
+    'm': 1, 'n': 2, 'o': 3, '6': 4,
+    'p': 1, 'q': 2, 'r': 3, 's': 4, '7': 5,
+    't': 1, 'u': 2, 'v': 3, '8': 4,
+    'w': 1, 'x': 2, 'y': 3, 'z': 4, '9': 5,
+    '1': 1, '*': 1, '#': 1, ' ': 1, '0': 2,
+}
 
+
+def presses(phrase):
+    summ = 0
+    for x in phrase.lower():
+        summ += count[x];
+    return summ
+
+
+def presses1(phrase):
+    return sum([count[x] for x in phrase.lower()])
+
+
+print(presses1("HOW R U"))
+
+BUTTONS = [ '1',   'abc2',  'def3',
+          'ghi4',  'jkl5',  'mno6',
+          'pqrs7', 'tuv8', 'wxyz9',
+            '*',   ' 0',    '#'   ]
+def presses2(phrase):
+    return sum(1 + button.find(c) for c in phrase.lower() for button in BUTTONS if c in button)
+
+def runShell(boxNr):
+    # G00D LUCK!
+    if boxNr == 1:
+        return "help"
+    elif boxNr == 2:
+        return "help"
+    else:
+        return "help"
+
+
+"""
+Available commands: help, echo, cat, exit, ls -l, cd, pwd, su, man, whoami
+
+su
+        #Allows you to change user, syntax: su 'user' 'password'
+        #For example su root rootpassword makes you root
+
+cat
+Shows content of a file, but works here only with files in the current directory
+For example cat /etc/passwd is not possible, because it's an absolute path
+Normally you can't cat passwd, just saying
+
+Echo prints something into the console
+With '>' you can change the output stream to a file. Here only local files work
+For example echo 'test' > /etc/passwd is not possible, because it's an absolute path
+Normally you can't write anything to passwd, just saying
+
+cd
+Changes directory
+Here only absolute paths work
+For example cd /etc works, but cd etc doesn't work
+In /etc there are important files, just saying
+
+"pwd; ls -l; cd /etc; pwd; ls -l; cat passwd"
+root:x:0:0::/root:/bin/bash
+
+ls -l
+Lists all files of the current directory, and shows permissions
+Maybe you can use it to detect wrongly set permissions on important files like passwd
+
+
+"""
