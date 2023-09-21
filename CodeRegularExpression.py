@@ -119,7 +119,7 @@ def strip_comments(strng, markers):
 solution1=lambda t,m,r=__import__('re'):r.sub(r'( *[{}].*)'.format(r.escape(''.join(m))),'',t)if m else t
 
 
-print('\\')
+#print('\\')
 #print(strip_comments('apples, pears # and bananas\ngrapes\nbananas !apples', ['#', '!']))
 
 tring= "avocados strawberries bananas '\n" \
@@ -128,7 +128,7 @@ tring= "avocados strawberries bananas '\n" \
         "avocados = @ bananas oranges cherries\n" \
         "pears ."
 Markers= ['-', "'"]
-print(strip_comments(tring, Markers))
+#print(strip_comments(tring, Markers))
 
 'avocados strawberries bananas\n' \
 'lemons @ oranges ! ! pears\n' \
@@ -141,12 +141,54 @@ print(strip_comments(tring, Markers))
 'pears .'
 
 
+#regex_new = re.compile(r"(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]){6,}")
+regex_new = re.compile(r"(?=.*[a-z]).{6}")
+"""
+My password strength criteria is as below :
+8 characters length
+2 letters in Upper Case
+1 Special Character (!@#$&*)
+2 numerals (0-9)
+3 letters in Lower Case"""
+"^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$"
+
+#text_new = "fjd3IR9"
+#text_new = "12345"
+text_new = "asd3faf"
+
+match_start = regex_new.match(text_new)
+#print(match_start)
 
 
 
+def validate_password(password):
+    # define our regex pattern for validation
+    pattern = r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[^A-Za-z0-9]).{8,}$"
+
+    # We use the re.match function to test the password against the pattern
+    match = re.match(pattern, password)
+
+    # return True if the password matches the pattern, False otherwise
+    return bool(match)
+
+password1 = "StrongP@ssword123"
+password2 = "weakpassword"
+print(validate_password(password1))
+print(validate_password(password2))
 
 
+"""WORKED THE FOLLOWING:
+At least six characters long
+contains a lowercase letter
+contains an uppercase letter
+contains a digit
+only contains alphanumeric characters (note that '_' is not alphanumeric)
 
+"""
 
+regex_pass = r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[^A-Za-z0-9]).{6,}$"
 
-
+"""
+the lookaheads (?= ____) are checking the presence of letters in string (but don't move the "checking" ahead),
+ the .{6,} checks the length - the space after comma is blank means infinity
+"""
