@@ -139,3 +139,61 @@ Maybe you can use it to detect wrongly set permissions on important files like p
 
 
 """
+
+
+def is_isogram(string):
+    arr = []
+    for s in string:
+        if s.lower() in arr:
+            return False
+        arr.append(s.lower())
+    return True
+
+def is_isogram2(string):
+    return len(string) == len(set(string.lower()))
+
+
+
+def cut_the_ropes(arr):
+    length = len(arr)
+    m = min(arr)
+    result = []
+    while m != 0:
+        m1 = 0
+        count = 0
+        for i in range(length):
+            if arr[i] != 0:
+                count += 1
+                arr[i] -= m
+                if m1 == 0 or (arr[i] < m1 and arr[i] != 0):
+                    m1 = arr[i]
+        m = m1
+        result.append(count)
+    return result
+
+
+def cut_the_ropes2(a):
+    if not a:
+        return []
+    m = min(a)
+    return [len(a)] + cut_the_ropes2([x-m for x in a if x > m])
+
+print(cut_the_ropes([3, 3, 2, 9, 7]))
+print(cut_the_ropes([1, 2, 3, 4, 3, 3, 2, 1]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
