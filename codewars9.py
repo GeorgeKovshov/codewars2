@@ -182,6 +182,16 @@ print(cut_the_ropes([3, 3, 2, 9, 7]))
 print(cut_the_ropes([1, 2, 3, 4, 3, 3, 2, 1]))
 
 
+def freed_prisoners(prison):
+    current = True
+    count = -1
+    for p in prison:
+        if p == current:
+            current = not current
+            count += 1
+    return count
+
+
 
 
 
