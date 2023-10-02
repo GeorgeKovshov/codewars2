@@ -178,8 +178,8 @@ def cut_the_ropes2(a):
     m = min(a)
     return [len(a)] + cut_the_ropes2([x-m for x in a if x > m])
 
-print(cut_the_ropes([3, 3, 2, 9, 7]))
-print(cut_the_ropes([1, 2, 3, 4, 3, 3, 2, 1]))
+#print(cut_the_ropes([3, 3, 2, 9, 7]))
+#print(cut_the_ropes([1, 2, 3, 4, 3, 3, 2, 1]))
 
 
 def freed_prisoners(prison):
@@ -190,6 +190,39 @@ def freed_prisoners(prison):
             current = not current
             count += 1
     return count
+
+
+class Multip:
+    arr = []
+    permute = []
+    length = int
+
+    def __init__(self, num):
+        self.length = 0
+        while num >= 1:
+            self.arr.append(num % 10)
+            num = num // 10
+            self.length += 1
+        self.permute = self.arr
+
+    def recursive_find(self, base):
+        tmp = []
+        for x in self.arr:
+            for y in self.permute:
+                tmp.append(y*10 + x)
+        self.permute.extend(tmp)
+
+def find_mult_3(num):
+    arr = Multip(num)
+    print(arr.arr)
+    arr.recursive_find(3)
+    print(arr.permute)
+
+
+
+
+print(find_mult_3((362)))
+
 
 
 
