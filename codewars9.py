@@ -192,38 +192,130 @@ def freed_prisoners(prison):
     return count
 
 
+class Block:
+    width = int
+    length = int
+    height = int
+
+    def __init__(self, arr):
+        self.width = arr[0]
+        self.length = arr[1]
+        self.height = arr[2]
+
+    def get_width(self):
+        return self.width
+
+    def get_length(self):
+        return self.length
+
+    def get_height(self):
+        return self.height
+
+    def get_volume(self):
+        return self.height * self.length * self.width
+
+    def get_surface_area(self):
+        return 2 * self.height * self.length + 2 * self.width * self.length + 2 * self.height * self.width
+
+
+import math
+
+
+class Sphere(object):
+    radius = float
+    mass = float
+
+    def __init__(self, rad, mass):
+        self.radius = rad
+        self.mass = float
+
+    def get_radius(self):
+        return self.radius
+
+    def get_mass(self):
+        return self.mass
+
+    def get_volume(self):
+        return round(self.radius * self.radius * self.radius * math.pi * 4 / 3, 5)
+
+    def get_surface_area(self):
+        return round(self.radius * self.radius * math.pi * 4, 5)
+
+    def get_density(self):
+        return round(self.get_mass() / self.get_volume(), 5)
+
 class Multip:
     arr = []
     permute = []
+    result = []
     length = int
 
     def __init__(self, num):
         self.length = 0
         while num >= 1:
             self.arr.append(num % 10)
+            self.permute.append(num % 10)
             num = num // 10
             self.length += 1
-        self.permute = self.arr
 
-    def recursive_find(self, base):
+    def find(self, base):
         tmp = []
-        for x in self.arr:
-            for y in self.permute:
-                tmp.append(y*10 + x)
-        self.permute.extend(tmp)
+        while self.length > 1:
+            tmp = []
+            for x in self.arr:
+                for y in self.permute:
+                    tmp.append(y*10 + x)
+            self.permute.extend(tmp)
+            self.length -= 1
+
+    def recursive_find(self, ar):
+        length = len(ar)
+        if length <= 0:
+            return
+        length_permute = len(self.permute)
+        for i in range(length):
+            for j in range(length_permute):
+                tmp = self.permute[j] * 10 + ar[i]
+                if tmp not in self.permute:
+                    self.permute.append(tmp)
+                    if tmp % 3 == 0:
+                        self.result.append(tmp)
+                    self.recursive_find(ar[:i] + ar[i+1:])
+        return
+
+    def recursive_find1(self, ar):
+        length = len(ar)
+        if length <= 0:
+            return
+        length_permute = len(self.permute)
+        for i in range(length):
+            for j in range(length_permute):
+                tmp = self.permute[j] * 10 + ar[i]
+                if tmp not in self.permute:
+                    self.permute.append(tmp)
+                    if tmp % 3 == 0:
+                        self.result.append(tmp)
+                    self.recursive_find(ar[:i] + ar[i+1:])
+        return
+
+
+
 
 def find_mult_3(num):
     arr = Multip(num)
     print(arr.arr)
-    arr.recursive_find(3)
-    print(arr.permute)
+    #arr.find(3)
+    arr.recursive_find1(arr.arr)
+    print(arr.result)
 
 
 
 
-print(find_mult_3((362)))
+#print(find_mult_3((362)))
 
-
+#ar = [1, 2, 3, 4, 5, 6, 7, 8]
+#i = len(ar)-1
+#print(ar[:i] + ar[i+1:])
 
 
 
