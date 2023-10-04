@@ -248,56 +248,37 @@ class Multip:
     arr = []
     permute = []
     result = []
-    length = int
+
 
     def __init__(self, num):
         self.length = 0
         while num >= 1:
             self.arr.append(num % 10)
-            self.permute.append(num % 10)
+            #self.permute.append(num % 10)
             num = num // 10
             self.length += 1
 
-    def find(self, base):
-        tmp = []
-        while self.length > 1:
-            tmp = []
-            for x in self.arr:
-                for y in self.permute:
-                    tmp.append(y*10 + x)
-            self.permute.extend(tmp)
-            self.length -= 1
 
-    def recursive_find(self, ar):
-        length = len(ar)
-        if length <= 0:
+    def recursive_find1(self, avail_ar, permuted_ar, power):
+        length_avail = len(avail_ar)
+        if length_avail < 1:
             return
-        length_permute = len(self.permute)
-        for i in range(length):
-            for j in range(length_permute):
-                tmp = self.permute[j] * 10 + ar[i]
-                if tmp not in self.permute:
-                    self.permute.append(tmp)
-                    if tmp % 3 == 0:
-                        self.result.append(tmp)
-                    self.recursive_find(ar[:i] + ar[i+1:])
+        length_permuted = len(permuted_ar)
+        for i in range(length_avail):
+            for j in range(length_permuted):
+                num = avail_ar[i] + permuted_ar[j] * 10
+
+                if num in self.permute or num / pow(10, power) < 1:
+                    continue
+                self.permute.append(num)
+                if num % 3 == 0:
+                    self.result.append(num)
+                self.recursive_find1(avail_ar[:i] + avail_ar[i+1:], permuted_ar + [num], power + 1)
+
         return
 
-    def recursive_find1(self, ar):
-        length = len(ar)
-        if length <= 0:
-            return
-        length_permute = len(self.permute)
-        for i in range(length):
-            for j in range(length_permute):
-                tmp = self.permute[j] * 10 + ar[i]
-                if tmp not in self.permute:
-                    self.permute.append(tmp)
-                    if tmp % 3 == 0:
-                        self.result.append(tmp)
-                    self.recursive_find(ar[:i] + ar[i+1:])
-        return
-
+    def recursive_start(self):
+        self.recursive_find1(self.arr, [0,0,0], 0)
 
 
 
@@ -305,19 +286,21 @@ def find_mult_3(num):
     arr = Multip(num)
     print(arr.arr)
     #arr.find(3)
-    arr.recursive_find1(arr.arr)
-    print(arr.result)
+    arr.recursive_start()
+    #arr.recursive_find1(arr.arr)
+    print(len(arr.result), max(arr.result))
+    #print(sorted(arr.result))
 
 
 
 
-#print(find_mult_3((362)))
+print(find_mult_3(6063))
 
 #ar = [1, 2, 3, 4, 5, 6, 7, 8]
+#num = 2
+#print(ar + [num])
 #i = len(ar)-1
 #print(ar[:i] + ar[i+1:])
-
-
 
 
 
