@@ -244,57 +244,202 @@ class Sphere(object):
     def get_density(self):
         return round(self.get_mass() / self.get_volume(), 5)
 
+
+
 class Multip:
+    """
     arr = []
     permute = []
     result = []
-
+    max_permute = int
+    amount_permute = int
+    hash_dict = {}
+    length = int
+    """
 
     def __init__(self, num):
-        self.length = 0
+        self.arr = []
+        self.permute = []
+        self.result = []
+        length = 0
+        self.amount_permute = 0
+        self.max_permute = 0
+        zero_present = False
         while num >= 1:
+            if num % 10 == 0:
+                zero_present = True
             self.arr.append(num % 10)
-            #self.permute.append(num % 10)
             num = num // 10
-            self.length += 1
+            length += 1
+        self.length = length
+        if zero_present:
+            self.amount_permute -= 1
+
+    def count_permutations_helper(self, split_len, length):
+        result = 1
+        while split_len > 0:
+            result *= length
+            length -= 1
+            split_len -= 1
+        return result
+
+    def count_permutations(self, num):
+        split = {}
+        length = 0
+        split_len = -1
+        while num >= 1:
+            if num % 10 not in split:
+                split[num % 10] = 0
+                split_len += 1
+            split[num % 10] += 1
+            num = num // 10
+            length += 1
+        result = self.count_permutations_helper(split_len, length)
+        if 0 in split:
+            result -= (self.count_permutations_helper(split_len - 1, length - 1)) * split[0]
+        return result
+
+    def count_permutations_helper1(self, split):
+        """start the formula"""
+        result = 1
+        divide = []
+        factori = 0
+        product = 1
+        division = 1
+        for key in split:
+            factori += split[key]
+            if split[key] > 1:
+                divide.append(split[key])
+        while factori > 0:
+            product *= factori
+            factori -= 1
+        for x in divide:
+            pro = 1
+            while x > 0:
+                pro *= x
+                x -= 1
+            division *= pro
+        result = product / division
+        """end the formula"""
+        return result
+
+    def count_permutations1(self, num):
+        """the good one"""
+        split = {}
+        length = 0
+        split_len = -1
+        while num >= 1:
+            if num % 10 not in split:
+                split[num % 10] = 0
+                split_len += 1
+            split[num % 10] += 1
+            num = num // 10
+            length += 1
+        result = self.count_permutations_helper1(split)
+        if 0 in split:
+            split[0] -= 1
+            result -= self.count_permutations_helper1(split)
+        return result
 
 
-    def recursive_find1(self, avail_ar, permuted_ar, power):
+    def recursive_find1(self, current_num, index):
+        """the good one"""
+        if index >= self.length:
+            return
+        for i in range(index, self.length):
+            num = current_num * 10 + self.arr[i]
+            if num in self.permute:
+                continue
+            self.permute.append(num)
+            if num % 3 == 0:
+                self.result.append(num)
+                self.amount_permute += self.count_permutations1(num)
+                self.max_permute = max(self.max_permute, num)
+            self.recursive_find1(num, i + 1)
+        return
+
+
+    def recursive_find2(self, avail_ar, permuted_ar, power):
+        """the slow one"""
         length_avail = len(avail_ar)
         if length_avail < 1:
             return
         length_permuted = len(permuted_ar)
+        start = 3
+        if power == 0:
+            start = 0
         for i in range(length_avail):
-            for j in range(length_permuted):
+            for j in range(start, length_permuted):
                 num = avail_ar[i] + permuted_ar[j] * 10
 
-                if num in self.permute or num / pow(10, power) < 1:
+                if num in self.hash_dict[power] or num / pow(10, power) < 1:
                     continue
-                self.permute.append(num)
+                self.hash_dict[power].append(num)
                 if num % 3 == 0:
                     self.result.append(num)
-                self.recursive_find1(avail_ar[:i] + avail_ar[i+1:], permuted_ar + [num], power + 1)
+                self.recursive_find2(avail_ar[:i] + avail_ar[i+1:], permuted_ar + [num], power + 1)
 
         return
 
     def recursive_start(self):
-        self.recursive_find1(self.arr, [0,0,0], 0)
+        #self.recursive_find2(self.arr, [0,0,0], 0)
+        self.arr = sorted(self.arr, reverse=True)
+        self.recursive_find1(0, 0)
+
+
+    def reset(self):
+        self.arr.clear()
+        self.permute.clear()
+        self.result.clear()
+        self.max_permute = 0
+        self.amount_permute = 0
+        self.length = 0
 
 
 
 def find_mult_3(num):
     arr = Multip(num)
-    print(arr.arr)
+
     #arr.find(3)
     arr.recursive_start()
+    print(arr.arr)
     #arr.recursive_find1(arr.arr)
-    print(len(arr.result), max(arr.result))
-    #print(sorted(arr.result))
+    print(arr.max_permute, arr.amount_permute)
+    print(sorted(arr.result))
 
 
 
 
+print(find_mult_3(362))
 print(find_mult_3(6063))
+print(find_mult_3(7766553322))
+
+from itertools import permutations
+
+
+def find_mult_3_2(num):
+    num_list = tuple(map(int, str(num)))
+
+    poss = set()
+    for i in range(1, len(num_list) + 1):
+        poss |= set(permutations(num_list, i))
+
+    res = set()
+    for p in poss:
+        if p[0] != 0 and sum(p) % 3 == 0:
+            res.add(p)
+
+    res = [sum(x * 10 ** n for n, x in enumerate(p[::-1])) for p in res]
+    return [len(res), max(res)]
+
+def find_mult_3_3(num):
+  ls = []
+  for i in range(1, len(str(num))+1):
+    for j in set(permutations(str(num), i)):
+      ls.append(int(''.join(j)))
+  ls = set(ls)
+  solve = [x for x in ls if x != 0 and x % 3 == 0]
+  return [len(solve), max(solve)]
 
 #ar = [1, 2, 3, 4, 5, 6, 7, 8]
 #num = 2
@@ -302,11 +447,77 @@ print(find_mult_3(6063))
 #i = len(ar)-1
 #print(ar[:i] + ar[i+1:])
 
+def count_permutations_helper(split_len, length):
+    result = 1
+    while split_len > 0:
+        result *= length
+        length -= 1
+        split_len -= 1
+    return result
+
+def count_permutations(num):
+    split = {}
+    length = 0
+    split_len = -1
+    while num >= 1:
+        if num % 10 not in split:
+            split[num % 10] = 0
+            split_len += 1
+        split[num % 10] += 1
+        num = num // 10
+        length += 1
+    result = count_permutations_helper(split_len, length)
+    if 0 in split:
+        result -= (count_permutations_helper(split_len - 1, length - 1)) * split[0]
+    return result
+
+def count_permutations_helper1(split):
+    """start the formula"""
+    result = 1
+    divide = []
+    factori = 0
+    product = 1
+    division = 1
+    for key in split:
+        factori += split[key]
+        if split[key] > 1:
+            divide.append(split[key])
+    while factori > 0:
+        product *= factori
+        factori -= 1
+    for x in divide:
+        pro = 1
+        while x > 0:
+            pro *= x
+            x -= 1
+        division *= pro
+    result = product / division
+
+    return result
 
 
 
+def count_permutations1(num):
+    split = {}
+    length = 0
+    split_len = -1
+    while num >= 1:
+        if num % 10 not in split:
+            split[num % 10] = 0
+            split_len += 1
+        split[num % 10] += 1
+        num = num // 10
+        length += 1
+    result = count_permutations_helper1(split)
+    if 0 in split:
+        split[0] -= 1
+        result -= count_permutations_helper1(split)
+    return result
 
 
+#print(count_permutations1(120))
+#for x in count_permutations1(360):
+    #print(x)
 
 
 
