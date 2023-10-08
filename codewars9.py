@@ -410,9 +410,9 @@ def find_mult_3(num):
 
 
 
-print(find_mult_3(362))
-print(find_mult_3(6063))
-print(find_mult_3(7766553322))
+#print(find_mult_3(362))
+#print(find_mult_3(6063))
+#print(find_mult_3(7766553322))
 
 from itertools import permutations
 
@@ -520,6 +520,13 @@ def count_permutations1(num):
     #print(x)
 
 
+def two_sum(numbers, target):
+    dicts = {}
+    for i in range(len(numbers)):
+        if numbers[i] in dicts:
+            return (dicts[numbers[i]],i)
+        dicts[target - numbers[i]] = i
+    return []
 
 
 
