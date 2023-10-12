@@ -173,8 +173,8 @@ def validate_password(password):
 
 password1 = "StrongP@ssword123"
 password2 = "weakpassword"
-print(validate_password(password1))
-print(validate_password(password2))
+#print(validate_password(password1))
+#print(validate_password(password2))
 
 
 """WORKED THE FOLLOWING:
@@ -192,3 +192,28 @@ regex_pass = r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*[^A-Za-z0-9]).{6,}$"
 the lookaheads (?= ____) are checking the presence of letters in string (but don't move the "checking" ahead),
  the .{6,} checks the length - the space after comma is blank means infinity
 """
+
+
+def domain_name(url):
+    pattern = r"(https://|http://)?(www\.)?([^\.]+)(.+)"
+    return re.sub(pattern, r"\3", url)
+
+
+def domain_name2(url):
+    url = url.replace('www.', '')
+    url = url.replace('https://', '')
+    url = url.replace('http://', '')
+
+    return url[0:url.find('.')]
+
+#def domain_name3(url):
+    #return re.search('(https?://)?(www\d?\.)?(?P<name>[\w-]+)\.', url).group('name')
+
+def domain_name4(url):
+    return url.split("//")[-1].split("www.")[-1].split(".")[0]
+
+
+
+
+
+
