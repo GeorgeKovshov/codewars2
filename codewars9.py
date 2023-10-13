@@ -529,7 +529,116 @@ def two_sum(numbers, target):
     return []
 
 
+def find_uniq(arr):
+    dict = {}
+    for x in arr:
+        if x not in dict:
+            dict[x] = 0
+        dict[x] += 1
+    for y in dict:
+        if dict[y] == 1:
+            return y
+    return ""
 
 
+def find_uniq2(arr):
+    dict = {}
+    i = 0
+    for line in arr:
+        tmp = set([x for x in line.lower() if x != " "])
+        for y in tmp:
+            if y not in dict:
+                dict[y] = i
+            else:
+                dict[y] = -1
+        i += 1
+    i = 0
+    for d in dict:
+        if dict[d] != -1:
+            return arr[dict[d]]
+    return ""
 
 
+def remove_smallest(numbers):
+    i = len(numbers) - 1
+    if i <= 0:
+        return []
+    min = [i, numbers[i]]
+    i -= 1
+    while i>=0:
+        if min[1] >= numbers[i]:
+            min = [i, numbers[i]]
+        i -= 1
+    return numbers[:min[0]] + numbers[min[0]+1:]
+
+
+def remove_smallest2(numbers):
+    a = numbers[:]
+    if a:
+        a.remove(min(a))
+    return a
+
+def sort_odd_indeces(source_array):
+    i = len(source_array)
+    t = 0
+    change = True
+    while i>0 and change:
+        change = False
+        while t + 2 < i:
+            if source_array[t] > source_array[t + 2]:
+                tmp = source_array[t]
+                source_array[t] = source_array[t + 2]
+                source_array[t + 2] = tmp
+                change = True
+            t += 2
+        i -= 2;
+        t = 0
+    return source_array
+
+
+def sort_odd_array(arr):
+    i = 0
+    j = len(arr)
+    last = arr[0]
+    for x in arr:
+        if x % 2 != 0:
+            last = x
+            break
+        i += 1
+    if last % 2 == 0:
+        return arr
+
+    while i + 1 < j:
+        if arr[i + 1] < last and arr[i+1] % 2 != 0:
+            t = i
+            ind = i + 1
+            while t >= 0:
+                if arr[t] % 2 != 0 and arr[ind] < arr[t]:
+                    tmp = arr[ind]
+                    arr[ind] = arr[t]
+                    arr[t] = tmp
+                    ind = t
+                elif arr[t] % 2 != 0:
+                    break
+                t -= 1
+            last = arr[i + 1]
+        elif arr[i+1] % 2 != 0:
+            last = arr[i + 1]
+        i += 1
+
+    return arr
+
+
+def sort_odd_array2(arr):
+    odds = sorted((x for x in arr if x % 2 != 0), reverse=True)
+    return [x if x % 2 == 0 else odds.pop() for x in arr]
+
+
+#print(sort_odd_array([5, 3, 2, 8, 1, 4]))
+print(sort_odd_array([1, 111, 11, 11, 2, 1, 5, 0]))
+
+#[1, 111, 11, 11, 2, 1, 5, 0] should equal
+#[1, 1, 5, 11, 2, 11, 111, 0]
+
+#[-49, -27, -5, 7, 32, 22, 33, 39, -44, 13] should equal
+#[-49, -27, -5, 7, 32, 22, 13, 33, -44, 39]
