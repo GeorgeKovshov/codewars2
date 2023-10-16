@@ -642,3 +642,24 @@ print(sort_odd_array([1, 111, 11, 11, 2, 1, 5, 0]))
 
 #[-49, -27, -5, 7, 32, 22, 33, 39, -44, 13] should equal
 #[-49, -27, -5, 7, 32, 22, 13, 33, -44, 39]
+
+
+def order(sentence):
+    if sentence == "":
+        return ""
+    arr = sentence.split()
+    result = ["", "", "", "", "", "", "", "", ""]
+    for word in arr:
+        for letter in word:
+            if letter.isdigit():
+                result[int(letter) - 1] = word
+                break
+    print(result)
+    res = " ".join([x for x in result if x != ""])
+    return res
+
+
+
+
+
+
