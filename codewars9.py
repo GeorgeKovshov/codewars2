@@ -659,6 +659,44 @@ def order(sentence):
     return res
 
 
+def arrange(strng):
+    words = strng.split()
+    lengths = []
+    for word in words:
+        lengths.append(len(word))
+    print("lengths", len(lengths), " words", len(words))
+
+    result = []
+    i = 0
+    word_amount = len(words)
+    odd = True
+    while i < word_amount - 1:
+        if lengths[i] <= lengths[i + 1] and odd:
+            result.append(words[i].lower())
+        elif lengths[i] >= lengths[i + 1] and not odd:
+            result.append(words[i].upper())
+        else:
+            if odd:
+                result.append(words[i + 1].lower())
+            else:
+                result.append(words[i + 1].upper())
+            words[i + 1] = words[i]
+            lengths[i + 1] = lengths[i]
+        i += 1
+        odd = not odd
+    if (word_amount > 0):
+        if odd:
+            result.append(words[-1].lower())
+        else:
+            result.append(words[-1].upper())
+    return " ".join([x for x in result])
+
+def arrange2(strng):
+    words = strng.split()
+    for i in range(len(words)):
+        words[i:i+2] = sorted(words[i:i+2], key=len, reverse=i%2)
+        words[i] = words[i].upper() if i%2 else words[i].lower()
+    return ' '.join(words)
 
 
 
