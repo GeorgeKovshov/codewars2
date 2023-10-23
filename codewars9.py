@@ -699,5 +699,21 @@ def arrange2(strng):
     return ' '.join(words)
 
 
+def split_integer(num, parts):
+    divider = int(num / parts)
+    result = [divider] * parts
+    sum = int(divider * parts)
+    i = len(result) - 1
+    while sum != num and i>=0:
+        if sum > num:
+            result[i] -= 1
+            sum -= 1
+        else:
+            result[i] += 1
+            sum += 1
+        i-=1
+    return result
+
+
 
 
