@@ -715,5 +715,21 @@ def split_integer(num, parts):
     return result
 
 
-
+def pop_blocks(lst):
+    result = []
+    found = False
+    for i in range(len(lst)-1):
+        if lst[i] != lst[i+1] and not found:
+            result.append(lst[i])
+        elif lst[i] != lst[i+1] and found:
+            result = result + lst[i+1:]
+            break;
+        else:
+            found = True
+    if found:
+        return pop_blocks(result)
+    else:
+        if len(lst) > 0:
+            result.append(lst[-1])
+        return result
 
