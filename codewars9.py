@@ -733,3 +733,20 @@ def pop_blocks(lst):
             result.append(lst[-1])
         return result
 
+#print(153//10)
+#var = 153
+#print([int(x)**3 for x in list(str(var))])
+
+# d = direction, v = values array, c = number to search
+# return None in case of value not found
+def cycle(d, v, c):
+    for i in range(len(v)):
+        if v[i] == c:
+            if  i + d < 0:
+                return v[len(v)+d]
+            elif i + d >= len(v):
+                return v[0]
+            else:
+                return v[i+d]
+    return None
+
