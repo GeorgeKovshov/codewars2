@@ -750,3 +750,15 @@ def cycle(d, v, c):
                 return v[i+d]
     return None
 
+def locate_entrance(office: List[str]) -> Tuple[int, int]:
+    for i in range(len(office)):
+        for j in range(len(office[i])):
+            if office[i][j] == '.':
+                if i == len(office) - 1 or i == 0 or j==0 or j==len(office[i])-1:
+                    return(j,i)
+                elif len(office[i-1])<=j or len(office[i+1])<=j:
+                    return(j,i)
+                elif office[i-1][j] == " " or office[i+1][j] == " " or office[i][j-1] == " " or office[i][j+1] == " ":
+                    return(j,i)
+    return ("","")
+
