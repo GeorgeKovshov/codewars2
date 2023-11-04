@@ -762,3 +762,35 @@ def locate_entrance(office: List[str]) -> Tuple[int, int]:
                     return(j,i)
     return ("","")
 
+def tops(msg):
+    i = 1
+    length = len(msg)
+    addition = 2
+    result = []
+    while i < length:
+        result.append(msg[i])
+        #result = msg[i] + result
+        i += addition * 2 + 1
+        addition += 2
+    return "".join(result[::-1])
+
+
+def tops2(msg):
+    i = 2
+    length = len(msg)
+    current = 2
+    addition = 2
+    result = []
+    while i < length:
+        result.append(msg[i:(i+current)])
+        i += current
+        addition += 3
+        i += addition
+        current += 1
+    return "".join(result[::-1])
+
+
+
+
+
+
