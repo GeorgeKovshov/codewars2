@@ -790,7 +790,80 @@ def tops2(msg):
     return "".join(result[::-1])
 
 
+def alphabet_war(fight):
+    dict = {
+        'w' : 4,
+        'p' : 3,
+        'b' : 2,
+        's' : 1,
+        'm' : -4,
+        'q' : -3,
+        'd' : -2,
+        'z' : -1,
+    }
+    result = 0
+    for fighter in fight:
+        if fighter in dict:
+            result += dict[fighter]
+    if result > 0:
+        return "Left side wins!"
+    elif result < 0:
+        return "Right side wins!"
+    else:
+        return "Let's fight again!"
 
 
+def alphabet_war2(fight):
+    dict = {
+        'w': 4,
+        'p': 3,
+        'b': 2,
+        's': 1,
+        'm': -4,
+        'q': -3,
+        'd': -2,
+        'z': -1,
+    }
+    length = len(fight)
+    arr = list(fight)
+    for i in range(length):
+        if fight[i] == '*':
+            if i < length - 1:
+                arr[i + 1] = '_'
+            if i > 0:
+                arr[i - 1] = '_'
+    result = 0
+    for fighter in arr:
+        if fighter in dict:
+            result += dict[fighter]
+
+    if result > 0:
+        return "Left side wins!"
+    elif result < 0:
+        return "Right side wins!"
+    else:
+        return "Let's fight again!"
+
+
+def alphabet_war3(reinforces, airstrikes):
+    depth = len(airstrikes)
+    length = 0
+    for x in airstrikes:
+        length = len(x) if len(x) > length else length
+    bombings = [0] * length
+    i = 0
+    while i < depth:
+        for j in range(0, len(airstrikes[i])):
+            if airstrikes[i][j] == '*':
+                if j == 0 or airstrikes[i][j - 1] != '*':
+                    bombings[j] += 1
+                if j < length - 1:
+                    bombings[j + 1] += 1
+        i += 1
+
+    result = []
+    for j in range(length):
+        result.append(reinforces[bombings[j]][j])
+    return "".join(result)
 
 
