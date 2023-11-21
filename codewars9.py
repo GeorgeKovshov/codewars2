@@ -749,7 +749,7 @@ def cycle(d, v, c):
             else:
                 return v[i+d]
     return None
-
+'''
 def locate_entrance(office: List[str]) -> Tuple[int, int]:
     for i in range(len(office)):
         for j in range(len(office[i])):
@@ -761,7 +761,7 @@ def locate_entrance(office: List[str]) -> Tuple[int, int]:
                 elif office[i-1][j] == " " or office[i+1][j] == " " or office[i][j-1] == " " or office[i][j+1] == " ":
                     return(j,i)
     return ("","")
-
+'''
 def tops(msg):
     i = 1
     length = len(msg)
@@ -866,4 +866,27 @@ def alphabet_war3(reinforces, airstrikes):
         result.append(reinforces[bombings[j]][j])
     return "".join(result)
 
-
+def count_sel(lst):
+    # loop through list to make a dictionary
+    dict = {}
+    count_all = 0
+    count_different = 0
+    maximum = 0
+    for val in lst:
+        if val not in dict:
+            dict[val] = 0
+            count_different += 1
+        if dict[val] + 1 >= maximum:
+            maximum = dict[val] + 1
+        dict[val] += 1
+        count_all += 1
+    # loop through dictionary to get all data
+    count_single = 0
+    array_maximum = []
+    for key in dict:
+        if dict[key] == 1:
+            count_single += 1
+        if dict[key] == maximum:
+            array_maximum.append(key)
+    array_maximum.sort()
+    return [count_all, count_different, count_single, [array_maximum, maximum]]
