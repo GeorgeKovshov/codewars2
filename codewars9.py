@@ -890,3 +890,115 @@ def count_sel(lst):
             array_maximum.append(key)
     array_maximum.sort()
     return [count_all, count_different, count_single, [array_maximum, maximum]]
+
+def find_inner_braces(s):
+    length = len(s)
+    i = 0
+    current_braces = [-1,-1]
+    while i < length:
+        if s[i] == '(':
+            current_braces[0] = i
+        if s[i] == ')':
+            current_braces[1] = i
+            break
+        i += 1
+    #print(s[current_braces[0]:current_braces[1]+1])
+    return current_braces
+
+
+def solve_equation(equation):
+    negation = {
+        'T': 'F',
+        'U': 'U',
+        'F': 'T'
+    }
+    arr = equation.strip().split()
+    previous = ""
+    i = 0
+    print(arr)
+    length = len(arr)
+    while i < length:
+        if arr[i] == "not":
+            arr[i+1] = negation[arr[i+1]]
+            arr[i] = ""
+        i += 1
+
+    print(" ".join(arr))
+    i = 0
+    while i < length:
+        if arr[i] == "and":
+            j = 1
+            while arr[i+j] == "":
+                j += 1
+            z = -1
+            while arr[i+z] == "":
+                z -= 1
+            if arr[i+z] == 'T' and arr[i+j] == 'T':
+                arr[i] = 'T'
+            elif (arr[i+z] == 'T' and arr[i+j] == 'U') or (arr[i+z] == 'U' and arr[i+j] == 'T') or (arr[i+z] == 'U' and arr[i+j] == 'U'):
+                arr[i] = 'U'
+            else:
+                arr[i] = 'F'
+            arr[i + z] = ""
+            arr[i + j] = ""
+        i += 1
+    print(" ".join(arr))
+    i = 0
+    while i < length:
+        if arr[i] == "xor":
+            j = 1
+            while arr[i + j] == "":
+                j += 1
+            z = -1
+            while arr[i + z] == "":
+                z -= 1
+            if (arr[i + z] == 'T' and arr[i + j] == 'T') or (arr[i + z] == 'F' and arr[i + j] == 'F'):
+                arr[i] = 'F'
+            elif (arr[i + z] == 'T' and arr[i + j] == 'F') or (arr[i + z] == 'F' and arr[i + j] == 'T'):
+                arr[i] = 'T'
+            else:
+                arr[i] = 'U'
+            arr[i + z] = ""
+            arr[i + j] = ""
+        i += 1
+    print(" ".join(arr))
+    i = 0
+    while i < length:
+        if arr[i] == "or":
+            j = 1
+            while arr[i + j] == "":
+                j += 1
+            z = -1
+            while arr[i + z] == "":
+                z -= 1
+            if arr[i + z] == 'F' and arr[i + j] == 'F':
+                arr[i] = 'F'
+            elif (arr[i + z] == 'F' and arr[i + j] == 'U') or (arr[i + z] == 'U' and arr[i + j] == 'F') or (
+                    arr[i + z] == 'U' and arr[i + j] == 'U'):
+                arr[i] = 'U'
+            else:
+                arr[i] = 'T'
+            arr[i + z] = ""
+            arr[i + j] = ""
+        i += 1
+    print(" ".join(arr))
+    return "".join(arr).strip()
+
+
+def threevl(s):
+    braces_indeces = find_inner_braces(s)
+    while braces_indeces[0] != -1 and braces_indeces[1] != -1:
+        tmp = solve_equation(s[braces_indeces[0]+1:braces_indeces[1]])
+        s = s[:braces_indeces[0]] + tmp + s[braces_indeces[1] + 1:]
+        braces_indeces = find_inner_braces(s)
+    return solve_equation(s)
+
+
+#print(find_inner_braces("(not T or U) and (not U or T)"))
+print(threevl("not T or U"))
+
+
+
+
+
+
