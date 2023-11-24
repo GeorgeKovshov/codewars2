@@ -995,8 +995,83 @@ def threevl(s):
 
 
 #print(find_inner_braces("(not T or U) and (not U or T)"))
-print(threevl("not T or U"))
+#print(threevl("not T or U"))
 
+
+class Partitions:
+    def __init__(self, n):
+        self.partition_list = []
+        self.max_score = []
+        self.min_score = []
+        num = n
+        i = 2
+        result = []
+        while i < n/2 + 2 and num > 1:
+            if num % i == 0:
+                result.append(i)
+                num = num // i
+                i -= 1
+            i += 1
+        if i >= n/2+1:
+            self.partition_list.append("It is a prime number")
+            return
+        result.sort(reverse=True)
+        self.max_score.append(result)
+        self.min_score.append(result)
+        self.max_score.append(self.calculate_score(result))
+        self.min_score.append(self.max_score[1])
+        self.partition_list.append(result)
+
+    def calculate_score(self, arr):
+        count_dict = {}
+        length = 0
+        for key in arr:
+            if key not in count_dict:
+                count_dict[key] = 0
+            count_dict[key] += 1
+            length += 1
+        result = 0
+        for key in count_dict:
+            result += key ** count_dict[key]
+        return result * length
+
+
+    def find_partitions_rec(self, part):
+        i = 0
+        length = len(part)
+        while i < length-1:
+            j = i + 1
+            while j < length:
+                tmp = part[:i] + part[i+1:j] + part[j+1:] + [part[i] * part[j]]
+                tmp.sort(reverse=True)
+                if tmp not in self.partition_list and len(tmp) > 1:
+                    score = self.calculate_score(tmp)
+
+                    if score > self.max_score[1]:
+                        self.max_score[0] = tmp
+                        self.max_score[1] = score
+                    elif score < self.min_score[1]:
+                        self.min_score[0] = tmp
+                        self.min_score[1] = score
+
+                    self.partition_list.append(tmp)
+                    self.find_partitions_rec(tmp)
+                j += 1
+            i += 1
+
+    def initiate_find_partitions(self):
+        self.find_partitions_rec(self.partition_list[0])
+
+
+def find_spec_prod_part(n, com):
+    part = Partitions(n)
+    if part.partition_list[0] == "It is a prime number":
+        return "It is a prime number"
+    part.initiate_find_partitions()
+    return part.min_score if com == "min" else part.max_score
+
+
+print(find_spec_prod_part(1416, "max"))
 
 
 
