@@ -1071,8 +1071,63 @@ def find_spec_prod_part(n, com):
     return part.min_score if com == "min" else part.max_score
 
 
-print(find_spec_prod_part(1416, "max"))
+#print(find_spec_prod_part(1416, "max"))
 
+def rec_spiral():
+    return
+
+def spiralize(size):
+    field = [[1]*size]
+    for i in range(size-2):
+        field.append(([0]*(size-1) + [1]))
+    field.append([1] * size)
+    i = size - 1
+    j = 0
+    moved = True
+    while moved:
+        moved = False
+        count = 0
+        while field[i-2][j] != 1:
+            field[i-1][j] = 1
+            i -= 1
+            count += 1
+            moved = True
+        if count == 1:
+            return field
+
+        count = 0
+        while field[i][j+2] != 1:
+            field[i][j+1] = 1
+            j += 1
+            count += 1
+            moved = True
+        if count == 1:
+            return field
+
+        count = 0
+        while field[i+2][j] != 1:
+            field[i+1][j] = 1
+            i += 1
+            count += 1
+            moved = True
+        if count == 1:
+            return field
+
+        count = 0
+        while field[i][j-2] != 1:
+            field[i][j-1] = 1
+            j -= 1
+            count += 1
+            moved = True
+        if count == 1:
+            return field
+
+    return field
+
+
+spiral = spiralize(5)
+for s in spiral:
+    print(s)
 
 
 
