@@ -1124,11 +1124,70 @@ def spiralize(size):
 
     return field
 
-
+'''
 spiral = spiralize(5)
 for s in spiral:
     print(s)
+'''
+
+def get_digits(num):
+    result = []
+    while num >= 1:
+        result.append(num % 10)
+        num = num // 10
+    return result
+
+def get_score(num):
+    result = num % 10
+    num = num // 10
+    previous = result
+    while num >= 1:
+        current = num % 10
+        if current > previous:
+            result -= current ** (abs(current - previous))
+        else:
+            result += current ** (abs(current - previous))
+        previous = current
+        num = num // 10
+    return result
 
 
+def prev_next(n):
+    low = n - 1
+    high = n + 1
+    left = -1
+    right = -1
+    if n > 100:
+        while low >= 100:
+            if get_score(low) == 0:
+                left = low
+                break
+            low -= 1
+    if n < 1000000:
+        while high <= 1500000:
+            if get_score(high) == 0:
+                right = high
+                break
+            high += 1
+            
+    if get_score(n) == 0:
+        if left == -1 and right == -1:
+            return [n]
+        elif left == -1:
+            return [n, right]
+        elif right == -1:
+            return [left, n]
+        return [left, n, right]
+    else:
+        if left == -1 and right == -1:
+            return []
+        elif left == -1:
+            return [right]
+        elif right == -1:
+            return [left]
+        return [left, right]
 
+
+#print(get_score(186599))
+print(prev_next(150))
 
