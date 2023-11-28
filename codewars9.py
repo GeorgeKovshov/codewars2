@@ -1169,7 +1169,7 @@ def prev_next(n):
                 right = high
                 break
             high += 1
-            
+
     if get_score(n) == 0:
         if left == -1 and right == -1:
             return [n]
@@ -1189,5 +1189,210 @@ def prev_next(n):
 
 
 #print(get_score(186599))
-print(prev_next(150))
+#print(prev_next(150))
+
+
+class Solution:
+    def __init__(self, shape):
+        # shape = shape.replace(" ", "0")
+        s = shape.splitlines()
+        # print(s)
+        list_shape = []
+        self.width = 0
+        for line in s:
+            list_line = []
+            for i in range(len(line)):
+                list_line.append(line[i])
+            if len(list_line) > self.width:
+                self.width = len(list_line)
+            list_shape = list_shape + [list_line]
+        self.list_shape = list_shape
+        self.depth = len(list_shape)
+        for i in range(self.depth):
+            if len(self.list_shape[i]) < self.width:
+                self.list_shape[i] = self.list_shape[i] + [' '] * (self.width - len(self.list_shape[i]))
+        self.vertices = {}
+        self.fake_vertices = []
+        self.cut_figures = []
+        # for x in self.list_shape:
+        # print("line: ", x, " width:", len(x))
+        # self.width = len(list_shape[1])
+        # print(self.width)
+        # for x in list_shape:
+        # print(x)
+
+    def figure_mapper(self, i, j, num, open_border):
+        if not open_border:
+            self.list_shape[i][j] = num
+            # checking for holes
+            if i == 0 or i == self.depth - 1 or j == 0 or j == self.width - 1:
+                open_border = True
+                self.fake_vertices.append(num)
+                self.figure_mapper(i, j, num, open_border)
+                return
+
+            if i >= 1 and self.list_shape[i - 1][j] == ' ':
+                self.figure_mapper(i - 1, j, num, open_border)
+            if i < self.depth - 1 and self.list_shape[i + 1][j] == ' ':
+                self.figure_mapper(i + 1, j, num, open_border)
+            if j >= 1 and self.list_shape[i][j - 1] == ' ':
+                self.figure_mapper(i, j - 1, num, open_border)
+            if j < self.width - 1 and self.list_shape[i][j + 1] == ' ':
+                self.figure_mapper(i, j + 1, num, open_border)
+        else:
+            self.list_shape[i][j] = '0'
+            if i >= 1 and self.list_shape[i - 1][j] in [' ', num]:
+                self.figure_mapper(i - 1, j, num, open_border)
+            if i < self.depth - 1 and self.list_shape[i + 1][j] in [' ', num]:
+                self.figure_mapper(i + 1, j, num, open_border)
+            if j >= 1 and self.list_shape[i][j - 1] in [' ', num]:
+                self.figure_mapper(i, j - 1, num, open_border)
+            if j < self.width - 1 and self.list_shape[i][j + 1] in [' ', num]:
+                self.figure_mapper(i, j + 1, num, open_border)
+        # store the coordinates of figure in graph
+        self.vertices[num][0] = i if i < self.vertices[num][0] else self.vertices[num][0]
+        self.vertices[num][1] = i if i > self.vertices[num][1] else self.vertices[num][1]
+        self.vertices[num][2] = j if j < self.vertices[num][2] else self.vertices[num][2]
+        self.vertices[num][3] = j if j > self.vertices[num][3] else self.vertices[num][3]
+        return
+
+    def overview_traversal(self):
+        num = 1
+        for i in range(self.depth):
+            for j in range(self.width):
+                if self.list_shape[i][j] == ' ':
+                    self.vertices[str(num)] = [1000, -1, 1000, -1]  # [min i, max i, min j, max j]
+                    self.figure_mapper(i, j, str(num), False)
+                    num += 1
+        return
+
+    def cut_out_figure(self, num):
+        coord = self.vertices[num]
+        tmp = []
+        for i in range(coord[0] - 1, coord[1] + 2):
+            tmp.append(self.list_shape[i][coord[2] - 1:coord[3] + 2])
+
+        depth = len(tmp) - 1
+        width = len(tmp[0]) - 1
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] not in ['-', '+', '|', num]:
+                    tmp[i][j] = ' '
+                elif tmp[i][j] == '-':
+                    if (i > 0 and tmp[i - 1][j] == num) or (i < depth and tmp[i + 1][j] == num):
+                        tmp[i][j] = '-'
+                    else:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '|':
+                    if (j > 0 and tmp[i][j - 1] == num) or (j < width and tmp[i][j + 1] == num):
+                        tmp[i][j] = '|'
+                    else:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '+':
+                    touches_num = False
+                    if i > 0 and j > 0:
+                        touches_num = True if tmp[i - 1][j - 1] == num else touches_num
+                    if i > 0 and j < width:
+                        touches_num = True if tmp[i - 1][j + 1] == num else touches_num
+                    if i < depth and j > 0:
+                        touches_num = True if tmp[i + 1][j - 1] == num else touches_num
+                    if i < depth and j < width:
+                        touches_num = True if tmp[i + 1][j + 1] == num else touches_num
+
+                    if i > 0:
+                        touches_num = True if tmp[i - 1][j] == num else touches_num
+                    if i < depth:
+                        touches_num = True if tmp[i + 1][j] == num else touches_num
+                    if j > 0:
+                        touches_num = True if tmp[i][j - 1] == num else touches_num
+                    if j < width:
+                        touches_num = True if tmp[i][j + 1] == num else touches_num
+
+                    if not touches_num:
+                        tmp[i][j] = ' '
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] == num:
+                    tmp[i][j] = ' '
+                elif tmp[i][j] == '+':
+
+                    if i < depth and i > 0 and tmp[i + 1][j] in ['|', '+'] and tmp[i - 1][j] in ['|', '+']:
+                        tmp[i][j] = '|'
+                    elif j < width and j > 0 and tmp[i][j + 1] in ['-', '+'] and tmp[i][j - 1] in ['-', '+']:
+                        tmp[i][j] = '-'
+
+                    if i < depth and i > 0 and j < width and j > 0:
+                        count = 0
+                        if tmp[i + 1][j] in ['|', '+']:
+                            count += 1
+                        if tmp[i - 1][j] in ['|', '+']:
+                            count += 1
+                        if tmp[i][j + 1] in ['-', '+']:
+                            count += 1
+                        if tmp[i][j - 1] in ['-', '+']:
+                            count += 1
+                        if count >= 3:
+                            tmp[i][j] = '+'
+
+        result = "\n".join([("".join(x)).rstrip() for x in tmp])
+        self.cut_figures.append(result)
+        # for x in tmp:
+
+        # print(x)
+        # print(result)
+        # return
+
+    def make_figures_list(self):
+        for y in self.vertices:
+            if y not in self.fake_vertices:
+                self.cut_out_figure(y)
+                # print("+++++++++++++++")
+                # print(y, ": ", self.vertices[y])
+        return
+
+    def print(self):
+        for x in self.list_shape:
+            print(x, self.width)
+        print("____")
+        for y in self.vertices:
+            if y not in self.fake_vertices:
+                print(y, ": ", self.vertices[y])
+
+
+def break_pieces(shape):
+    # shape = shape.replace(" ", "0")
+    s = shape.splitlines()
+    # print(s)
+    '''
+    list_shape = []
+    for line in s:
+        list_line = []
+        for i in range(len(line)):
+            list_line.append(line[i])
+        list_shape.append([list_line])
+
+    '''
+    for x in s:
+        print(x)
+
+    result = Solution(shape)
+    result.overview_traversal()
+    # result.print()
+    result.make_figures_list()
+
+    return result.cut_figures
+
+# uncomment next line if you prefer raw error messages
+# raw_errors = True
+
+
+
+
+
+
+
+
+
+
+
 
