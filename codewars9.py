@@ -1384,8 +1384,27 @@ def break_pieces(shape):
 
 # uncomment next line if you prefer raw error messages
 # raw_errors = True
-
-
+def test_Immortal():
+    print("--------------")
+    result = []
+    for i in range(410):
+        line = []
+        for j in range(511):
+            #if i % 8 == 0 and j % 8 == 0:
+            line.append(i ^ j)
+        if line:
+            result.append(line)
+    whole = 0
+    for x in result:
+        whole += x.count(102)
+        print(x)
+    print(whole)
+test_Immortal()
+#print(32 * 8)
+#print(256 * 256)
+#print(whole)
+#print(1 ^ 3)
+#print(2208 - 960)
 
 
 
