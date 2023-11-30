@@ -1384,29 +1384,320 @@ def break_pieces(shape):
 
 # uncomment next line if you prefer raw error messages
 # raw_errors = True
+def test_Immortal2():
+    result = []
+    first_sum = 0
+    other_sum = 0
+    length = 16
+    modifier = 1
+
+    for i in range(16):
+        #hor_modifier = modifier
+        other_sum += i
+        line = []
+        for j in range(length):
+            #if i % 8 == 0 and j % 8 == 0:
+            line.append(i ^ j)
+            first_sum += i ^ j
+            if (j+1) % 4 == 0:
+                line.append("|")
+                #hor_modifier *= 2
+        if line:
+            result.append(line)
+        if (i+1) % 4 == 0:
+            result.append(["-"] * length)
+            #modifier *= 2
+
+    whole = 0
+    for x in result:
+        #whole += sum(x)
+        #whole += x.count(319)
+        print(x)
+    #print(whole)
+    print(first_sum)
+    print(other_sum * length)
+
+
 def test_Immortal():
     print("--------------")
     result = []
-    for i in range(410):
+    first_sum = 0
+    other_sum = 0
+    length = 16
+    modifier = 1
+    for i in range(7):
+        #hor_modifier = modifier
+        other_sum += i
         line = []
-        for j in range(511):
+        for j in range(length):
             #if i % 8 == 0 and j % 8 == 0:
             line.append(i ^ j)
+            first_sum += i ^ j
+            if (j+1) % 4 == 0:
+                line.append("|")
+                #hor_modifier *= 2
         if line:
             result.append(line)
+        if (i+1) % 4 == 0:
+            result.append(["-"] * length)
+            #modifier *= 2
+
     whole = 0
     for x in result:
-        whole += x.count(102)
+        #whole += sum(x)
+        #whole += x.count(319)
         print(x)
-    print(whole)
-test_Immortal()
+    #print(whole)
+    print(first_sum)
+    print(other_sum * length)
+#test_Immortal()
 #print(32 * 8)
 #print(256 * 256)
 #print(whole)
 #print(1 ^ 3)
 #print(2208 - 960)
+#print(1920 -224)
+
+#print(28827050410* 35165045587)
+
+class Solution2:
+    def __init__(self, shape):
+        # shape = shape.replace(" ", "0")
+        s = shape.splitlines()
+        # print(s)
+        list_shape = []
+        self.width = 0
+        for line in s:
+            list_line = []
+            for i in range(len(line)):
+                list_line.append(line[i])
+            if len(list_line) > self.width:
+                self.width = len(list_line)
+            list_shape = list_shape + [list_line]
+        self.list_shape = list_shape
+        self.depth = len(list_shape)
+        for i in range(self.depth):
+            if len(self.list_shape[i]) < self.width:
+                self.list_shape[i] = self.list_shape[i] + [' '] * (self.width - len(self.list_shape[i]))
+        self.vertices = {}
+        self.small_vertices = {}
+        self.fake_vertices = []
+        self.cut_figures = []
+        # for x in self.list_shape:
+        # print("line: ", x, " width:", len(x))
+        # self.width = len(list_shape[1])
+        # print(self.width)
+        # for x in list_shape:
+        # print(x)
+
+    def figure_mapper(self, i, j, num, open_border):
+        if not open_border:
+            self.list_shape[i][j] = num
+            # checking for holes
+            if i == 0 or i == self.depth - 1 or j == 0 or j == self.width - 1:
+                open_border = True
+                self.fake_vertices.append(num)
+                self.figure_mapper(i, j, num, open_border)
+                return
+
+            if i >= 1 and self.list_shape[i - 1][j] == ' ':
+                self.figure_mapper(i - 1, j, num, open_border)
+            if i < self.depth - 1 and self.list_shape[i + 1][j] == ' ':
+                self.figure_mapper(i + 1, j, num, open_border)
+            if j >= 1 and self.list_shape[i][j - 1] == ' ':
+                self.figure_mapper(i, j - 1, num, open_border)
+            if j < self.width - 1 and self.list_shape[i][j + 1] == ' ':
+                self.figure_mapper(i, j + 1, num, open_border)
+        else:
+            self.list_shape[i][j] = '0'
+            if i >= 1 and self.list_shape[i - 1][j] in [' ', num]:
+                self.figure_mapper(i - 1, j, num, open_border)
+            if i < self.depth - 1 and self.list_shape[i + 1][j] in [' ', num]:
+                self.figure_mapper(i + 1, j, num, open_border)
+            if j >= 1 and self.list_shape[i][j - 1] in [' ', num]:
+                self.figure_mapper(i, j - 1, num, open_border)
+            if j < self.width - 1 and self.list_shape[i][j + 1] in [' ', num]:
+                self.figure_mapper(i, j + 1, num, open_border)
+        # store the coordinates of figure in graph
+        self.vertices[num][0] = i if i < self.vertices[num][0] else self.vertices[num][0]
+        self.vertices[num][1] = i if i > self.vertices[num][1] else self.vertices[num][1]
+        self.vertices[num][2] = j if j < self.vertices[num][2] else self.vertices[num][2]
+        self.vertices[num][3] = j if j > self.vertices[num][3] else self.vertices[num][3]
+        return
+
+    def small_figure_1(self, i, j, num):
+        coords = [i, i, j - 1, j]  # min i, max i, min j, max j
+        while coords[0] > 0 and self.list_shape[coords[0]][j] == '|':
+            self.list_shape[coords[0]][j] = '/'
+            self.list_shape[coords[0]][j - 1] = '/'
+            coords[0] -= 1
+        self.list_shape[i][j] = '|'
+        while coords[1] < self.depth and self.list_shape[coords[1]][j] == '|':
+            self.list_shape[coords[1]][j] = '/'
+            self.list_shape[coords[1]][j - 1] = '/'
+            coords[1] += 1
+        self.small_vertices[num] = coords
+
+    def small_figure_2(self, i, j, num):
+        coords = [i - 1, i, j - 1, j]  # min i, max i, min j, max j
+        while coords[2] > 0 and self.list_shape[i][coords[2]] == '-':
+            self.list_shape[i][coords[2]] = '_'
+            self.list_shape[i - 1][coords[2]] = '_'
+            coords[2] -= 1
+        self.list_shape[i][j] = '-'
+        while coords[3] < self.width and self.list_shape[i][coords[3]] == '-':
+            self.list_shape[i][coords[3]] = '_'
+            self.list_shape[i - 1][coords[3]] = '_'
+            coords[3] += 1
+        self.small_vertices[num] = coords
+
+    def overview_traversal(self):
+        num = 1
+        small_num = 1
+        up = "0"
+        for i in range(self.depth):
+            left = "0"
+            for j in range(self.width):
+                if self.list_shape[i][j] == ' ':
+                    self.vertices[str(num)] = [1000, -1, 1000, -1]  # [min i, max i, min j, max j]
+                    self.figure_mapper(i, j, str(num), False)
+                    num += 1
+                elif self.list_shape[i][j] == '|' and left == "|":
+                    self.small_figure_1(i, j, str(small_num))
+                    small_num += 1
+                elif self.list_shape[i][j] == '-' and i > 0 and self.list_shape[i - 1][j] == '-':
+                    self.small_figure_2(i, j, str(small_num))
+                    small_num += 1
+                elif self.list_shape[i][j] == '+' and i > 0 and self.list_shape[i - 1][j] == '+' and left == '+' and \
+                        self.list_shape[i - 1][j - 1] == '+':
+                    self.small_vertices[small_num] = [i - 1, i, j - 1, j]
+                    small_num += 1
+                left = self.list_shape[i][j]
+        return
+
+    def cut_out_figure(self, num):
+        coord = self.vertices[num]
+        tmp = []
+        for i in range(coord[0] - 1, coord[1] + 2):
+            tmp.append(self.list_shape[i][coord[2] - 1:coord[3] + 2])
+
+        depth = len(tmp) - 1
+        width = len(tmp[0]) - 1
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] not in ['-', '+', '|', num]:
+                    tmp[i][j] = ' '
+                elif tmp[i][j] == '-':
+                    if (i > 0 and tmp[i - 1][j] == num) or (i < depth and tmp[i + 1][j] == num):
+                        tmp[i][j] = '-'
+                    else:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '|':
+                    if (j > 0 and tmp[i][j - 1] == num) or (j < width and tmp[i][j + 1] == num):
+                        tmp[i][j] = '|'
+                    else:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '+':
+                    touches_num = False
+                    if i > 0 and j > 0:
+                        touches_num = True if tmp[i - 1][j - 1] == num else touches_num
+                    if i > 0 and j < width:
+                        touches_num = True if tmp[i - 1][j + 1] == num else touches_num
+                    if i < depth and j > 0:
+                        touches_num = True if tmp[i + 1][j - 1] == num else touches_num
+                    if i < depth and j < width:
+                        touches_num = True if tmp[i + 1][j + 1] == num else touches_num
+
+                    if i > 0:
+                        touches_num = True if tmp[i - 1][j] == num else touches_num
+                    if i < depth:
+                        touches_num = True if tmp[i + 1][j] == num else touches_num
+                    if j > 0:
+                        touches_num = True if tmp[i][j - 1] == num else touches_num
+                    if j < width:
+                        touches_num = True if tmp[i][j + 1] == num else touches_num
+
+                    if not touches_num:
+                        tmp[i][j] = ' '
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] == num:
+                    tmp[i][j] = ' '
+                elif tmp[i][j] == '+':
+
+                    if i < depth and i > 0 and tmp[i + 1][j] in ['|', '+'] and tmp[i - 1][j] in ['|', '+']:
+                        tmp[i][j] = '|'
+                    elif j < width and j > 0 and tmp[i][j + 1] in ['-', '+'] and tmp[i][j - 1] in ['-', '+']:
+                        tmp[i][j] = '-'
+
+                    if i < depth and i > 0 and j < width and j > 0:
+                        count = 0
+                        if tmp[i + 1][j] in ['|', '+']:
+                            count += 1
+                        if tmp[i - 1][j] in ['|', '+']:
+                            count += 1
+                        if tmp[i][j + 1] in ['-', '+']:
+                            count += 1
+                        if tmp[i][j - 1] in ['-', '+']:
+                            count += 1
+                        if count >= 3:
+                            tmp[i][j] = '+'
+
+        result = "\n".join([("".join(x)).rstrip() for x in tmp])
+        self.cut_figures.append(result)
+
+    def cut_out_small(self, small_num):
+        coord = self.small_vertices[small_num]
+        tmp = []
+        for i in range(coord[0], coord[1] + 1):
+            tmp.append(self.list_shape[i][coord[2]:coord[3] + 1])
+
+        depth = len(tmp) - 1
+        width = len(tmp[0]) - 1
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] == '/':
+                    tmp[i][j] = '|'
+                elif tmp[i][j] == '_':
+                    tmp[i][j] = '-'
+        result = "\n".join([("".join(x)).rstrip() for x in tmp])
+        self.cut_figures.append(result)
+
+    def make_figures_list(self):
+        for i in range(self.depth):
+            for j in range(self.width):
+                if self.list_shape[i][j] == '/':
+                    self.list_shape[i][j] = '|'
+                elif self.list_shape[i][j] == '_':
+                    self.list_shape[i][j] = '-'
+        for y in self.small_vertices:
+            self.cut_out_small(y)
+        for y in self.vertices:
+            if y not in self.fake_vertices:
+                self.cut_out_figure(y)
+                # print("+++++++++++++++")
+                # print(y, ": ", self.vertices[y])
+        return
+
+    def print(self):
+        for x in self.list_shape:
+            print(x, self.width)
+        print("____")
+        for y in self.vertices:
+            if y not in self.fake_vertices:
+                print(y, ": ", self.vertices[y])
 
 
+def break_evil_pieces(shape):
+    # shape = shape.replace(" ", "0")
+    s = shape.splitlines()
+
+    result = Solution(shape)
+    result.overview_traversal()
+    # result.print()
+    result.make_figures_list()
+
+    return result.cut_figures
 
 
 
