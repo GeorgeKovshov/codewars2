@@ -1700,6 +1700,71 @@ def break_evil_pieces(shape):
     return result.cut_figures
 
 
+def my_first_interpreter(code):
+    val = 0
+    result = []
+    for c in code:
+        if c == '+':
+            val = 0 if val == 255 else val + 1
+        elif c == '.':
+            result.append(chr(val))
+    return "".join(result)
+
+
+def interpreter_smallfuck(code, string_tape):
+    print("code: ", code)
+    print("tape: ", string_tape)
+    flip = {
+        '0': '1',
+        '1': '0'
+    }
+    tape = [*string_tape]
+    cell = 0
+    length_tape = len(tape)
+    i = 0
+    length_code = len(code)
+    while i < length_code:
+        if code[i] == '*':
+            tape[cell] = flip[tape[cell]]
+        elif code[i] == '<':
+            if cell > 0:
+                cell -= 1
+            else:
+                return "".join(tape)
+        elif code[i] == '>':
+            if cell < length_tape - 1:
+                cell += 1
+            else:
+                return "".join(tape)
+        elif code[i] == '[' and tape[cell] == '0':
+            stack = 0
+            while i < length_code:
+                if code[i] == ']':
+                    stack -= 1
+                elif code[i] == '[':
+                    stack += 1
+                if stack == 0:
+                    break
+                i += 1
+            if i == length_code:
+                i -= 1
+        elif code[i] == ']':
+            stack = 0
+            while i >= 0 and stack != 0:
+                if code[i] == ']':
+                    stack -= 1
+                elif code[i] == '[':
+                    stack += 1
+                if stack == 0:
+                    break
+                i -= 1
+            if i < 0:
+                i += 1
+        i += 1
+    return "".join(tape)
+
+print(interpreter_smallfuck("*>[[]*>]<*", "100"))
+
 
 
 
