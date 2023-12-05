@@ -2606,7 +2606,21 @@ class Solution:
 
             
     def make_figures_list(self):
-        for num_key in self.double_vertices:
+        self.true_vertices = [] # indeces of self.double_vertices that have correct lists of connected vertices
+        used_vertices = []
+        for x in self.vertices:
+            max_vert = [0, 'none']
+            if x not in self.fake_vertices and x not in used_vertices:
+                for y in self.double_vertices:
+                    if x in self.double_vertices[y]:
+                        if len(self.double_vertices[y]) > max_vert[0]:
+                            max_vert[0] = len(self.double_vertices[y])
+                            max_vert[1] = y
+                self.true_vertices.append(max_vert[1])
+                for z in self.double_vertices[max_vert[1]]:
+                    used_vertices.append(z)
+    
+        for num_key in self.true_vertices:
             fake = False
             for y in self.double_vertices[num_key]:
                 if y in self.fake_vertices:
@@ -2643,7 +2657,456 @@ def break_evil_pieces(shape):
     print(result.fake_vertices)
     
     
-    return result.cut_figures
+    return result.cut_figures   
 
 """
+'''
+class Solution:
+    def __init__(self, shape):
+        
+        s = shape.splitlines()
+        self.double = False
+        list_shape = []
+        self.width = 0
+        for line in s:
+            list_line = []
+            started = False
+            tmp_line = line.rstrip()
+            for i in range(len(tmp_line)):
+                
+                if tmp_line or started:
+                    list_line.append(tmp_line[i])
+                    started = True
+                else:
+                    continue
+            if len(list_line) > self.width:
+                self.width = len(list_line)
+            if tmp_line or started:
+                list_shape = list_shape + [list_line]
+        self.list_shape = list_shape
+        self.depth = len(list_shape)
+        for i in range(self.depth):
+            if len(self.list_shape[i]) < self.width:
+                self.list_shape[i] = self.list_shape[i] + [' '] * (self.width - len(self.list_shape[i]))
+        self.vertices = {}
+        self.double_vertices = {}
+        self.fake_vertices = []
+        self.cut_figures = []
+    
+    def double_init(self):
+        self.double = True
+        s = self.list_shape
+        list_shape = []
+        self.width = 0
+        # doubling the size of graph
+        for line in s:
+            list_line = []
+            for i in range(len(line)):
+                list_line.append(line[i])
+                list_line.append(' ')
+            if len(list_line) > self.width:
+                self.width = len(list_line)
+
+            list_shape = list_shape + [list_line] + [[' '] * self.width]
+        self.depth = len(list_shape)
+        for i in range(self.depth):
+            if len(list_shape[i]) < self.width:
+                list_shape[i] = list_shape[i] + [' '] * (self.width - len(list_shape[i]))
+        # filling the "stretch gaps"
+        i = 0
+        while i < self.depth:
+            j = 0
+            while j < self.width:
+                
+                if j > 1 and list_shape[i][j] in ['-', '+'] and list_shape[i][j-2] in ['-', '+']:
+                    list_shape[i][j - 1] = '-'
+                if i > 1 and list_shape[i][j] in ['|', '+'] and list_shape[i-2][j] in ['|', '+']:
+                    list_shape[i - 1][j] = '|'
+                if j > 2 and i > 2 and i < self.depth-1 and j < self.width and list_shape[i][j-2] not in ['|', '+', '-'] and list_shape[i-2][j-2]==list_shape[i-2][j] and list_shape[i][j-2] == list_shape[i][j] and list_shape[i][j-2] == list_shape[i-2][j-2]:             
+                    list_shape[i][j-1] = list_shape[i][j]
+                j += 2
+            i += 2
+        self.list_shape = list_shape
+        for i in range(self.depth):
+            if len(self.list_shape[i]) < self.width:
+                self.list_shape[i] = self.list_shape[i] + [' '] * (self.width - len(self.list_shape[i]))
+        #self.vertices = {}
+        #self.fake_vertices = []
+        #self.cut_figures = []
+        
+    def figure_mapper(self, i, j, num, open_border, count):
+        if count <= 0: 
+            return
+        if not open_border:
+            self.list_shape[i][j] = num
+            # checking for holes
+            if i == 0 or i == self.depth - 1 or j == 0 or j == self.width - 1:
+                open_border = True
+                self.fake_vertices.append(num)
+                self.figure_mapper(i, j, num, open_border, count)
+                return
+
+            if i >= 1 and self.list_shape[i - 1][j] == ' ':
+                self.figure_mapper(i - 1, j, num, open_border, count - 1)
+            if i < self.depth - 1 and self.list_shape[i + 1][j] == ' ':
+                self.figure_mapper(i + 1, j, num, open_border, count - 1)
+            if j >= 1 and self.list_shape[i][j - 1] == ' ':
+                self.figure_mapper(i, j - 1, num, open_border, count - 1)
+            if j < self.width - 1 and self.list_shape[i][j + 1] == ' ':
+                self.figure_mapper(i, j + 1, num, open_border, count - 1)
+        else:
+            self.list_shape[i][j] = '0'
+            if i >= 1 and self.list_shape[i - 1][j] in [' ', num]:
+                self.figure_mapper(i - 1, j, num, open_border, count - 1)
+            if i < self.depth - 1 and self.list_shape[i + 1][j] in [' ', num]:
+                self.figure_mapper(i + 1, j, num, open_border, count - 1)
+            if j >= 1 and self.list_shape[i][j - 1] in [' ', num]:
+                self.figure_mapper(i, j - 1, num, open_border, count - 1)
+            if j < self.width - 1 and self.list_shape[i][j + 1] in [' ', num]:
+                self.figure_mapper(i, j + 1, num, open_border, count - 1)
+
+        # store the coordinates of figure in graph
+        self.vertices[num][0] = i * 2 if i * 2 < self.vertices[num][0] else self.vertices[num][0]
+        self.vertices[num][1] = i * 2 if i * 2 > self.vertices[num][1] else self.vertices[num][1]
+        self.vertices[num][2] = j * 2 if j * 2 < self.vertices[num][2] else self.vertices[num][2]
+        self.vertices[num][3] = j * 2 if j * 2 > self.vertices[num][3] else self.vertices[num][3]
+        return
+
+    def figure_mapper_double(self, i, j, num, count):
+        self.list_shape[i][j] = self.double_vertices[num][0]
+
+        # checking for holes
+        if i == 0 or i == self.depth - 1 or j == 0 or j == self.width - 1:
+            self.list_shape[i][j] = '0'
+            for x in self.double_vertices[num]:
+                if x not in self.fake_vertices:
+                    self.fake_vertices.append(x)
+        if count == 0:
+            return
+        
+        '''vertical up'''
+        # 1) we check if we encounter a new number, add it to the dictionary of currently connected vertices,
+        #        if the new number in fake_vertices, we add current ones there
+        if i >= 1 and self.list_shape[i - 1][j] not in ['|', '+', '-', '0', ' '] and self.list_shape[i - 1][j] not in self.double_vertices[num]:
+            self.double_vertices[num].append(self.list_shape[i - 1][j])
+            '''for x in self.double_vertices:
+                if self.list_shape[i - 1][j] in self.double_vertices[x]:
+                    for y in self.double_vertices[num]:
+                        if y not in self.double_vertices[x]:
+                            self.double_vertices[x] += [y]
+            '''
+            if self.list_shape[i - 1][j] in self.fake_vertices:
+                for x in self.double_vertices[num]:
+                    if x not in self.fake_vertices:
+                        self.fake_vertices.append(x)
+        # 2) we check if we encounter an open border section, thus adding all currently connected vertices to fake vertices list
+        elif i >= 1 and self.list_shape[i - 1][j] == '0':
+            for x in self.double_vertices[num]:
+                if x not in self.fake_vertices:
+                    self.fake_vertices.append(x)
+        # 3) if the next location is empty, we travel there
+        elif i >= 1 and self.list_shape[i - 1][j] == ' ':
+            self.figure_mapper_double(i - 1, j, num, count - 1)
+        
+        '''vertical down'''
+        if i < self.depth - 1 and self.list_shape[i + 1][j] not in ['|', '+', '-', '0', ' '] and self.list_shape[i + 1][j] not in self.double_vertices[num]:
+            self.double_vertices[num].append(self.list_shape[i + 1][j])
+            if self.list_shape[i + 1][j] in self.fake_vertices:
+                for x in self.double_vertices[num]:
+                    if x not in self.fake_vertices:
+                        self.fake_vertices.append(x)
+        elif i < self.depth - 1 and self.list_shape[i + 1][j] == '0':
+            for x in self.double_vertices[num]:
+                if x not in self.fake_vertices:
+                    self.fake_vertices.append(x)
+        elif i < self.depth - 1 and self.list_shape[i + 1][j] == ' ':
+            self.figure_mapper_double(i + 1, j, num, count - 1)
+
+        '''horizontal left'''
+        if j >= 1 and self.list_shape[i][j - 1] not in ['|', '+', '-', '0', ' '] and self.list_shape[i][j - 1] not in self.double_vertices[num]:
+            self.double_vertices[num].append(self.list_shape[i][j - 1])
+            if self.list_shape[i][j - 1] in self.fake_vertices:
+                for x in self.double_vertices[num]:
+                    if x not in self.fake_vertices:
+                        self.fake_vertices.append(x)
+        elif j >= 1 and self.list_shape[i][j - 1] == '0':
+            for x in self.double_vertices[num]:
+                if x not in self.fake_vertices:
+                    self.fake_vertices.append(x)
+        elif j >= 1 and self.list_shape[i][j - 1] == ' ':
+            self.figure_mapper_double(i, j - 1, num, count - 1)
+        
+        '''horizontal right'''
+        if j < self.width - 1 and self.list_shape[i][j + 1] not in ['|', '+', '-', '0', ' '] and self.list_shape[i][j + 1] not in self.double_vertices[num]:
+            self.double_vertices[num].append(self.list_shape[i][j + 1])
+            if self.list_shape[i - 1][j] in self.fake_vertices:
+                for x in self.double_vertices[num]:
+                    if x not in self.fake_vertices:
+                        self.fake_vertices.append(x)
+        elif j < self.width - 1 and self.list_shape[i][j + 1] == '0':
+            for x in self.double_vertices[num]:
+                if x not in self.fake_vertices:
+                    self.fake_vertices.append(x)
+        elif j < self.width - 1 and self.list_shape[i][j + 1] == ' ':
+            self.figure_mapper_double(i, j + 1, num, count - 1)
+            
+        # store the coordinates of figure in graph
+        
+        for n in self.double_vertices[num]:
+            if n in self.vertices:
+                self.vertices[n][0] = i  if i  < self.vertices[n][0] else self.vertices[n][0]
+                self.vertices[n][1] = i  if i  > self.vertices[n][1] else self.vertices[n][1]
+                self.vertices[n][2] = j  if j  < self.vertices[n][2] else self.vertices[n][2]
+                self.vertices[n][3] = j  if j  > self.vertices[n][3] else self.vertices[n][3]  
+        
+            
+        return
+    
+    
+    def overview_traversal(self):
+        num = 1
+        for i in range(self.depth):
+            for j in range(self.width):
+                if self.list_shape[i][j] == ' ':
+                    self.vertices[str(num)] = [1000, -1, 1000, -1]  # [min i, max i, min j, max j]
+                    self.figure_mapper(i, j, str(num), False, 30)
+                    num += 1
+        return
+    
+    def find_near_num(self, i,j, count):
+        if count <= 0:
+            return "none"
+        result = "none"
+        if self.list_shape[i][j] not in ['|', '+', '-', ' ']:
+            return self.list_shape[i][j]
+        elif self.list_shape[i][j] in ['|', '+', '-']:
+            return "none"
+        if i > 0:
+            tmp = self.find_near_num(i - 1,j, count-1)
+            if tmp != "none":
+                return tmp
+        if i < self.depth - 1:
+            tmp = self.find_near_num(i + 1,j, count-1)
+            if tmp != "none":
+                return tmp
+        if j < self.width - 1:
+            tmp = self.find_near_num(i,j + 1, count-1)
+            if tmp != "none":
+                return tmp
+        if j > 0:
+            tmp = self.find_near_num(i,j - 1, count-1)
+            if tmp != "none":
+                return tmp
+        return "none"
+        
+        
+    
+    def overview_traversal_double(self):
+        jic_num = -1
+        num = 1
+        for i in range(self.depth):
+            for j in range(self.width):
+                #if self.list_shape[i][j] not in ['|', '+', '-', '/', '_', '0', 'U', 'D', 'L', 'R']:
+                near_num = self.find_near_num(i, j, 3);
+                near_num = near_num if near_num != "none" else jic_num
+                if self.list_shape[i][j] == ' ':
+                    #self.vertices[str(num)] =  [1000, -1, 1000, -1] # [min i, max i, min j, max j]
+                    if near_num not in self.vertices:
+                        self.vertices[near_num] = [1000, -1, 1000, -1]
+                    self.double_vertices[num] = [near_num]
+                    self.figure_mapper_double(i, j, num, 30)
+                    num += 1
+                    jic_num -= 1
+                elif near_num != "none" and near_num in self.vertices:
+                    for x in self.double_vertices:
+                        if near_num in self.double_vertices[x]:
+                            self.figure_mapper_double(i, j, x, 5)
+                            
+                    
+                        
+                    
+        return
+
+    def smallify(self, tmp):
+        result = []
+        depth = len(tmp)
+        width = len(tmp[0])
+        i = 0
+        while i<depth:
+            j = 0
+            line = []
+            while j < width:
+                line.append(tmp[i][j])
+                j += 2
+            result.append(line)
+            i += 2
+        return result
+    
+    def check_tricky(self):
+        pass
+    
+
+    def cut_out_figure(self, num):
+        num_list = self.double_vertices[num]
+        coord = [1000, -1, 1000, -1]
+        for ver in num_list:
+            self.fake_vertices.append(ver)
+            v = self.vertices[ver]
+            coord[0] = v[0] if v[0] < coord[0] else coord[0]
+            coord[1] = v[1] if v[1] > coord[1] else coord[1]
+            coord[2] = v[2] if v[2] < coord[2] else coord[2]
+            coord[3] = v[3] if v[3] > coord[3] else coord[3]
+
+        tmp = []
+        for i in range(coord[0] - 1, coord[1] + 2):
+            tmp.append(self.list_shape[i][coord[2] - 1:coord[3] + 2])
+
+        depth = len(tmp) - 1
+        width = len(tmp[0]) - 1
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] not in ['-', '+', '|'] and tmp[i][j] not in num_list:
+                    found_tricky = False
+                    for x in num_list:
+                        if int(x) - int(tmp[i][j])  == 1 and self.check_tricky():
+                            num_list.append(tmp[i][j])
+                            found_tricky = True
+                    if not found_tricky:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '-':
+                    if (i > 0 and tmp[i-1][j] in num_list) or (i < depth and tmp[i+1][j] in num_list):
+                        tmp[i][j] = '-'
+                    else:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '|':
+                    if (j > 0 and tmp[i][j-1] in num_list) or (j < width and tmp[i][j+1] in num_list):
+                        tmp[i][j] = '|'
+                    else:
+                        tmp[i][j] = ' '
+                elif tmp[i][j] == '+':  # this nefarious plus...
+                    touches_num = False
+                    if i > 0 and j > 0:
+                        touches_num = True if tmp[i - 1][j - 1] in num_list else touches_num
+                    if i > 0 and j < width:
+                        touches_num = True if tmp[i - 1][j + 1] in num_list else touches_num
+                    if i < depth and j > 0:
+                        touches_num = True if tmp[i + 1][j - 1] in num_list else touches_num
+                    if i < depth and j < width:
+                        touches_num = True if tmp[i + 1][j + 1] in num_list else touches_num
+
+                    if i > 0:
+                        touches_num = True if tmp[i - 1][j] in num_list else touches_num
+                    if i < depth:
+                        touches_num = True if tmp[i + 1][j] in num_list else touches_num
+                    if j > 0:
+                        touches_num = True if tmp[i][j - 1] in num_list else touches_num
+                    if j < width:
+                        touches_num = True if tmp[i][j + 1] in num_list else touches_num
+
+                    if not touches_num:
+                        tmp[i][j] = ' '
+        for i in range(depth + 1):
+            for j in range(width + 1):
+                if tmp[i][j] in num_list:
+                    tmp[i][j] = ' '
+                elif tmp[i][j] == '+':  # this plus just doesn't give up...
+
+                    if i < depth and i > 0 and tmp[i + 1][j] in ['|', '+'] and tmp[i - 1][j] in ['|', '+']:
+                        tmp[i][j] = '|'
+                    elif j < width and j > 0 and tmp[i][j + 1] in ['-', '+'] and tmp[i][j - 1] in ['-', '+']:
+                        tmp[i][j] = '-'
+
+                    count = 0
+                    if i < depth and tmp[i + 1][j] in ['|', '+']:
+                        count += 1
+                    if i > 0 and tmp[i - 1][j] in ['|', '+']:
+                        count += 1
+                    if j < width and tmp[i][j + 1] in ['-', '+']:
+                        count += 1
+                    if j > 0 and tmp[i][j - 1] in ['-', '+']:
+                        count += 1
+                    if count >= 3:
+                        tmp[i][j] = '+'
+        if self.double:
+            tmp = self.smallify(tmp)
+            result = "\n".join([("".join(x)).rstrip() for x in tmp])
+            #if result not in self.cut_figures:
+            self.cut_figures.append(result)
+
+            
+    def make_figures_list(self):
+        self.true_vertices = [] # indeces of self.double_vertices that have correct lists of connected vertices
+        used_vertices = []
+        for x in self.vertices:
+            max_vert = [0, 'none']
+            if x not in self.fake_vertices and x not in used_vertices:
+                for y in self.double_vertices:
+                    if x in self.double_vertices[y]:
+                        if len(self.double_vertices[y]) > max_vert[0]:
+                            max_vert[0] = len(self.double_vertices[y])
+                            max_vert[1] = y
+                self.true_vertices.append(max_vert[1])
+                for z in self.double_vertices[max_vert[1]]:
+                    used_vertices.append(z)
+                    
+        
+        for num_key in self.true_vertices:
+            #print("num_key:", num_key)
+            fake = False
+            for y in self.double_vertices[num_key]:
+                #print("___num:", y)
+                if y in self.fake_vertices:
+                    fake = True
+            if not fake:
+                #print("num_key:", num_key)
+                #print("___nums:", self.double_vertices[num_key])
+                self.cut_out_figure(num_key)
+        #for y in self.vertices:
+        #    if y not in self.fake_vertices:
+        #        self.cut_out_figure(y)
+        return
+
+    def print(self):
+        for x in self.list_shape:
+            line = []
+            for y in x:
+                if len(str(y)) == 1:
+                    line.append("  " + str(y))
+                elif len(str(y)) == 2:
+                    line.append(" " + str(y))
+                else:
+                    line.append(y)
+                    
+            print(line, self.width)
+        print("____")
+        for y in self.vertices:
+            if y not in self.fake_vertices:
+                print(y, ": ", self.vertices[y])
+    
+    
+
+
+def break_evil_pieces(shape):
+    s = shape.splitlines()
+    result = Solution(shape)
+    result.overview_traversal()
+    
+    result.double_init()
+    
+    result.overview_traversal_double()
+    #print("fake_vertices: ", result.fake_vertices)
+    
+    result.make_figures_list()
+    #result.print()
+    
+    
+    
+    return result.cut_figures
+
+
+'''
+
+
+
+
 
