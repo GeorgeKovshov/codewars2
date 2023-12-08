@@ -410,9 +410,35 @@ graph3 = [
 
 ]
 
-break_evil_pieces(graph3)
+#break_evil_pieces(graph3)
 
 
+
+
+def cuckoo_clock(initial_time, n):
+    print(initial_time, n)
+    hour_minute = initial_time.split(':')
+    hour = int(hour_minute[0])
+    minutes = int(hour_minute[1])
+    if minutes == 0:
+        n -= hour
+        minutes += 1
+    while n > 0:
+        if minutes == 60:
+            hour = hour + 1 if hour < 12 else 1
+            minutes = 0
+            n -= hour
+        elif minutes % 15 == 0:
+            n -= 1
+        minutes += 1
+    hour_minute = [str(hour), str(minutes - 1)]
+    for i in range(2):
+        hour_minute[i] = hour_minute[i] if len(hour_minute[i]) > 1 else "0" + hour_minute[i]
+
+    return hour_minute[0] + ':' + hour_minute[1]
+
+print(cuckoo_clock("01:58", 1))
+print(cuckoo_clock("12:22", 2))
 
 
 
