@@ -437,11 +437,62 @@ def cuckoo_clock(initial_time, n):
 
     return hour_minute[0] + ':' + hour_minute[1]
 
-print(cuckoo_clock("01:58", 1))
-print(cuckoo_clock("12:22", 2))
+#print(cuckoo_clock("01:58", 114))
+#print(cuckoo_clock("12:22", 2))
 
 
+def cuckoo_clock_better(initial_time, n):
+    print(initial_time, n)
+    hour_minute = initial_time.split(':')
+    hour = int(hour_minute[0])
+    minutes = int(hour_minute[1])
+    if minutes != 0:
+        n -= (60 - minutes) // 15
+        hour = hour + 1 if hour < 12 else 1
+        minutes = 0
+    print(n)
+    while n > 114: # in 12 hours clock chimes 114 times, returning to previous position
+        n -= 114
+    while n > 0:
+        n -= hour + 3
+        hour = hour + 1 if hour < 12 else 1
+    #hour = hour - 1 if hour > 0 else 12
+    if n < 0:
+        hour = hour - 1 if hour > 0 else 12
+        n += hour + 3
+        minutes += abs(n) * 15
 
+    hour_minute = [str(hour), str(minutes)]
+    for i in range(2):
+        hour_minute[i] = hour_minute[i] if len(hour_minute[i]) > 1 else "0" + hour_minute[i]
+
+    return hour_minute[0] + ':' + hour_minute[1]
+
+prod = 0
+for i in range(1,13):
+    #print(i)
+    prod += i + 3
+
+#print(prod)
+
+#print(cuckoo_clock_better("01:58", 11))
+#print(cuckoo_clock_better("12:30", 4))
+#print(cuckoo_clock_better("07:22", 1))
+
+def convert(x):
+    if ord(x) > 97 and ord(x) < 123:
+        return chr(ord(x) -1)
+    elif ord(x) == 97:
+        return 'z'
+    elif ord(x) > 65 and ord(x) < 91:
+        return chr(ord(x) -1)
+    elif ord(x) == 65:
+        return 'Z'
+    else:
+        return x
+
+def one_down(txt):
+    return "".join([convert(x) for x in txt]) if isinstance(txt, str) else "Input is not a string"
 
 
 
