@@ -495,6 +495,17 @@ def one_down(txt):
     return "".join([convert(x) for x in txt]) if isinstance(txt, str) else "Input is not a string"
 
 
+def domino_reaction(s):
+    result = ""
+    ss = list(s)
+    for i in range(len(ss)):
+        if s[i] != '|':
+            result += "".join(ss[i:])
+            break
+        result += '/'
+    return result
+
+
 
 
 
