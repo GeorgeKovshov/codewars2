@@ -505,6 +505,36 @@ def domino_reaction(s):
         result += '/'
     return result
 
+def good_vs_evil(good, evil):
+    g_force = good.split()
+    good_sum = int(g_force[0]) + int(g_force[1])*2 + int(g_force[2])*3 + int(g_force[3])*3 + int(g_force[4])*4 + int(g_force[5])*10
+    e_force = evil.split()
+    evil_sum = int(e_force[0]) + int(e_force[1])*2 + int(e_force[2])*2 + int(e_force[3])*2 + int(e_force[4])*3 + int(e_force[5])*5 + int(e_force[6])*10
+    print("good:", good, " evil:", evil, "good_sum:", good_sum,"evil_sum:", evil_sum)
+    if good_sum > evil_sum:
+        return "Battle Result: Good triumphs over Evil"
+    elif evil_sum > good_sum:
+        return "Battle Result: Evil eradicates all trace of Good"
+    else:
+        return "Battle Result: No victor on this battle field"
+
+
+def goodVsEvil2(good, evil):
+    points_good = [1, 2, 3, 3, 4, 10]
+    points_evil = [1, 2, 2, 2, 3, 5, 10]
+
+    good = sum([int(x) * y for x, y in zip(good.split(), points_good)])
+    evil = sum([int(x) * y for x, y in zip(evil.split(), points_evil)])
+
+    result = 'Battle Result: '
+
+    if good < evil:
+        return result + 'Evil eradicates all trace of Good'
+    elif good > evil:
+        return result + 'Good triumphs over Evil'
+    else:
+        return result + 'No victor on this battle field'
+
 
 
 
