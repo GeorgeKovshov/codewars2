@@ -557,8 +557,35 @@ def find_arr(arrA, arrB, rng, wanted):
     res.sort()
     return res
 
+def find_arr2(arrA, arrB, rng, wanted):
+    check = 0 if wanted == "even" else 1
+    dictA = {}
+    for x in arrA:
+        if x <= rng[1] and x >= rng[0] and x % 2 == check:
+            if x not in dictA:
+                dictA[x] = 0
+            dictA[x] -= 1
+    result = []
+    for x in arrB:
+        if x not in dictA or dictA[x] == -1:
+            continue
+        if dictA[x] < 0:
+            dictA[x] = 0
+        dictA[x] += 1
+        if dictA[x] == 2:
+            result.append(x)
+    result.sort()
+    return result
 
 
+from collections import Counter
+
+def find_arr3(arrA, arrB, rng, wanted):
+    ca, cb = Counter(arrA), Counter(arrB)
+    m, n = rng
+    m += (m % 2 == 1) == (wanted == 'even')
+    r = range(m, n+1, 2)
+    return [v for v in r if ca[v] > 1 and cb[v] > 1]
 
 
 
