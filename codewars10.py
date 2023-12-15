@@ -535,6 +535,28 @@ def goodVsEvil2(good, evil):
     else:
         return result + 'No victor on this battle field'
 
+def check_arr(arr, rng, check):
+    dict = {}
+    for x in arr:
+        if x <= rng[1] and x >= rng[0] and x % 2 == check:
+            if x not in dict:
+                dict[x] = 0
+            dict[x] += 1
+    return dict
+
+def find_arr(arrA, arrB, rng, wanted):
+    check = 0 if wanted == "even" else 1
+    dictA = check_arr(arrA, rng, check)
+    dictB = check_arr(arrB, rng, check)
+    result = set()
+    for x in dictA:
+        for y in dictB:
+            if x == y and dictA[x]>1 and dictB[y]>1:
+                result.add(x)
+    res = [x for x in result]
+    res.sort()
+    return res
+
 
 
 
