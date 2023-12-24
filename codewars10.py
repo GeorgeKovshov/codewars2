@@ -692,6 +692,7 @@ def interpreter_original(code, iterations, width, height):
     return result[:-2]
 
 def interpreter(code, iterations, width, height):
+    print("code: ", code)
     graph = []
     for z in range(height):
         row = []
@@ -699,7 +700,8 @@ def interpreter(code, iterations, width, height):
             row.append('0')
         graph.append(row)
     print(graph)
-    #graph = [['0'] * width] * height
+    # graph = [['0'] * width] * height - wrong
+    # grid = [[0] * width for _ in range(height)] - right
     flip = {
         '0': '1',
         '1': '0'
@@ -714,23 +716,23 @@ def interpreter(code, iterations, width, height):
             continue
         if code[ind] == '*':
             graph[i][j] = flip[graph[i][j]]
-        if code[ind] == 'n':
+        elif code[ind] == 'n':
             if i == 0:
-                return graph
+                i = height
             i -= 1
-        if code[ind] == 's':
+        elif code[ind] == 's':
             if i == height - 1:
-                return graph
+                i = -1
             i += 1
-        if code[ind] == 'w':
+        elif code[ind] == 'w':
             if j == 0:
-                return graph
+                j = width
             j -= 1
-        if code[ind] == 'e':
-            if i == width - 1:
-                return graph
+        elif code[ind] == 'e':
+            if j == width - 1:
+                j = -1
             j += 1
-        if code[ind] == '[' and graph[i][j] == '0':
+        elif code[ind] == '[' and graph[i][j] == '0':
             stack = 0
             while ind < len(code):
                 if code[ind] == ']':
@@ -738,31 +740,35 @@ def interpreter(code, iterations, width, height):
                 elif code[ind] == '[':
                     stack += 1
                 if stack == 0:
+                    #ind += 1
                     break
                 ind += 1
             if ind == len(code):
                 ind -= 1
-        elif code[ind] == ']':
+        elif code[ind] == ']' and graph[i][j] == '1':
             stack = 0
-            while ind >= 0 and stack != 0:
+            while ind >= 0:
                 if code[ind] == ']':
                     stack -= 1
                 elif code[ind] == '[':
                     stack += 1
                 if stack == 0:
+                    # ind -= 1
                     break
                 ind -= 1
-            if ind < 0:
-                ind += 1
+            # if ind < 0:
+            #    ind += 1
+            # ind -= 1
         iter += 1
         ind += 1
     result = ""
     for x in graph:
         result += "".join([y for y in x]) + "\r\n"
-    return result[:-2]
+    return graph#result[:-2]
 
-result = interpreter("*e*e*e*es*es*ws*ws*w*w*w*n*n*n*ssss*s*s*s*", 100, 6, 9)
+result = interpreter("*[s[e]*]", 5, 6, 9)
 #result = interpreter("*e*e*e*es*es*ws*ws*w*w*w*n*n*n*ssss*s*s*s*", 7, 6, 9)
+
 for x in result:
     print(x)
 
