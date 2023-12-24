@@ -588,5 +588,183 @@ def find_arr3(arrA, arrB, rng, wanted):
     return [v for v in r if ca[v] > 1 and cb[v] > 1]
 
 
+def interpreter_smallfuck(code, string_tape):
+    print("code: ", code)
+    print("tape: ", string_tape)
+    flip = {
+        '0': '1',
+        '1': '0'
+    }
+    tape = [*string_tape]
+    cell = 0
+    length_tape = len(tape)
+    i = 0
+    length_code = len(code)
+    while i < length_code:
+        if code[i] == '*':
+            tape[cell] = flip[tape[cell]]
+        elif code[i] == '<':
+            if cell > 0:
+                cell -= 1
+            else:
+                return "".join(tape)
+        elif code[i] == '>':
+            if cell < length_tape - 1:
+                cell += 1
+            else:
+                return "".join(tape)
+        elif code[i] == '[' and tape[cell] == '0':
+            stack = 0
+            while i < length_code:
+                if code[i] == ']':
+                    stack -= 1
+                elif code[i] == '[':
+                    stack += 1
+                if stack == 0:
+                    break
+                i += 1
+            if i == length_code:
+                i -= 1
+        elif code[i] == ']':
+            stack = 0
+            while i >= 0 and stack != 0:
+                if code[i] == ']':
+                    stack -= 1
+                elif code[i] == '[':
+                    stack += 1
+                if stack == 0:
+                    break
+                i -= 1
+            if i < 0:
+                i += 1
+        i += 1
+    return "".join(tape)
+
+#print(interpreter_smallfuck("*>[[]*>]<*", "100"))
+
+#rows = [[0] * 10] * 10
+#print(rows)
+
+def interpreter_original(code, iterations, width, height):
+    graph = []
+    for z in range(height):
+        row = []
+        for y in range(width):
+            row.append('0')
+        graph.append(row)
+    print(graph)
+    #graph = [['0'] * width] * height
+    flip = {
+        '0': '1',
+        '1': '0'
+    }
+    iter = 0
+    ind = 0
+    i = 0
+    j = 0
+    while iter < iterations and ind < len(code):
+        if code[ind] not in ['n', 'e', 's', 'w', '*', '[', ']']:
+            ind += 1
+            continue
+        if code[ind] == '*':
+            graph[i][j] = flip[graph[i][j]]
+        if code[ind] == 'n':
+            if i == 0:
+                return graph
+            i -= 1
+        if code[ind] == 's':
+            if i == height - 1:
+                return graph
+            i += 1
+        if code[ind] == 'w':
+            if j == 0:
+                return graph
+            j -= 1
+        if code[ind] == 'e':
+            if i == width - 1:
+                return graph
+            j += 1
+        iter += 1
+        ind += 1
+    result = ""
+    for x in graph:
+        result += "".join([y for y in x]) + "\r\n"
+    return result[:-2]
+
+def interpreter(code, iterations, width, height):
+    graph = []
+    for z in range(height):
+        row = []
+        for y in range(width):
+            row.append('0')
+        graph.append(row)
+    print(graph)
+    #graph = [['0'] * width] * height
+    flip = {
+        '0': '1',
+        '1': '0'
+    }
+    iter = 0
+    ind = 0
+    i = 0
+    j = 0
+    while iter < iterations and ind < len(code):
+        if code[ind] not in ['n', 'e', 's', 'w', '*', '[', ']']:
+            ind += 1
+            continue
+        if code[ind] == '*':
+            graph[i][j] = flip[graph[i][j]]
+        if code[ind] == 'n':
+            if i == 0:
+                return graph
+            i -= 1
+        if code[ind] == 's':
+            if i == height - 1:
+                return graph
+            i += 1
+        if code[ind] == 'w':
+            if j == 0:
+                return graph
+            j -= 1
+        if code[ind] == 'e':
+            if i == width - 1:
+                return graph
+            j += 1
+        if code[ind] == '[' and graph[i][j] == '0':
+            stack = 0
+            while ind < len(code):
+                if code[ind] == ']':
+                    stack -= 1
+                elif code[ind] == '[':
+                    stack += 1
+                if stack == 0:
+                    break
+                ind += 1
+            if ind == len(code):
+                ind -= 1
+        elif code[ind] == ']':
+            stack = 0
+            while ind >= 0 and stack != 0:
+                if code[ind] == ']':
+                    stack -= 1
+                elif code[ind] == '[':
+                    stack += 1
+                if stack == 0:
+                    break
+                ind -= 1
+            if ind < 0:
+                ind += 1
+        iter += 1
+        ind += 1
+    result = ""
+    for x in graph:
+        result += "".join([y for y in x]) + "\r\n"
+    return result[:-2]
+
+result = interpreter("*e*e*e*es*es*ws*ws*w*w*w*n*n*n*ssss*s*s*s*", 100, 6, 9)
+#result = interpreter("*e*e*e*es*es*ws*ws*w*w*w*n*n*n*ssss*s*s*s*", 7, 6, 9)
+for x in result:
+    print(x)
+
 
 
