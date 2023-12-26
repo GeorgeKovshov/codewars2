@@ -780,3 +780,81 @@ def largest_sum(arr):
         max_val = max(max_val, result)
     return max_val
 
+def convert(x):
+    if ord(x) > 97 and ord(x) < 123:
+        return chr(ord(x) -1)
+    elif ord(x) == 97:
+        return 'z'
+    elif ord(x) > 65 and ord(x) < 91:
+        return chr(ord(x) -1)
+    elif ord(x) == 65:
+        return 'Z'
+    else:
+        return x
+
+
+def check(x):
+    if (ord(x) >= 97 and ord(x) < 123) or (ord(x) >= 65 and ord(x) < 91) or ord(x) == 39:
+        return True
+    return False
+
+
+def top_3_words(text):
+    length = len(text)
+    dict = {}
+    i = 0
+    top3 = [
+        ["", 0],
+        ["", 0],
+        ["", 0],
+        ["", 0]
+    ]
+    while i < length:
+        word = ""
+        check_2 = True
+        while i < length and check(text[i]):
+            if ord(text[i]) != 39:
+                check_2 = False
+            word += text[i]
+            i += 1
+        i += 1
+        if word == "" or check_2:
+            continue
+        if word not in dict:
+            dict[word] = 0
+        dict[word] += 1
+        j = 0
+        found = False
+        while j < 3:
+            if top3[j][0] == word:
+                found = True
+                top3[j][1] += 1
+                if j > 0 and top3[j][1] > top3[j-1][1]:
+                    tmp = top3[j]
+                    top3[j] = top3[j - 1]
+                    top3[j - 1] = tmp
+                break
+            j += 1
+        if found:
+            continue
+        j = 2
+        while top3[j][1] < dict[word] and j >= 0:
+            top3[j + 1] = top3[j]
+            top3[j] = [word, dict[word]]
+            j -= 1
+
+    print(dict)
+    return [x[0] for x in top3][:3]
+
+
+print(top_3_words("e e e e DDD ddd DdD: ddd ddd aa aA Aa, bb cc cC e e e"))
+
+
+from collections import Counter
+import re
+
+def top_3_words2(text):
+    c = Counter(re.findall(r"[a-z']+", re.sub(r" '+ ", " ", text.lower())))
+    return [w for w,_ in c.most_common(3)]
+
+
