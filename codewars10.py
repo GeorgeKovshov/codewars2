@@ -772,5 +772,11 @@ result = interpreter("*[s[e]*]", 5, 6, 9)
 for x in result:
     print(x)
 
-
+def largest_sum(arr):
+    result = 0
+    max_val = 0
+    for x in arr:
+        result = max(0, result + x)
+        max_val = max(max_val, result)
+    return max_val
 
