@@ -858,3 +858,20 @@ def top_3_words2(text):
     return [w for w,_ in c.most_common(3)]
 
 
+def count_attacking_rooks(rooks):
+    dict_let = {}
+    dict_dig = {}
+    for r in rooks:
+        if r[0] not in dict_let:
+            dict_let[r[0]] = 0
+        dict_let[r[0]] += 1
+        if r[1] not in dict_dig:
+            dict_dig[r[1]] = 0
+        dict_dig[r[1]] += 1
+    result = 0
+    for x in dict_let:
+        result += dict_let[x] - 1
+    for y in dict_dig:
+        result += dict_dig[y] - 1
+    return result
+
