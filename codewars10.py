@@ -875,3 +875,39 @@ def count_attacking_rooks(rooks):
         result += dict_dig[y] - 1
     return result
 
+
+def id_best_users(*args):
+    prev = {}
+    for x in args[0]: # making the initial list of clients
+        if x not in prev:
+            prev[x] = 0
+        prev[x] += 1
+    for arr in args[1:]: # we remove a client that hasn't reappeared in subsequent month
+        new = {}
+        for y in arr:
+            if y in prev:
+                if y not in new:
+                    new[y] = prev[y]
+                new[y] += 1
+        prev = new
+    """ prev is the answer, the following code is just making it look like the instructions asked"""
+    result = {}
+    for z in prev: # make the dictionary multi-valued
+        if prev[z] not in result:
+            result[prev[z]] = []
+        result[prev[z]].append(z)
+    result2 = []
+    for i in result: # turn dictionary into list (with sorted clients)
+        result2.append([i, sorted(result[i])])
+    for i in range(len(result2)): # sort the list by top clients
+        for j in range(i, len(result2)):
+            if result2[j][0] > result2[i][0]:
+                tmp = result2[j]
+                result2[j] = result2[i]
+                result2[i] = tmp
+    return result2
+
+
+
+
+
