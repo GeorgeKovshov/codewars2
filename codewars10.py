@@ -908,6 +908,29 @@ def id_best_users(*args):
     return result2
 
 
+import math
+
+
+def tour(friends, friend_towns, home_to_town_distances):
+    current_location = "X1"
+    distance = 0
+    i = 0
+    while i < len(friends):
+        for x in friend_towns:
+            if x[0] == friends[i]:
+                if distance != 0:
+                    tmp = math.sqrt(home_to_town_distances[x[1]] ** 2 - home_to_town_distances[current_location] ** 2)
+                else:
+                    tmp = home_to_town_distances[x[1]]  # first friend
+
+                distance += tmp
+                current_location = x[1]
+                break
+        i += 1
+    return math.floor(distance) + home_to_town_distances[current_location]
+
+
+
 
 
 
