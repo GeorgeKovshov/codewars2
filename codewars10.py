@@ -931,6 +931,102 @@ def tour(friends, friend_towns, home_to_town_distances):
 
 
 
+def last_digit(n1, n2):
+    n_1 = n1
+    count = 1
+    while True:
+        n_1 = n_1 * n1
+        while n_1 >= 10:
+            n_1 = n_1 % 10
+        count += 1
+        if n_1 == n1:
+            #count += 1
+            break
+    print("count", count)
+    if count < n2:
+        n2 = n2 % count -1
+    result = 1
+    for i in range(n2 - 1):
+        #result *= default
+        while result >= 10:
+            result = result % 10
+    return result
+
+#print(last_digit(4, 2))
+'''
+#print(last_digit(3, 68819615221552997273737174557165657483427362207517952651))
+print(68819615221552997273737174557165657483427362207517952651 % 4)
+
+result = 3
+result2 = 2
+result3 = 4
+for i in range(13):
+    print(i, ", ", result, result2, result3)
+    result *= 3
+    result2 *= 2
+    result3 *= 4
+print(result)
+'''
+
+def last_digit_try(n1, n2):
+    print(n1, n2)
+    if n2 == 0:
+        return 1
+
+    n_1 = n1 if n1 < 10 else n1 % 10
+    default = n_1
+    count = 0
+    while True:
+        n_1 = n_1 * default
+        n_1 = n_1 if n_1 < 10 else n_1 % 10
+        count += 1
+        if n_1 == default:
+            # count += 1
+            break
+    print("count", count)
+    if count == 0:
+        return default
+    if count < n2:
+        n2 = (n2) % (count)
+    print("n2", n2)
+    # return (default ** n2) % 10
+    result = default
+    # result = (default ** 2) % 10
+    for i in range(n2 - 1):
+        result *= default
+        # result = result if result < 10 else result % 10
+    return result % 10
+
+def last_digit_true(n1, n2):
+    if n2 == 0:
+        return 1
+    # we count how many self-multplications does it take to get back to original last number
+    n_1 = n1 % 10
+    default = n_1
+    count = 0
+    while True:
+        n_1 = (n_1 * default) % 10
+        count += 1
+        if n_1 == default:
+            break
+
+    if count == 0:
+        return default
+    # throwing away all multiplications that aren't meaningful, i.e. which return the last digit back to original
+    n2 = (n2-1) % (count)
+    if n2 == 0:
+        return default
+    # we raise the original last digit to meaningful exponent
+    result = default
+    for i in range(n2):
+        result *= default
+    return result % 10
+
+def last_digit_slow(n1, n2):
+    return pow( n1, n2, 10 )
+
+
+
 
 
 
