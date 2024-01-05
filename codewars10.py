@@ -1026,6 +1026,13 @@ def last_digit_slow(n1, n2):
     return pow( n1, n2, 10 )
 
 
+def getting_mad(arr):
+    min = 10000000
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            min = min if min < abs(arr[i] - arr[j]) else abs(arr[i] - arr[j])
+    return min
+
 
 
 
