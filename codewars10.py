@@ -1138,4 +1138,19 @@ class Kprimes:
         return len(result)
 
 
+def scramble(s1, s2):
+    dict = {}
+    for x in s2:
+        if x not in dict:
+            dict[x] = 0
+        dict[x] += 1
+    for y in s1:
+        if y in dict:
+            dict[y] -= 1
+    for z in dict:
+        if dict[z] > 0:
+            return False
+    return True
+
+
 
