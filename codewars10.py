@@ -1034,6 +1034,108 @@ def getting_mad(arr):
     return min
 
 
+def make_primes():
+    primes = []
+    for i in range(2, 100000):
+        check = True
+        for j in range(2, i//2):
+            if i % j == 0:
+                check = False
+                break
+        if check:
+            primes.append(i)
+    return primes
+
+
+def count_Kprimes(k, start, end):
+    primes = make_primes()
+    result = []
+    for x in range(start, end + 1):
+        number = x
+        count = k
+        i = 0
+        while x > 1 and count > 0 and i < len(primes):
+            if x % primes[i] == 0:
+                x = x / primes[i]
+                count -= 1
+            else:
+                i += 1
+        if count == 0 and x == 1:
+            result.append(number)
+    return result
+
+
+def puzzle(s):
+    primes1 = make_primes()
+    primes3 = count_Kprimes(3, 0, 1000)
+    primes7 = count_Kprimes(7, 0, 1000)
+    result = []
+    for x in primes7:
+        if x > s:
+            break
+        for y in primes3:
+            if x + y > s:
+                break
+            for z in primes1:
+                if x + y + z == s:
+                    if [x, y, z] not in result:
+                        result.append([x, y, z])
+                elif x + y + z > s:
+                    break
+    return len(result)
+
+#print(puzzle(143))
+
+print(make_primes())
+
+class Kprimes:
+    primes = []
+
+    def __init__(self):
+        if self.primes:
+            return
+        for i in range(2, 100000):
+            check = True
+            for j in range(2, i):
+                if i % j == 0:
+                    check = False
+            if check:
+                self.primes.append(i)
+        return
+
+    def count_Kprimes(self, k, start, end):
+        result = []
+        for x in range(start, end + 1):
+            number = x
+            count = k
+            i = 0
+            while x > 1 and count > 0 and i < len(self.primes):
+                if x % self.primes[i] == 0:
+                    x = x / self.primes[i]
+                    count -= 1
+                else:
+                    i += 1
+            if count == 0 and x == 1:
+                result.append(number)
+        return result
+
+    def puzzle(self, s):
+        primes3 = self.count_Kprimes(3, 0, 1000)
+        primes7 = self.count_Kprimes(7, 0, 1000)
+        result = []
+        for x in primes7:
+            if x > s:
+                break
+            for y in primes3:
+                if x + y > s:
+                    break
+                for z in self.primes:
+                    if x + y + z == s:
+                        if [x, y, z] not in result:
+                            result.append([x, y, z])
+                    elif x + y + z > s:
+                        break
+        return len(result)
 
 
 
