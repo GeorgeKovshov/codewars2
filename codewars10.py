@@ -1086,7 +1086,7 @@ def puzzle(s):
 
 #print(puzzle(143))
 
-print(make_primes())
+#print(make_primes())
 
 class Kprimes:
     primes = []
@@ -1151,6 +1151,160 @@ def scramble(s1, s2):
         if dict[z] > 0:
             return False
     return True
+
+
+def scramble2(s1,s2):
+    for c in set(s2):
+        if s1.count(c) < s2.count(c):
+            return False
+    return True
+
+def largest_rect_1(histogram):
+    if not histogram:
+        return 0
+    length = max(histogram)
+    depth = len(histogram)
+    maximum = 0
+    for i in range(length):
+        maxi = 0
+        count = 0
+        for j in range(depth):
+            if histogram[j] >= i:
+                count += i
+                maxi = max(maxi, count)
+            else:
+                count = 0
+        maximum = max(maxi,maximum)
+    return maximum
+
+def largest_rect_2(histogram):
+    if not histogram:
+        return 0
+    maxi = 0
+    for i in range(len(histogram)):
+        j = i
+        z = i
+        count = histogram[i]
+        current = histogram[i]
+        while j > 0 and histogram[j-1] >= current:
+            count += current
+            j -= 1
+        while z < len(histogram)-1 and histogram[z+1] >= current:
+            count += current
+            z += 1
+        maxi = max(maxi, count)
+    return maxi
+
+#print(largest_rect([1, 1, 1]))
+
+
+def king_is_in_check(chessboard) -> bool:
+    depth = len(chessboard)
+    length = len(chessboard[0])
+    i = 0
+    while i < depth:
+        j = 0
+        found = False
+        while j < length:
+            if chessboard[i][j] == '♔':
+                found = True
+                break
+            j += 1
+        if found:
+            break
+        i += 1
+    print(i, j)
+    ver = i
+    hor = j
+    if ver - 1 >= 0 and hor - 1 >= 0 and chessboard[ver - 1][hor - 1] == '♟':
+        return True
+    if ver - 1 >= 0 and hor + 1 < length and chessboard[ver - 1][hor + 1] == '♟':
+        return True
+    """Checking Rooks"""
+    while i + 1 < depth:
+        if chessboard[i + 1][hor] in ['♜', '♛']:
+            return True
+        if chessboard[i + 1][hor] != ' ':
+            break
+        i += 1
+    i = ver
+    while i - 1 >= 0:
+        if chessboard[i - 1][hor] in ['♜', '♛']:
+            return True
+        if chessboard[i - 1][hor] != ' ':
+            break
+        i -= 1
+    i = ver
+    while j + 1 < length:
+        if chessboard[ver][j + 1] in ['♜', '♛']:
+            return True
+        if chessboard[ver][j + 1] != ' ':
+            break
+        j += 1
+    j = hor
+    while j - 1 >= 0:
+        if chessboard[ver][j - 1] in ['♜', '♛']:
+            return True
+        if chessboard[ver][j - 1] != ' ':
+            break
+        j -= 1
+    j = hor
+    """checking Bishops"""
+    while i + 1 < depth and j + 1 < length:
+        if chessboard[i + 1][j + 1] in ['♝', '♛']:
+            return True
+        if chessboard[i + 1][j + 1] != ' ':
+            break
+        i+=1
+        j+=1
+    j = hor
+    i = ver
+    while i - 1 >= 0 and j - 1 >= 0:
+        if chessboard[i - 1][j - 1] in ['♝', '♛']:
+            return True
+        if chessboard[i - 1][j - 1] != ' ':
+            break
+        i-=1
+        j-=1
+    j = hor
+    i = ver
+    while i + 1 < depth and j - 1 >= 0:
+        if chessboard[i + 1][j - 1] in ['♝', '♛']:
+            return True
+        if chessboard[i + 1][j - 1] != ' ':
+            break
+        i+=1
+        j-=1
+    j = hor
+    i = ver
+    while i - 1 >=0 and j + 1 < length:
+        if chessboard[i - 1][j + 1] in ['♝', '♛']:
+            return True
+        if chessboard[i - 1][j + 1] != ' ':
+            break
+        i-=1
+        j+=1
+    j = hor
+    i = ver
+    """Checking for Knights"""
+    if i - 2 >= 0 and j - 1 >= 0 and chessboard[i - 2][j - 1] == '♞':
+        return True
+    if i - 2 >= 0 and j + 1 < length and chessboard[i - 2][j + 1] == '♞':
+        return True
+    if i + 2 < depth and j - 1 >= 0 and chessboard[i + 2][j - 1] == '♞':
+        return True
+    if i + 2 < depth and j + 1 < length and chessboard[i + 2][j + 1] == '♞':
+        return True
+    if i - 1 >= 0 and j - 2 >= 0 and chessboard[i - 1][j - 2] == '♞':
+        return True
+    if i + 1 < depth and j - 2 >= 0 and chessboard[i + 1][j - 2] == '♞':
+        return True
+    if i - 1 >= 0 and j + 2 < length and chessboard[i - 1][j + 2] == '♞':
+        return True
+    if i + 1 < depth and j + 2 < length and chessboard[i + 1][j + 2] == '♞':
+        return True
+    return False
+
 
 
 
