@@ -126,3 +126,55 @@ def runoff(voters):
                     candidates[v[i]] += 1
                 reserve -= 1
     return None
+
+
+voters = [["dem", "ind", "rep"],
+                  ["rep", "ind", "dem"],
+                  ["ind", "dem", "rep"],
+                  ["ind", "rep", "dem"]]
+
+
+def runoff(voters):
+    candidates = {}
+    max_c = [[0, ""]]
+    min_c = [[10000, ""]]
+
+    for v in voters:
+        if v[0] not in candidates:
+            candidates[v[0]] = 0
+    while candidates:
+        if len(candidates) == 1:
+            for x in candidates:
+                return x
+        max_c = [[0, ""]]
+        min_c = [[10000, ""]]
+        for v in voters:
+            i = 0
+            while i < len(v) and v[i] not in candidates:
+                i += 1
+            if i >= len(v):
+                continue
+            if v[i] in candidates:
+                candidates[v[i]] += 1
+
+        mini = 10000
+        maxi = 0
+        for c in candidates:
+            if candidates[c] < mini:
+                mini = candidates[c]
+            if candidates[c] > maxi:
+                maxi = candidates[c]
+        minimal = []
+        for c in candidates:
+            if candidates[c] == mini:
+                minimal.append(c)
+        for m in minimal:
+            del (candidates[m])
+        for c in candidates:
+            if candidates[c] == maxi and maxi > len(voters) // 2:
+                return c
+
+
+    return None
+
+print(runoff(voters))
