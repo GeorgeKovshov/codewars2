@@ -177,4 +177,34 @@ def runoff(voters):
 
     return None
 
-print(runoff(voters))
+#print(runoff(voters))
+
+
+def longest_sequence(arr, command):
+    com_inc = True if command in ["<<", "< <"] else False
+    prev = arr[0]
+    max_window = [0,0]
+    window = [0,0]
+    if com_inc:
+        for i in range(len(arr)):
+            if arr[i] > prev:
+                window[1] = i
+            elif arr[i] <= prev:
+                window[0] = i
+                window[1] = i
+            max_window = window if (window[1] - window[0]) > (max_window[1] - max_window[0]) else max_window
+            prev = arr[i]
+    else:
+        for i in range(len(arr)):
+            if arr[i] < prev:
+                window[1] = i
+            elif arr[i] >= prev:
+                window[0] = i
+                window[1] = i
+            max_window = window if (window[1] - window[0]) > (max_window[1] - max_window[0]) else max_window
+            prev = arr[i]
+    return max_window if (max_window[1] - max_window[0]) > 2 else []
+
+
+
+
