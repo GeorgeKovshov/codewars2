@@ -207,4 +207,67 @@ def longest_sequence(arr, command):
 
 
 
+def longest_comb_1(arr, command):
+    com_inc_lam = lambda a, b: a > b if command in ["<<", "< <"] else a < b
+    max_window = 0
+    list_comb = []
+    for i in range(len(arr)):
+        list_cur = [arr[i]]
+        prev = arr[i]
+        count = 0
+        for j in range(i, len(arr)):
+            if com_inc_lam(arr[j], prev):
+                count += 1
+                list_cur.append(arr[j])
+                prev = arr[j]
+        if count > max_window:
+            max_window = count
+            list_comb = [list_cur]
+        elif count == max_window:
+            list_comb.append(list_cur)
+    if max_window < 2:
+        return []
+    elif max_window == len(arr):
+        return arr
+    return list_comb if len(list_comb) > 1 else list_comb[0]
+
+
+class Long_comb:
+
+    def __init__(self, command):
+        self.com_inc_lam = lambda a, b: a > b if command in ["<<", "< <"] else a < b
+        self.result = []
+        self.max_count = 0
+
+    def rec_comb(self, arr, i, prev, count):
+        if count > self.max_count:
+            self.result = [prev]
+            self.max_count = count
+        elif count == self.max_count and prev not in self.result:
+            self.result.append(prev)
+        if i >= len(arr):
+            return count
+        rec1 = 0
+
+        if self.com_inc_lam(arr[i], prev[-1]):
+            rec1 = self.rec_comb(arr, i + 1, list(prev) + [arr[i]], count + 1)
+
+        rec3 = self.rec_comb(arr, i + 1, list(prev), count)
+        rec2 = self.rec_comb(arr, i + 1, [arr[i]], 1)
+        return
+
+    def longest_comb(self, arr):
+        self.rec_comb(arr, 1, [arr[0]], 1)
+        if self.max_count < 3:
+            return []
+        if len(self.result) == 1:
+            return self.result[0]
+        return self.result
+
+
+def longest_comb_true(arr, command):
+    if len(arr) == 0:
+        return []
+    comb = Long_comb(command)
+    return comb.longest_comb(arr)
 
