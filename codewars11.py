@@ -271,3 +271,63 @@ def longest_comb_true(arr, command):
     comb = Long_comb(command)
     return comb.longest_comb(arr)
 
+
+class Long_comb2:
+
+    def __init__(self, command):
+        self.com_inc_lam = lambda a, b: a > b if command in ["<<", "< <"] else a < b
+        self.result = []
+        self.max_count = 0
+
+    def rec_comb(self, arr, i, prev, count):
+        if i >= len(arr):
+            return count
+        rec1 = 0
+        rec3 = self.rec_comb(arr, i + 1, list(prev), count)
+        if not prev:
+            rec1 = self.rec_comb(arr, i + 1, list(prev) + [arr[i]], count + 1)
+        elif self.com_inc_lam(arr[i], prev[-1]):
+            if count + 1 > self.max_count:
+                self.result = [prev + [arr[i]]]
+                self.max_count = count + 1
+            elif count + 1 == self.max_count:
+                self.result.append(prev + [arr[i]])
+            rec1 = self.rec_comb(arr, i + 1, list(prev) + [arr[i]], count + 1)
+
+        # rec2 = self.rec_comb(arr, i+1, [arr[i]], 1)
+        return
+
+    def longest_comb(self, arr):
+        self.rec_comb(arr, 0, [], 0)
+        # self.rec_comb(arr, 1, [arr[0]], 1)
+        if self.max_count < 3:
+            return []
+        if len(self.result) == 1:
+            return self.result[0][::-1]
+        return self.result
+
+
+def longest_comb2(arr, command):
+    if len(arr) == 0:
+        return []
+    comb = Long_comb2(command)
+    return comb.longest_comb(arr)[::-1]
+
+
+def smallest_possible_reduction_sum(a):
+    a.sort()
+    i = 0
+    while i < len(a) - 1:
+        if a[i] == 1:
+            return len(a)
+        while a[i] != a[i+1]:
+            if a[i] > a[i+1]:
+                a[i] = a[i+1] if a[i] % a[i+1] == 0 else a[i] % a[i+1]
+            elif a[i] < a[i+1]:
+                a[i+1] = a[i] if a[i+1] % a[i] == 0 else a[i+1] % a[i]
+        i += 1
+    return a[-1] * len(a)
+
+
+
+
