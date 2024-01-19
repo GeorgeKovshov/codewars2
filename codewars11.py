@@ -328,6 +328,99 @@ def smallest_possible_reduction_sum(a):
         i += 1
     return a[-1] * len(a)
 
+arr = [1, 2, 23, 4, 5, 9]
+a = arr[:1] + arr[1:5][::-1] + arr[5:]
+print(arr)
+print(a)
+for i in range(22, 28):
+    print(i)
+
+arr = [x if x % 2 == 0 else 0 for x in arr]
+print(arr)
+
+def paren_rec2(string, i, end):
+    start = i
+    check = False
+    new_string = string[:i]
+    while i < end // 2:
+        if string[i] == '(':
+            check = True
+            new_string += ')'
+        elif string[i] == ')':
+            new_string += '('
+        else:
+            new_string += string[end - i]
+        i += 1
+    while i < end:
+        new_string += string[end - i]
+        i += 1
+    i = start
+    if not check:
+        return new_string
+    stack = 0
+    while i < end:
+        if new_string[i] == '(':
+            if stack == 0:
+                start_end[0] = i
+            stack += 1
+        elif new_string[i] == ')':
+            stack -= 1
+            if stack == 0:
+                stack_end[1] = i
+                new_string = new_string[:stack_end[0]] + paren_rec2(new_string, stack_end[0] + 1,
+                                                                   stack_end[1]) + new_string[stack_end[1]:]
+        i += 1
+    return new_string
 
 
+def reverse_in_parentheses2(string):
+    stack = 0
+    start_end = [0, 0]
+    for i in range(len(string)):
+        if string[i] == '(':
+            if stack == 0:
+                start_end[0] = i
+            stack += 1
+        elif string[i] == ')':
+            stack -= 1
+            if stack == 0:
+                start_end[1] = i
+                string = string[:start_end[0]] + paren_rec2(string, start_end[0] + 1, start_end[1]) + string[
+                                                                                                     start_end[1]:]
+    return string
 
+
+def paren_rec(string, j, end):
+    stack = 0
+    start_end = [[0, 0]]
+    for i in range(j, end):
+        if string[i] == '(':
+            if stack == 0:
+                print("starrrr", start_end[-1])
+                start_end[-1][0] = i
+            stack += 1
+        elif string[i] == ')':
+            stack -= 1
+            if stack == 0:
+                start_end[-1][1] = i
+                string = paren_rec(string, start_end[-1][0] + 1, start_end[-1][1])
+                start_end.append([0, 0])
+    print(start_end)
+    if start_end[0][1] != 0:
+        dict = {
+            '(': ')',
+            ')': '('
+        }
+        for pair in start_end:
+            if pair == [0,0]:
+                break
+            parente = "".join([x if x not in ['(', ')'] else dict[x] for x in string[pair[0] + 1:pair[1]][::-1]])
+            string = string[:pair[0]] + '(' + parente + ')' + string[pair[1] + 1:]
+    return string
+
+
+def reverse_in_parentheses(string):
+    print(string)
+    return paren_rec(string, 0, len(string))
+
+print(reverse_in_parentheses("many (parens) on (pot)"))
