@@ -424,3 +424,180 @@ def reverse_in_parentheses(string):
     return paren_rec(string, 0, len(string))
 
 print(reverse_in_parentheses("many (parens) on (pot)"))
+
+
+#class Proc:
+#    def __init__(self, lst):
+
+
+def divisors_old(num):
+    divisor = set()
+    divisor.add(1)
+    divisor.add(num)
+    i = 2
+    while i < num // 2:
+        if num % i == 0:
+            divisor.add(i)
+            divisor.add(int(num / i))
+        i += 1
+    return divisor
+
+def proc_arr_int2(lst):
+    divisor_count = [0] * len(lst)
+    for i in range(2, max(lst) // 2):
+        for j in range(len(lst)):
+            if lst[j] % i == 0:
+                divisor_count[j] += 1
+    maxi = max(divisor_count)
+    result = [a for a, b in zip(lst,divisor_count) if b == maxi]
+    return [len(lst), divisor_count.count(0), [maxi, result]]
+
+
+def proc_arr_int1(lst):
+    divisor_count = [0] * len(lst)
+    for i in range(2, max(lst) // 2):
+        for j in range(len(lst)):
+            if lst[j] < i:
+                continue
+            elif lst[j] % i == 0:
+                if lst[j] / i == i:
+                    divisor_count[j] += 1
+                else:
+                    divisor_count[j] += 2
+    maxi = max(divisor_count)
+    print(divisor_count)
+    result = [a for a, b in zip(lst,divisor_count) if b == maxi]
+    return [len(lst), divisor_count.count(0), [maxi, result]]
+
+def proc_arr_int_slow(lst):
+    divisor_count = [0] * len(lst)
+    maxi = 0
+    for i in range(2, max(lst)):
+        for j in range(len(lst)):
+            if lst[j] <= i:
+                continue
+            elif lst[j] % i == 0:
+                divisor_count[j] += 1
+                maxi = divisor_count[j] if divisor_count[j] > maxi else maxi
+    result = [a for a, b in zip(lst,divisor_count) if b == maxi]
+    result.sort()
+    return [len(lst), divisor_count.count(0), [maxi+2, result]]
+
+def divisors(num):
+    if num == 0:
+        return 2
+    divisor = set()
+    divisor.add(1)
+    divisor.add(num)
+    i = 2
+    while i <= int(num**1/2) + 1:
+        if num % i == 0:
+            divisor.add(i)
+            divisor.add(int(num / i))
+        i += 1
+    return len(divisor)
+
+def proc_arr_int(lst):
+    prime_count = 0
+    max_count = 0
+    result = []
+    length = 0
+    for x in lst:
+        length += 1
+        divisor_count = divisors(x)
+        if divisor_count <= 2:
+            prime_count += 1
+        if divisor_count > max_count:
+            result = [x]
+            max_count = divisor_count
+        elif divisor_count == max_count:
+            new_result = []
+            i = 0
+            while result[i] < x:
+                new_result.append(result[i])
+                i += 1
+            new_result.append(x)
+            result = new_result + result[i:]
+    return [length, prime_count, [max_count, result]]
+
+
+class Proc:
+    def __init__(self):
+        self.divisors = set()
+        self.prime_count = 0
+        self.max_count = 0
+        self.primes = [0, 1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877, 881, 883, 887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983, 991, 997]
+
+    def get_divisors(self, num):
+        divisor = set()
+        divisor.add(1)
+        divisor.add(num)
+        self.divisors.add(num)
+        i = 2
+        while i <= num // 2:
+            if num % i == 0:
+                self.divisors.add(i)
+                self.divisors.add(int(num / i))
+                divisor.add(i)
+                divisor.add(int(num / i))
+            i += 1
+        return len(divisor)
+
+    def proc_arr_int(self, lst):
+        result = []
+        length = 0
+        for x in lst:
+            length += 1
+            if x in self.primes:
+                self.prime_count += 1
+                continue
+            elif x in self.divisors:
+                continue
+            divisor_count = self.get_divisors(x)
+            if divisor_count <= 2:
+                self.primes.add(x)
+                self.prime_count += 1
+            if divisor_count > self.max_count:
+                result = [x]
+                self.max_count = divisor_count
+            elif divisor_count == self.max_count:
+                new_result = []
+                i = 0
+                while result[i] < x:
+                    new_result.append(result[i])
+                    i += 1
+                new_result.append(x)
+                result = new_result + result[i:]
+        return [length, self.prime_count, [self.max_count, result]]
+
+result = []
+for i in range(1000):
+    if divisors(i) <= 2:
+        result.append(i)
+print(result)
+
+
+#print(proc_arr_int1([36, 98]))
+#print([0] * 5)
+
+#print(divisors_old(36))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
