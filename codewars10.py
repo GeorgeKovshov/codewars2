@@ -1308,3 +1308,8 @@ def king_is_in_check(chessboard) -> bool:
 
 
 
+
+
+
+
+
