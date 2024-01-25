@@ -27,6 +27,15 @@
 		return (($first * $second == $prod) ? (array($first, $second, true)) : (array($first, $second, false)));
 	}
 	
+	function productFib2(int $prod): array {
+	  $a = 0;
+	  $b = 1;
+	  while (($result = $a * $b) < $prod) {
+		list($a, $b) = [$b, $a + $b];
+	  }
+	  return [$a, $b, $result === $prod];
+	}
+	
 	#print_r(10);
 	$arr = productFib(4895);
 	echo "$arr[0] $arr[1] $arr[2]";
