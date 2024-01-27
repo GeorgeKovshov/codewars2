@@ -5,10 +5,10 @@ arr = [
     [5,2,3,5]
 ]
 
-for a in arr:
-    del(a[a.index(5)])
+#for a in arr:
+#    del(a[a.index(5)])
 
-print(arr)
+#print(arr)
 
 
 def runoff_CORRECT(voters):
@@ -327,7 +327,7 @@ def smallest_possible_reduction_sum(a):
                 a[i+1] = a[i] if a[i+1] % a[i] == 0 else a[i+1] % a[i]
         i += 1
     return a[-1] * len(a)
-
+"""
 arr = [1, 2, 23, 4, 5, 9]
 a = arr[:1] + arr[1:5][::-1] + arr[5:]
 print(arr)
@@ -336,7 +336,7 @@ for i in range(22, 28):
     print(i)
 
 arr = [x if x % 2 == 0 else 0 for x in arr]
-print(arr)
+print(arr)"""
 
 def paren_rec2(string, i, end):
     start = i
@@ -423,7 +423,7 @@ def reverse_in_parentheses(string):
     print(string)
     return paren_rec(string, 0, len(string))
 
-print(reverse_in_parentheses("many (parens) on (pot)"))
+#print(reverse_in_parentheses("many (parens) on (pot)"))
 
 
 #class Proc:
@@ -569,12 +569,12 @@ class Proc:
                 new_result.append(x)
                 result = new_result + result[i:]
         return [length, self.prime_count, [self.max_count, result]]
-
+"""
 result = []
 for i in range(1000):
     if divisors(i) <= 2:
         result.append(i)
-print(result)
+print(result)"""
 
 
 #print(proc_arr_int1([36, 98]))
@@ -582,7 +582,34 @@ print(result)
 
 #print(divisors_old(36))
 
+def crazyRabbit(field, cr):
+    cr = field[0]
+    i = 0
+    dir_right = True
+    while cr != 0:
+        field[i] = 0
+        cr = cr % (len(field) * 2)
+        while cr != 0:
+            if dir_right:
+                if i + cr >= len(field):
+                    cr -= len(field) - i + 1
+                    i = len(field) - 1
+                    dir_right = False
+                else:
+                    i += cr
+                    cr = 0
+            if not dir_right:
+                if i - cr < 0:
+                    cr -= len(field) - i + 1
+                    i = 0
+                    dir_right = True
+                else:
+                    i -= cr
+                    cr = 0
+        cr = field[i]
+    return sum(field) == 0
 
+print(crazyRabbit([1, 0, 1], 0))
 
 
 
