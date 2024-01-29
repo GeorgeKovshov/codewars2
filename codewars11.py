@@ -609,19 +609,91 @@ def crazyRabbit(field, cr):
         cr = field[i]
     return sum(field) == 0
 
-print(crazyRabbit([1, 0, 1], 0))
+#print(crazyRabbit([1, 0, 1], 0))
+
+def crazyRabbit(field, cr):
+    print(field, cr)
+    i = cr
+    cr = field[i]
+    dir_right = True
+    visited = {}
+    while True:
+        cr_old = cr
+        field[i] = 0
+        cr = cr % (len(field) * 2)
+        while cr != 0:
+            if dir_right:
+                if i + cr >= len(field):
+                    cr -= len(field) - i
+                    i = len(field) - 1
+                    dir_right = False
+                else:
+                    i += cr
+                    cr = 0
+            if not dir_right:
+                if i - cr < 0:
+                    cr -= i + 1
+                    i = 0
+                    dir_right = True
+                else:
+                    i -= cr
+                    cr = 0
+        cr = cr_old + field[i]
+        if field[i] == 0:
+            if i not in visited:
+                visited[i] = 0
+            visited[i] += 1
+            if visited[i] > 2:
+                break
+        else:
+            visited = {}
+    return sum(field) == 0
 
 
+def first_non_repeating_letter_old(s):
+    dict = {}
+    for x in s:
+        if x.lower() not in dict:
+            dict[x.lower()] = [0,0] # [upper, lowercase count]
+        if x.isupper():
+            dict[x.lower()][0] += 1
+        else:
+            dict[x.lower()][1] += 1
+    mini_id_upper = [len(s)+1, "", True]
+    for y in dict:
+        if dict[y][0] + dict[y][1] < mini_id_upper[0]:
+            mini_id_upper[0] = dict[y][0] + dict[y][1]
+            mini_id_upper[1] = y
+            mini_id_upper[2] = True if dict[y][0] > dict[y][1] else False
+        if dict[y][0] + dict[y][1] > 1:
+            mini_id_upper[1] = ""
+    return mini_id_upper[1].upper() if mini_id_upper[2] else mini_id_upper[1]
 
 
+def first_non_repeating_letter(s):
+    if not s:
+        return ""
+    dict = {}
+    mini = [len(s) + 1, ""]
+    for x in s:
+        if x.lower() not in dict:
+            dict[x.lower()] = [0, 0]  # [upper, lowercase count]
+        if x.isupper():
+            dict[x.lower()][0] += 1
+        else:
+            dict[x.lower()][1] += 1
+
+    for y in dict:
+        if dict[y][0] + dict[y][1] < mini[0]:
+            mini[0] = dict[y][0] + dict[y][1]
+            mini[1] = y
+
+    if mini[0] != 1:
+        return ""
+    return s[s.lower().find(mini[1])]
 
 
-
-
-
-
-
-
+print(first_non_repeating_letter("abba"))
 
 
 
