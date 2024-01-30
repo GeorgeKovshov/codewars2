@@ -696,6 +696,27 @@ def first_non_repeating_letter(s):
 print(first_non_repeating_letter("abba"))
 
 
+def dead_ant_count(ants):
+    dict = {
+        'a': 0,
+        'n': 0,
+        't': 0
+    }
+    count = 0
+
+    for i in range(len(ants)):
+        x = ants[i]
+        if x in dict:
+            dict[x] += 1
+        if i > 1:
+            if ants[i - 2] == 'a' and ants[i - 1] == 'n' and ants[i] == 't':
+                count += 1
+    maxi = 0
+    for y in dict:
+        maxi = dict[y] if dict[y] > maxi else maxi
+    return maxi - count    
+
+
 
 
 
