@@ -714,7 +714,64 @@ def dead_ant_count(ants):
     maxi = 0
     for y in dict:
         maxi = dict[y] if dict[y] > maxi else maxi
-    return maxi - count    
+    return maxi - count
+
+
+"""
+user = User()
+user.rank # => -8
+user.progress # => 0
+user.inc_progress(-7)
+user.progress # => 10
+user.inc_progress(-5) # will add 90 progress
+user.progress # => 0 # progress is now zero
+user.rank # => -7 # rank was upgraded to -7
+"""
+
+aa = [x for x in range(-8, 9) if x != 0]
+print(aa)
+ass = 10 * (8 - 3) ** 2
+print(ass)
+
+
+class User:
+    rankings = [x for x in range(-8, 9) if x != 0]
+
+    def __init__(self):
+        self.rank = -8
+        self.rank_ind = 0
+        self.progress = 0
+
+    def inc_progress(self, rang):
+        difference = 0 if rang * self.rank > 0 else 1
+        val = self.rank - rang - difference
+
+        if rang not in self.rankings:
+            raise Exception
+        elif val > 1 or self.rank == 8:
+            return
+
+        if val == 0:
+            self.progress += 3
+        elif val == 1:
+            self.progress += 1
+        elif val < 0:
+            self.progress += 10 * (rang - self.rank - difference) ** 2
+        if self.progress >= 100:
+            self.rank_ind += self.progress // 100
+            self.progress = self.progress % 100
+            if self.rank_ind < 16:
+                self.rank = self.rankings[self.rank_ind]
+            else:
+                self.rank = 8
+        if self.rank == 8:
+            self.progress = 0
+
+
+
+
+
+
 
 
 
