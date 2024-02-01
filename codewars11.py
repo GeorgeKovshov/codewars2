@@ -768,7 +768,30 @@ class User:
             self.progress = 0
 
 
+arr = [1,2,3,4]
+print(arr[1:1 + 1])
 
+
+def check(a, s):
+    length = len(str(int(a) + 1))
+    arr = [a]
+    i = len(a)
+    while i < len(s):
+        if int(s[i: i + length]) == int(arr[-1]) + 1:
+            arr.append(s[i: i + length])
+            i += length
+            length = length + 1 if len(str(int(arr[-1]) + 1)) > length else length
+        else:
+            return False
+    return True
+
+
+def find(s):
+    for i in range(len(s)):
+        for j in range(i + 1, len(s)):
+            if check(s[0: j], s):
+                return int(s[0: j])
+    return int(s)
 
 
 
