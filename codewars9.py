@@ -591,7 +591,7 @@ def sort_odd_indeces(source_array):
                 source_array[t + 2] = tmp
                 change = True
             t += 2
-        i -= 2;
+        i -= 2
         t = 0
     return source_array
 
