@@ -793,11 +793,35 @@ def find(s):
                 return int(s[0: j])
     return int(s)
 
+a = "john"
+b = f"hello, {a}"
+print(b)
+
+print("1046/01/01" < "1046/01/02")
 
 
+def rec_tec(family_tree):
+    if not family_tree["children"]:
+        return [1, family_tree["name"], family_tree["date_of_birth"]]
+    elder_child = [0, "", ""] # generation difference, name, age
+    for x in family_tree["children"]:
+        y = rec_tec(x)
+        if elder_child[0] < y[0] or (elder_child[0] == y[0] and elder_child[2] > y[2]):
+            elder_child = y
+    sex = "mother" if family_tree["sex"] == 'f' else "father"
+    tek = f"{sex} of {elder_child[1]}"
+    if elder_child[0] > 1:
+        tek = "grand" + tek
+    for i in range(2, elder_child[0]):
+        tek = "great-" + tek
+    family_tree["teknonym"] = tek
+    elder_child[0] += 1
+    return elder_child
 
-
-
+def teknonymize(family_tree):
+    print(family_tree)
+    rec_tec(family_tree)
+    return None
 
 
 
