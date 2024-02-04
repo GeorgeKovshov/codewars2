@@ -825,3 +825,37 @@ def teknonymize(family_tree):
 
 
 
+bar = "kslajfds"
+print([*bar])
+
+for x, i in enumerate([*bar]):
+    print(i)
+
+def codify(code):
+    alphabet = list(map(chr, range(97, 123))) + ['a']
+    arr = [sorted([*code])]
+    j = 1
+    while "".join(arr[-1]) != "":
+        arr.append([alphabet[alphabet.index(x)+1] if arr[j - 1][i] != "" and alphabet[alphabet.index(x)+1] not in arr[0]   else "" for i, x in enumerate(arr[j-1])])
+        j += 1
+    for y in arr:
+        print(y)
+    return arr
+
+
+def hamster_me(code, message):
+    arr = codify(code)
+    result = ""
+    for m in message:
+        for i, x in enumerate(arr[0]):
+            if ord(m) < ord(x):
+                for j in range(len(arr)):
+                    if arr[j][i-1] == m:
+                        result += arr[0][i-1] + str(j + 1)
+                        break
+            elif i == len(arr[0]) - 1:
+                for j in range(len(arr)):
+                    if arr[j][i] == m:
+                        result += arr[0][i] + str(j + 1)
+    return result
+
