@@ -859,3 +859,9 @@ def hamster_me(code, message):
                         result += arr[0][i] + str(j + 1)
     return result
 
+def collinearity(x1, y1, x2, y2):
+    if x1 / x2 == y1 / y2 or x2 / x1 == y2 / y1 :
+        return True
+    else:
+        return False
+
