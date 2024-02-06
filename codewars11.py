@@ -865,3 +865,19 @@ def collinearity(x1, y1, x2, y2):
     else:
         return False
 
+def cat_mouse(x,j):
+    xx = [*x]
+    try:
+        dog = xx.index('D')
+        cat = xx.index('C')
+        mouse = xx.index('m')
+    except:
+        return "boring without all three"
+    if abs(cat - mouse) <= j:
+        if cat < dog and dog < mouse or cat > dog and dog > mouse:
+            return "Protected!"
+        return "Caught!"
+    return "Escaped!"
+
+
+
