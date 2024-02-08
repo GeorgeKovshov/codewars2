@@ -880,4 +880,29 @@ def cat_mouse(x,j):
     return "Escaped!"
 
 
+def lowest(s):
+    hash = {}
+    for c in s:
+        if c not in hash:
+            hash[c] = 0
+        hash[c] += 1
+    print(hash)
+    count = 0
+    for x in hash:
+        if hash[x] % 2 == 1:
+            count += 1
+    print(count)
+    if count < 2:
+        return len(s)
+    result = [1] * count
+    remainer = len(s) - count
+    i = 0
+    while remainer > 0:
+        result[i] += 2
+        remainer -= 2
+        i = 0 if i == count - 1 else i + 1
+    return min(result)
+
+
+
 
