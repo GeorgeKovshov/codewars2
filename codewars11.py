@@ -903,6 +903,102 @@ def lowest(s):
         i = 0 if i == count - 1 else i + 1
     return min(result)
 
+class Beehive():
+    def __init__(self, n):
+        """
+        self.honeycomb = []
+        for i in range(2*n - 1 + (n*2 - 2)):
+            tmp = []
+            for j in range(n * 2 - 1):
+                tmp.append(0)
+            self.honeycomb.append(tmp)
+        #self.honeycomb = [[0] * (n * 2 - 1)] * (2*n - 1 + (n*2 - 2))"""
+        self.honeycomb = []
+        end_comb = []
+        z = 0
+        for i in range(n):
+            tmp = []
+            for j in range(n*2 - 1):
+                if abs(n - j - 1) == z:
+                    tmp.append(0)
+                else:
+                    tmp.append(-1)
+            check = False
+            for j in range(n-1):
+                if check:
+                    break
+                if tmp[j] == 0:
+                    while j + 2 < len(tmp):
+                        j += 2
+                        if tmp[j] == 0:
+                            check = True
+                            break
+                        tmp[j] = 0
 
+            z += 1
+            self.honeycomb.append(tmp)
+            end_comb = [tmp] + end_comb
+        boo = False
+        for i in range (2*n - 1 - 2):
+            tmp = []
+            for j in range(n*2 - 1):
+                if boo:
+                    if j % 2 == 0:
+                        tmp.append(0)
+                    else:
+                        tmp.append(-1)
+                else:
+                    if j % 2 != 0:
+                        tmp.append(0)
+                    else:
+                        tmp.append(-1)
+            boo = not boo
+            self.honeycomb.append(tmp)
+        self.honeycomb = self.honeycomb + end_comb
+
+
+    def print(self):
+        for x in self.honeycomb:
+            print(x)
+
+    def honey_Im_home1(self, i, j, val):
+        if i < 0 or i >= len(self.honeycomb) or j < 0 or j >= len(self.honeycomb[0]) or self.honeycomb[i][j] == -1:
+            return
+        self.honeycomb[i][j] += val
+
+        self.honey_Im_home(i - 1, j + 1, self.honeycomb[i][j])
+        self.honey_Im_home(i + 2, j, self.honeycomb[i][j])
+        self.honey_Im_home(i + 1, j + 1, self.honeycomb[i][j])
+        #if i > 0 and j < len(self.honeycomb[0]) - 1 and self.honeycomb[i - 1][j + 1] != 0:
+
+    def honey_Im_home(self, i, j, ):
+        if i < 0 or i >= len(self.honeycomb) or j < 0 or j >= len(self.honeycomb[0]) or self.honeycomb[i][j] != 0:
+            return
+        self.honeycomb[i][j] = max(self.honeycomb[i][j], 1)
+        self.honey_Im_home(i + 2, j)
+        val = 0
+        if i > 0 and j > 0:
+            val = val + self.honeycomb[i-1][j-1] if self.honeycomb[i-1][j - 1] != -1 else val
+        if i > 1:
+            val = val + self.honeycomb[i-2][j] if self.honeycomb[i-2][j] != -1 else val
+        if i < len(self.honeycomb) - 1 and j > 0:
+            val = val + self.honeycomb[i + 1][j - 1] if self.honeycomb[i + 1][j - 1] != -1 else val
+        self.honeycomb[i][j] = max(val, 1)
+
+        self.honey_Im_home(i - 1, j + 1)
+
+        self.honey_Im_home(i + 1, j + 1)
+
+
+
+def the_bee(n):
+    be = Beehive(n)
+    #be.honey_Im_home(0, n - 1, 1)
+    #be.honeycomb[n-1][0] = 1
+    be.honey_Im_home(n-1, 0)
+
+    be.print()
+
+the_bee(3)
 
 
