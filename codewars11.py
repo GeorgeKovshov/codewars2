@@ -1010,6 +1010,37 @@ def the_bee(n):
 
     be.print()
 
-the_bee(3)
+#the_bee(3)
+
+str = "abcdefg"
+
+str = str[:2] + str[2+1:]
+print(str)
+
+def last_non_empty_string1(str):
+    last_string = str
+    while str:
+        letters = []
+        last_string = str
+        length = len(str)
+        i = 0
+        while i < length:
+            if str[i] not in letters:
+                letters.append(str[i])
+                str = str[:i] + str[i+1:]
+                i -= 1
+                length -= 1
+            i += 1
+    return last_string
+
+import string
+
+def last_non_empty_string(str):
+    dict = {}
+
+
+print(last_non_empty_string('aabcbbca'))
+
+
 
 
