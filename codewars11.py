@@ -1037,6 +1037,27 @@ import string
 
 def last_non_empty_string(str):
     dict = {}
+    count = 0
+    for letter in str:
+        if letter not in dict:
+            dict[letter] = 0
+        dict[letter] += 1
+        count = max(count, dict[letter])
+    for x in dict:
+        if dict[x] != count:
+            dict[x] = -1
+    result = ""
+    for i in range(len(str)):
+        if dict[str[i]] == -1:
+            continue
+
+        dict[str[i]] -= 1
+        if dict[str[i]] == 0:
+            result += str[i]
+    return result
+
+
+
 
 
 print(last_non_empty_string('aabcbbca'))
